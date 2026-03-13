@@ -1,0 +1,259 @@
+site_name: Junsung's Dev Docs
+site_description: Claude와 함께 만든 개발 학습 문서
+site_author: 이준성
+
+theme:
+  name: material
+  language: ko
+  custom_dir: overrides
+  icon:
+    logo: material/book-open-page-variant
+  favicon: material/book-open-page-variant
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: 다크 모드
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: 라이트 모드
+  font:
+    text: Pretendard
+    code: JetBrains Mono
+  features:
+    - navigation.top
+    - navigation.footer
+    - navigation.instant
+    - navigation.tracking
+    - navigation.path
+    - navigation.indexes
+    #- search.suggest
+    #- search.highlight
+    #- search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - toc.follow
+    - header.autohide
+
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/tideflo
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.mark
+  - pymdownx.critic
+  - pymdownx.keys
+  - tables
+  - attr_list
+  - md_in_html
+  - def_list
+  - footnotes
+  - abbr
+  - toc:
+      permalink: true
+      toc_depth: 3
+
+plugins: []
+
+nav:
+  - Home: index.md
+  - Spring Core:
+    - 학습 로드맵: Spring_Core/00_학습_로드맵.md
+    - Spring이 뭐야: Spring_Core/01_Spring이_뭐야.md
+    - Bean이 뭐야: Spring_Core/02_Bean이_뭐야.md
+    - DI 의존성 주입: Spring_Core/03_DI_의존성_주입.md
+    - XML 설정: Spring_Core/04_XML_설정_완전정복.md
+    - Bean 생명주기: Spring_Core/05_Bean_생명주기.md
+    - Bean Scope: Spring_Core/06_Bean_Scope.md
+    - 어노테이션 설정: Spring_Core/07_어노테이션_설정.md
+    - Spring Context: Spring_Core/08_Spring_Context.md
+    - 우리 프로젝트로 보는 Spring: Spring_Core/09_우리_프로젝트로_보는_Spring.md
+    - 빠싺 최종시험: Spring_Core/10_빠싺_최종시험.md
+  - JVM 메모리 분석:
+    - 학습 로드맵: JVM_메모리_분석/00_학습_로드맵.md
+    - JVM이란 무엇인가: JVM_메모리_분석/01_JVM이란_무엇인가.md
+    - JVM 메모리 구조: JVM_메모리_분석/02_JVM_메모리_구조.md
+    - 객체와 클래스: JVM_메모리_분석/03_객체와_클래스.md
+    - 클래스로더: JVM_메모리_분석/04_클래스로더.md
+    - 가비지 컬렉션과 GC Roots: JVM_메모리_분석/05_가비지_컬렉션과_GC_Roots.md
+    - 힙덤프와 hprof: JVM_메모리_분석/06_힙덤프와_hprof.md
+    - JVM 옵션과 튜닝: JVM_메모리_분석/07_JVM_옵션과_튜닝.md
+    - MAT 리포트 완전해석: JVM_메모리_분석/08_MAT_리포트_완전해석.md
+    - 빠싺 최종시험: JVM_메모리_분석/09_빠싺_최종시험.md
+  - 메모리 기본기초:
+    - 학습 로드맵: 메모리_기본기초/00_학습_로드맵.md
+    - 메모리란 무엇인가: 메모리_기본기초/01_메모리란_무엇인가.md
+    - 가상 메모리와 페이징: 메모리_기본기초/02_가상_메모리와_페이징.md
+    - 프로세스 메모리 구조: 메모리_기본기초/03_프로세스_메모리_구조.md
+    - JVM 메모리 구조: 메모리_기본기초/04_JVM_메모리_구조.md
+    - 가비지 컬렉션 기초: 메모리_기본기초/05_가비지_컬렉션_기초.md
+    - 메모리 누수 패턴: 메모리_기본기초/06_메모리_누수_패턴.md
+    - 리눅스 메모리 관리: 메모리_기본기초/07_리눅스_메모리_관리.md
+    - JVM 튜닝과 진단도구: 메모리_기본기초/08_JVM_튜닝과_진단도구.md
+    - 실전 메모리 장애대응: 메모리_기본기초/09_실전_메모리_장애대응.md
+    - 빠싺 최종시험: 메모리_기본기초/10_빠싺_최종시험.md
+    - 빠싺 최종시험 정답: 메모리_기본기초/11_빠싺_최종시험_정답.md
+  - 서버 메모리:
+    - 학습 로드맵: 서버_메모리/00_학습_로드맵.md
+    - 메모리의 기초 중의 기초: 서버_메모리/01_메모리의_기초_중의_기초.md
+    - 서버란 무엇인가: 서버_메모리/02_서버란_무엇인가.md
+    - OS의 메모리 관리: 서버_메모리/03_OS의_메모리_관리.md
+    - 프로세스의 메모리 사용 원리: 서버_메모리/04_프로세스의_메모리_사용_원리.md
+    - JVM 옵션 완전 해석: 서버_메모리/05_JVM_옵션_완전_해석.md
+    - JVM 메모리 구조와 힙 확장: 서버_메모리/06_JVM_메모리_구조와_힙_확장.md
+    - GC의 모든 것: 서버_메모리/07_GC의_모든_것.md
+    - GC와 OS 페이지 관리: 서버_메모리/08_GC와_OS_페이지_관리는_다른_것이다.md
+    - 모니터링 수치 완전 해석: 서버_메모리/09_모니터링_수치_완전_해석.md
+    - 실전 우리 서버 사례 분석: 서버_메모리/10_실전_우리_서버_사례_분석.md
+    - 빠싺 최종시험: 서버_메모리/11_빠싺_최종시험.md
+    - 빠싺 최종시험 정답: 서버_메모리/12_빠싺_최종시험_정답.md
+  - 스레드:
+    - 학습 로드맵: 스레드/00_학습_로드맵.md
+    - 스레드란 무엇인가: 스레드/01_스레드란_무엇인가.md
+    - 스레드 생성과 실행: 스레드/02_스레드_생성과_실행.md
+    - 스레드 생명주기: 스레드/03_스레드_생명주기.md
+    - 동기화와 락: 스레드/04_동기화와_락.md
+    - Timer와 TimerTask: 스레드/05_Timer와_TimerTask.md
+    - 스레드풀과 Executor: 스레드/06_스레드풀과_Executor.md
+    - 데몬스레드와 GC: 스레드/07_데몬스레드와_GC.md
+    - 우리 프로젝트로 보는 스레드: 스레드/08_우리_프로젝트로_보는_스레드.md
+    - 빠싺 최종시험: 스레드/09_빠싺_최종시험.md
+  - DB:
+    - 학습 로드맵: DB/00_학습_로드맵.md
+    - DB란 무엇인가: DB/01_DB란_무엇인가.md
+    - SQL 기초 DDL DML DCL: DB/02_SQL_기초_DDL_DML_DCL.md
+    - DELETE TRUNCATE DROP: DB/03_DELETE_TRUNCATE_DROP.md
+    - 트랜잭션과 Auto-Commit: DB/04_트랜잭션과_Auto-Commit.md
+    - 격리수준과 MVCC: DB/05_격리수준과_MVCC.md
+    - 락의 세계: DB/06_락의_세계.md
+    - SHOW PROCESSLIST 실전분석: DB/07_SHOW_PROCESSLIST_실전분석.md
+    - information_schema 활용: DB/08_information_schema_활용.md
+    - 인덱스 완전정복: DB/09_인덱스_완전정복.md
+    - InnoDB 스토리지 엔진: DB/10_InnoDB_스토리지_엔진.md
+    - mysqldump와 백업전략: DB/11_mysqldump와_백업전략.md
+    - 디스크와 DB의 관계: DB/12_디스크와_DB의_관계.md
+    - 실전종합 장애대응: DB/13_실전종합_장애대응.md
+    - 빠싺 최종시험: DB/14_빠싺_최종시험.md
+  - API 통신:
+    - 학습 로드맵: API_통신/00_학습_로드맵.md
+    - HTTP 기초: API_통신/01_HTTP_기초.md
+    - JSON 완전정복: API_통신/02_JSON_완전정복.md
+    - REST API: API_통신/03_REST_API.md
+    - Java 타입캐스팅: API_통신/04_Java_타입캐스팅.md
+    - Spring Transactional: API_통신/05_Spring_Transactional.md
+    - MyBatis Batch: API_통신/06_MyBatis_Batch.md
+    - 재시도 패턴: API_통신/07_재시도_패턴.md
+    - 실전 경상국립대 분석: API_통신/08_실전_경상국립대_분석.md
+    - 빠싺 최종시험: API_통신/09_빠싺_최종시험.md
+    - 빠싺 최종시험 정답: API_통신/10_빠싺_최종시험_정답.md
+    - 서버 인프라 네트워크: API_통신/11_서버_인프라_네트워크.md
+  - JWT API인증:
+    - 학습 로드맵: JWT_API인증/00_학습_로드맵.md
+    - JWT가 뭐야: JWT_API인증/01_Alpha_JWT가_뭐야.md
+    - 암호화 인코딩 해싱: JWT_API인증/02_Alpha_암호화_인코딩_해싱.md
+    - JWT 3조각 해부: JWT_API인증/03_Beta_JWT_3조각_해부.md
+    - JWT 생성과 검증: JWT_API인증/04_Beta_JWT_생성과_검증.md
+    - API 인증과 JWT: JWT_API인증/05_Gamma_API_인증과_JWT.md
+    - AES256 암호화: JWT_API인증/06_Gamma_AES256_암호화.md
+    - JWT 보안 설계: JWT_API인증/07_Delta_JWT_보안_설계.md
+    - NexClass LMS 실전: JWT_API인증/08_Omega_NexClass_LMS_실전.md
+    - 빠싺 최종시험: JWT_API인증/09_빠싺_최종시험.md
+    - 빠싺 최종시험 정답: JWT_API인증/10_빠싺_최종시험_정답.md
+  - JWT 세션 디버깅:
+    - JWT 기본구조: JWT_세션_디버깅/01_JWT_기본구조.md
+    - 세션과 토큰 관계: JWT_세션_디버깅/02_세션과_토큰_관계.md
+    - 코드베이스 검색 기술: JWT_세션_디버깅/03_코드베이스_검색_기술.md
+    - 외부연동 디버깅 방법론: JWT_세션_디버깅/04_외부연동_디버깅_방법론.md
+    - 빠싺 최종시험: JWT_세션_디버깅/05_빠싺_최종시험.md
+  - JPA:
+    - 학습 로드맵: JPA/00_학습_로드맵.md
+    - JPA가 뭐야: JPA/01_Alpha_JPA가_뭐야.md
+    - 엔티티 기초: JPA/02_Alpha_엔티티_기초.md
+    - Repository와 CRUD: JPA/03_Beta_Repository와_CRUD.md
+    - 연관관계 기초: JPA/04_Beta_연관관계_기초.md
+    - 영속성 컨텍스트: JPA/05_Gamma_영속성_컨텍스트.md
+    - JPQL과 쿼리: JPA/06_Gamma_JPQL과_쿼리.md
+    - 트랜잭션과 동시성: JPA/07_Delta_트랜잭션과_동시성.md
+    - 성능 최적화: JPA/08_Delta_성능_최적화.md
+    - NexClass 실전: JPA/09_Omega_NexClass_실전.md
+    - 빠싺 최종시험: JPA/10_빠싺_최종시험.md
+    - 빠싺 최종시험 정답: JPA/11_빠싺_최종시험_정답.md
+  - DNS Nginx 인프라:
+    - 학습 로드맵: DNS_Nginx_인프라/00_학습_로드맵.md
+    - IP와 포트: DNS_Nginx_인프라/01_IP와_포트.md
+    - DNS 도메인의 비밀: DNS_Nginx_인프라/02_DNS_도메인의_비밀.md
+    - HTTP와 HTTPS: DNS_Nginx_인프라/03_HTTP와_HTTPS.md
+    - SSL 인증서: DNS_Nginx_인프라/04_SSL_인증서.md
+    - Nginx 리버스프록시: DNS_Nginx_인프라/05_Nginx_리버스프록시.md
+    - Cloudflare: DNS_Nginx_인프라/06_Cloudflare.md
+    - WEB WAS 아키텍처: DNS_Nginx_인프라/07_WEB_WAS_아키텍처.md
+    - NexClass 인프라 실전: DNS_Nginx_인프라/08_NexClass_인프라_실전.md
+    - 빠싺 최종시험: DNS_Nginx_인프라/09_빠싺_최종시험.md
+    - 빠싺 최종시험 정답: DNS_Nginx_인프라/10_빠싺_최종시험_정답.md
+  - 서버 인프라:
+    - 학습 로드맵: 서버_인프라/00_학습_로드맵.md
+    - 서버란 무엇인가: 서버_인프라/01_서버란_무엇인가.md
+    - 리눅스 기초: 서버_인프라/02_리눅스_기초.md
+    - 네트워크 기초: 서버_인프라/03_네트워크_기초.md
+    - WEB서버 Apache: 서버_인프라/04_WEB서버_Apache.md
+    - WAS연동 mod_jk: 서버_인프라/05_WAS연동_mod_jk.md
+    - SSL 보안 백업: 서버_인프라/06_SSL_보안_백업.md
+  - 네트워크 스토리지:
+    - 전체 구조도: 네트워크_스토리지/01_전체_구조도.md
+    - 프로토콜 비교: 네트워크_스토리지/02_프로토콜_비교.md
+    - S3 스토리지 이해: 네트워크_스토리지/03_S3_스토리지_이해.md
+    - HTTP 상태코드 인증: 네트워크_스토리지/04_HTTP_상태코드_인증.md
+    - CDN CMS 흐름: 네트워크_스토리지/05_CDN_CMS_흐름.md
+    - Python 라이브러리 정리: 네트워크_스토리지/06_Python_라이브러리_정리.md
+    - 빠싺 최종시험: 네트워크_스토리지/07_빠싺_최종시험.md
+  - Redis:
+    - Redis 기본개념: Redis/01_Redis_기본개념.md
+    - 프로젝트별 Redis 적용현황: Redis/02_프로젝트별_Redis_적용현황.md
+    - Redis 설정 상세분석: Redis/03_Redis_설정_상세분석.md
+    - 실제 코드 패턴 분석: Redis/04_실제_코드_패턴_분석.md
+    - 통합 마스터 가이드: Redis/05_통합_마스터_가이드.md
+    - 비전공자용 Redis 요약: Redis/06_비전공자용_Redis_요약.md
+    - LMS 중복체크 메커니즘: Redis/07_LMS_중복체크_메커니즘_정확분석.md
+  - Webhook:
+    - 학습 로드맵: Webhook/00_학습_로드맵.md
+    - API 호출이 뭐야: Webhook/01_API_호출이_뭐야.md
+    - Webhook이 뭐야: Webhook/02_Webhook이_뭐야.md
+    - Push와 Pull: Webhook/03_Push와_Pull.md
+    - Webhook 동작 원리: Webhook/04_Webhook_동작_원리.md
+    - Webhook vs API 호출: Webhook/05_Webhook_vs_API_호출.md
+    - Zoom Webhook 이벤트: Webhook/06_Zoom_Webhook_이벤트.md
+    - Webhook 보안과 설계: Webhook/07_Webhook_보안과_설계.md
+    - NexClass 실전 구현: Webhook/08_NexClass_실전_구현.md
+    - 빠싺 최종시험: Webhook/09_빠싺_최종시험.md
+    - 빠싺 최종시험 정답: Webhook/10_빠싺_최종시험_정답.md
