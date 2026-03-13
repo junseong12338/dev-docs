@@ -1,0 +1,7640 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Claude와 함께 만든 개발 학습 문서">
+      
+      
+        <meta name="author" content="이준성">
+      
+      
+      
+        <link rel="prev" href="../05_Spring_Transactional/">
+      
+      
+        <link rel="next" href="../07_%EC%9E%AC%EC%8B%9C%EB%8F%84_%ED%8C%A8%ED%84%B4/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../material/book-open-page-variant">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>MyBatis Batch - Junsung's Dev Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#06-mybatis-batch-gamma" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../.." title="Junsung&#39;s Dev Docs" class="md-header__button md-logo" aria-label="Junsung's Dev Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Junsung's Dev Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              MyBatis Batch
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="deep-orange"  aria-label="다크 모드"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="amber"  aria-label="라이트 모드"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Junsung&#39;s Dev Docs" class="md-nav__button md-logo" aria-label="Junsung's Dev Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    Junsung's Dev Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Core
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Spring Core
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/01_Spring%EC%9D%B4_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring이 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/02_Bean%EC%9D%B4_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bean이 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/03_DI_%EC%9D%98%EC%A1%B4%EC%84%B1_%EC%A3%BC%EC%9E%85/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DI 의존성 주입
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/04_XML_%EC%84%A4%EC%A0%95_%EC%99%84%EC%A0%84%EC%A0%95%EB%B3%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XML 설정
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/05_Bean_%EC%83%9D%EB%AA%85%EC%A3%BC%EA%B8%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bean 생명주기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/06_Bean_Scope/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bean Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/07_%EC%96%B4%EB%85%B8%ED%85%8C%EC%9D%B4%EC%85%98_%EC%84%A4%EC%A0%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    어노테이션 설정
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/08_Spring_Context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/09_%EC%9A%B0%EB%A6%AC_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A1%9C_%EB%B3%B4%EB%8A%94_Spring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    우리 프로젝트로 보는 Spring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 메모리 분석
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JVM 메모리 분석
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/01_JVM%EC%9D%B4%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM이란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/02_JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 메모리 구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/03_%EA%B0%9D%EC%B2%B4%EC%99%80_%ED%81%B4%EB%9E%98%EC%8A%A4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    객체와 클래스
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/04_%ED%81%B4%EB%9E%98%EC%8A%A4%EB%A1%9C%EB%8D%94/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    클래스로더
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/05_%EA%B0%80%EB%B9%84%EC%A7%80_%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC_GC_Roots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    가비지 컬렉션과 GC Roots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/06_%ED%9E%99%EB%8D%A4%ED%94%84%EC%99%80_hprof/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    힙덤프와 hprof
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/07_JVM_%EC%98%B5%EC%85%98%EA%B3%BC_%ED%8A%9C%EB%8B%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 옵션과 튜닝
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/08_MAT_%EB%A6%AC%ED%8F%AC%ED%8A%B8_%EC%99%84%EC%A0%84%ED%95%B4%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAT 리포트 완전해석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/09_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리 기본기초
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    메모리 기본기초
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/01_%EB%A9%94%EB%AA%A8%EB%A6%AC%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/02_%EA%B0%80%EC%83%81_%EB%A9%94%EB%AA%A8%EB%A6%AC%EC%99%80_%ED%8E%98%EC%9D%B4%EC%A7%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    가상 메모리와 페이징
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/03_%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    프로세스 메모리 구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/04_JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 메모리 구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/05_%EA%B0%80%EB%B9%84%EC%A7%80_%EC%BB%AC%EB%A0%89%EC%85%98_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    가비지 컬렉션 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/06_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%88%84%EC%88%98_%ED%8C%A8%ED%84%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리 누수 패턴
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/07_%EB%A6%AC%EB%88%85%EC%8A%A4_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    리눅스 메모리 관리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/08_JVM_%ED%8A%9C%EB%8B%9D%EA%B3%BC_%EC%A7%84%EB%8B%A8%EB%8F%84%EA%B5%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 튜닝과 진단도구
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/09_%EC%8B%A4%EC%A0%84_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EC%9E%A5%EC%95%A0%EB%8C%80%EC%9D%91/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전 메모리 장애대응
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/11_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버 메모리
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    서버 메모리
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/01_%EB%A9%94%EB%AA%A8%EB%A6%AC%EC%9D%98_%EA%B8%B0%EC%B4%88_%EC%A4%91%EC%9D%98_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리의 기초 중의 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/02_%EC%84%9C%EB%B2%84%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/03_OS%EC%9D%98_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OS의 메모리 관리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/04_%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4%EC%9D%98_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EC%82%AC%EC%9A%A9_%EC%9B%90%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    프로세스의 메모리 사용 원리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/05_JVM_%EC%98%B5%EC%85%98_%EC%99%84%EC%A0%84_%ED%95%B4%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 옵션 완전 해석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/06_JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0%EC%99%80_%ED%9E%99_%ED%99%95%EC%9E%A5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 메모리 구조와 힙 확장
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/07_GC%EC%9D%98_%EB%AA%A8%EB%93%A0_%EA%B2%83/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GC의 모든 것
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/08_GC%EC%99%80_OS_%ED%8E%98%EC%9D%B4%EC%A7%80_%EA%B4%80%EB%A6%AC%EB%8A%94_%EB%8B%A4%EB%A5%B8_%EA%B2%83%EC%9D%B4%EB%8B%A4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GC와 OS 페이지 관리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/09_%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81_%EC%88%98%EC%B9%98_%EC%99%84%EC%A0%84_%ED%95%B4%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    모니터링 수치 완전 해석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/10_%EC%8B%A4%EC%A0%84_%EC%9A%B0%EB%A6%AC_%EC%84%9C%EB%B2%84_%EC%82%AC%EB%A1%80_%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전 우리 서버 사례 분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/11_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/12_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    스레드
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/01_%EC%8A%A4%EB%A0%88%EB%93%9C%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/02_%EC%8A%A4%EB%A0%88%EB%93%9C_%EC%83%9D%EC%84%B1%EA%B3%BC_%EC%8B%A4%ED%96%89/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드 생성과 실행
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/03_%EC%8A%A4%EB%A0%88%EB%93%9C_%EC%83%9D%EB%AA%85%EC%A3%BC%EA%B8%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드 생명주기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/04_%EB%8F%99%EA%B8%B0%ED%99%94%EC%99%80_%EB%9D%BD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    동기화와 락
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/05_Timer%EC%99%80_TimerTask/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Timer와 TimerTask
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/06_%EC%8A%A4%EB%A0%88%EB%93%9C%ED%92%80%EA%B3%BC_Executor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드풀과 Executor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/07_%EB%8D%B0%EB%AA%AC%EC%8A%A4%EB%A0%88%EB%93%9C%EC%99%80_GC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    데몬스레드와 GC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/08_%EC%9A%B0%EB%A6%AC_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A1%9C_%EB%B3%B4%EB%8A%94_%EC%8A%A4%EB%A0%88%EB%93%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    우리 프로젝트로 보는 스레드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/09_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DB
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/01_DB%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/02_SQL_%EA%B8%B0%EC%B4%88_DDL_DML_DCL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL 기초 DDL DML DCL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/03_DELETE_TRUNCATE_DROP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DELETE TRUNCATE DROP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/04_%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%EA%B3%BC_Auto-Commit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    트랜잭션과 Auto-Commit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/05_%EA%B2%A9%EB%A6%AC%EC%88%98%EC%A4%80%EA%B3%BC_MVCC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    격리수준과 MVCC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/06_%EB%9D%BD%EC%9D%98_%EC%84%B8%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    락의 세계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/07_SHOW_PROCESSLIST_%EC%8B%A4%EC%A0%84%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SHOW PROCESSLIST 실전분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/08_information_schema_%ED%99%9C%EC%9A%A9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    information_schema 활용
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/09_%EC%9D%B8%EB%8D%B1%EC%8A%A4_%EC%99%84%EC%A0%84%EC%A0%95%EB%B3%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    인덱스 완전정복
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/10_InnoDB_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80_%EC%97%94%EC%A7%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    InnoDB 스토리지 엔진
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/11_mysqldump%EC%99%80_%EB%B0%B1%EC%97%85%EC%A0%84%EB%9E%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mysqldump와 백업전략
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/12_%EB%94%94%EC%8A%A4%ED%81%AC%EC%99%80_DB%EC%9D%98_%EA%B4%80%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    디스크와 DB의 관계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/13_%EC%8B%A4%EC%A0%84%EC%A2%85%ED%95%A9_%EC%9E%A5%EC%95%A0%EB%8C%80%EC%9D%91/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전종합 장애대응
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/14_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 통신
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API 통신
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_HTTP_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_JSON_%EC%99%84%EC%A0%84%EC%A0%95%EB%B3%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JSON 완전정복
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_REST_API/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_Java_%ED%83%80%EC%9E%85%EC%BA%90%EC%8A%A4%ED%8C%85/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java 타입캐스팅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_Spring_Transactional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Transactional
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MyBatis Batch
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MyBatis Batch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-mybatis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. MyBatis가 뭐야?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. MyBatis가 뭐야?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 왜 필요한가
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-mybatis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 MyBatis 구조
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-crud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 기본 CRUD 매핑
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 기본 CRUD 매핑">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 네 가지 기본 태그
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-parametertype-resulttype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 parameterType과 resultType
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-vs-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 #{} vs ${} - 이거 모르면 보안사고 난다
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 동적 SQL
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 동적 SQL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-if" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 if 태그
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-choose-when-otherwise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 choose / when / otherwise
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-where" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 where 태그
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-foreach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 foreach 태그 (핵심!)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-foreach-batch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. foreach로 Batch 처리
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. foreach로 Batch 처리">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-insert-vs-batch-insert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 단건 INSERT vs Batch INSERT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-batch-insert-xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Batch INSERT XML 작성법
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-insert-on-duplicate-key-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 INSERT ON DUPLICATE KEY UPDATE
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 경상국립대 실제 코드
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 경상국립대 실제 코드">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 수강생 동기화의 핵심 전략
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-updatesyncstudstatus-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 updateSyncStudStatus (1단계: 전체 취소)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-mergesyncstudbatch-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 mergeSyncStudBatch (2단계: 확인된 학생 복원)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 전체 흐름 시각화
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-batch-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Batch vs 단건 처리 성능
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Batch vs 단건 처리 성능">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-1000" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 성능 비교 (1000건 기준)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-db" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 DB 커넥션 효율
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 주의사항
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 주의사항">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 SQL 빈 줄 금지
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-foreach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 foreach 항목이 비어있을 때 처리
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-batch-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 대량 데이터 시 Batch Size 조절
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-batch-update-foreach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Batch UPDATE는 foreach 방식이 다르다
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 확인 문제
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. 확인 문제">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        문제 1.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        문제 2.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        문제 3.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        문제 4.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        문제 5.
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_%EC%9E%AC%EC%8B%9C%EB%8F%84_%ED%8C%A8%ED%84%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    재시도 패턴
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_%EC%8B%A4%EC%A0%84_%EA%B2%BD%EC%83%81%EA%B5%AD%EB%A6%BD%EB%8C%80_%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전 경상국립대 분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11_%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC_%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버 인프라 네트워크
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT API인증
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JWT API인증
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/01_Alpha_JWT%EA%B0%80_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT가 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/02_Alpha_%EC%95%94%ED%98%B8%ED%99%94_%EC%9D%B8%EC%BD%94%EB%94%A9_%ED%95%B4%EC%8B%B1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    암호화 인코딩 해싱
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/03_Beta_JWT_3%EC%A1%B0%EA%B0%81_%ED%95%B4%EB%B6%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 3조각 해부
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/04_Beta_JWT_%EC%83%9D%EC%84%B1%EA%B3%BC_%EA%B2%80%EC%A6%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 생성과 검증
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/05_Gamma_API_%EC%9D%B8%EC%A6%9D%EA%B3%BC_JWT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 인증과 JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/06_Gamma_AES256_%EC%95%94%ED%98%B8%ED%99%94/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AES256 암호화
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/07_Delta_JWT_%EB%B3%B4%EC%95%88_%EC%84%A4%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 보안 설계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/08_Omega_NexClass_LMS_%EC%8B%A4%EC%A0%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NexClass LMS 실전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/09_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 세션 디버깅
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JWT 세션 디버깅
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/01_JWT_%EA%B8%B0%EB%B3%B8%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 기본구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/02_%EC%84%B8%EC%85%98%EA%B3%BC_%ED%86%A0%ED%81%B0_%EA%B4%80%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    세션과 토큰 관계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/03_%EC%BD%94%EB%93%9C%EB%B2%A0%EC%9D%B4%EC%8A%A4_%EA%B2%80%EC%83%89_%EA%B8%B0%EC%88%A0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    코드베이스 검색 기술
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/04_%EC%99%B8%EB%B6%80%EC%97%B0%EB%8F%99_%EB%94%94%EB%B2%84%EA%B9%85_%EB%B0%A9%EB%B2%95%EB%A1%A0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부연동 디버깅 방법론
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/05_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JPA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JPA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/01_Alpha_JPA%EA%B0%80_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JPA가 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/02_Alpha_%EC%97%94%ED%8B%B0%ED%8B%B0_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    엔티티 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/03_Beta_Repository%EC%99%80_CRUD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository와 CRUD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/04_Beta_%EC%97%B0%EA%B4%80%EA%B4%80%EA%B3%84_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    연관관계 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/05_Gamma_%EC%98%81%EC%86%8D%EC%84%B1_%EC%BB%A8%ED%85%8D%EC%8A%A4%ED%8A%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    영속성 컨텍스트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/06_Gamma_JPQL%EA%B3%BC_%EC%BF%BC%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JPQL과 쿼리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/07_Delta_%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%EA%B3%BC_%EB%8F%99%EC%8B%9C%EC%84%B1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    트랜잭션과 동시성
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/08_Delta_%EC%84%B1%EB%8A%A5_%EC%B5%9C%EC%A0%81%ED%99%94/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    성능 최적화
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/09_Omega_NexClass_%EC%8B%A4%EC%A0%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NexClass 실전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/11_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DNS Nginx 인프라
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DNS Nginx 인프라
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/01_IP%EC%99%80_%ED%8F%AC%ED%8A%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IP와 포트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/02_DNS_%EB%8F%84%EB%A9%94%EC%9D%B8%EC%9D%98_%EB%B9%84%EB%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DNS 도메인의 비밀
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/03_HTTP%EC%99%80_HTTPS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP와 HTTPS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/04_SSL_%EC%9D%B8%EC%A6%9D%EC%84%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSL 인증서
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/05_Nginx_%EB%A6%AC%EB%B2%84%EC%8A%A4%ED%94%84%EB%A1%9D%EC%8B%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nginx 리버스프록시
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/06_Cloudflare/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cloudflare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/07_WEB_WAS_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WEB WAS 아키텍처
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/08_NexClass_%EC%9D%B8%ED%94%84%EB%9D%BC_%EC%8B%A4%EC%A0%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NexClass 인프라 실전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/09_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버 인프라
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    서버 인프라
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/01_%EC%84%9C%EB%B2%84%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/02_%EB%A6%AC%EB%88%85%EC%8A%A4_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    리눅스 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/03_%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    네트워크 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/04_WEB%EC%84%9C%EB%B2%84_Apache/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WEB서버 Apache
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/05_WAS%EC%97%B0%EB%8F%99_mod_jk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WAS연동 mod_jk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/06_SSL_%EB%B3%B4%EC%95%88_%EB%B0%B1%EC%97%85/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSL 보안 백업
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    네트워크 스토리지
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    네트워크 스토리지
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/01_%EC%A0%84%EC%B2%B4_%EA%B5%AC%EC%A1%B0%EB%8F%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    전체 구조도
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/02_%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C_%EB%B9%84%EA%B5%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    프로토콜 비교
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/03_S3_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80_%EC%9D%B4%ED%95%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    S3 스토리지 이해
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/04_HTTP_%EC%83%81%ED%83%9C%EC%BD%94%EB%93%9C_%EC%9D%B8%EC%A6%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP 상태코드 인증
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/05_CDN_CMS_%ED%9D%90%EB%A6%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CDN CMS 흐름
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/06_Python_%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC_%EC%A0%95%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python 라이브러리 정리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/07_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redis
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Redis
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/01_Redis_%EA%B8%B0%EB%B3%B8%EA%B0%9C%EB%85%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redis 기본개념
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/02_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%B3%84_Redis_%EC%A0%81%EC%9A%A9%ED%98%84%ED%99%A9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    프로젝트별 Redis 적용현황
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/03_Redis_%EC%84%A4%EC%A0%95_%EC%83%81%EC%84%B8%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redis 설정 상세분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/04_%EC%8B%A4%EC%A0%9C_%EC%BD%94%EB%93%9C_%ED%8C%A8%ED%84%B4_%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실제 코드 패턴 분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/05_%ED%86%B5%ED%95%A9_%EB%A7%88%EC%8A%A4%ED%84%B0_%EA%B0%80%EC%9D%B4%EB%93%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    통합 마스터 가이드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/06_%EB%B9%84%EC%A0%84%EA%B3%B5%EC%9E%90%EC%9A%A9_Redis_%EC%9A%94%EC%95%BD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    비전공자용 Redis 요약
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/07_LMS_%EC%A4%91%EB%B3%B5%EC%B2%B4%ED%81%AC_%EB%A9%94%EC%BB%A4%EB%8B%88%EC%A6%98_%EC%A0%95%ED%99%95%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LMS 중복체크 메커니즘
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Webhook
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/01_API_%ED%98%B8%EC%B6%9C%EC%9D%B4_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 호출이 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/02_Webhook%EC%9D%B4_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook이 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/03_Push%EC%99%80_Pull/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Push와 Pull
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/04_Webhook_%EB%8F%99%EC%9E%91_%EC%9B%90%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook 동작 원리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/05_Webhook_vs_API_%ED%98%B8%EC%B6%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook vs API 호출
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/06_Zoom_Webhook_%EC%9D%B4%EB%B2%A4%ED%8A%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zoom Webhook 이벤트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/07_Webhook_%EB%B3%B4%EC%95%88%EA%B3%BC_%EC%84%A4%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook 보안과 설계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/08_NexClass_%EC%8B%A4%EC%A0%84_%EA%B5%AC%ED%98%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NexClass 실전 구현
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/09_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-mybatis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. MyBatis가 뭐야?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. MyBatis가 뭐야?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 왜 필요한가
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-mybatis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 MyBatis 구조
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-crud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 기본 CRUD 매핑
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 기본 CRUD 매핑">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 네 가지 기본 태그
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-parametertype-resulttype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 parameterType과 resultType
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-vs-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 #{} vs ${} - 이거 모르면 보안사고 난다
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 동적 SQL
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 동적 SQL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-if" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 if 태그
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-choose-when-otherwise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 choose / when / otherwise
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-where" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 where 태그
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-foreach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 foreach 태그 (핵심!)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-foreach-batch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. foreach로 Batch 처리
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. foreach로 Batch 처리">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-insert-vs-batch-insert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 단건 INSERT vs Batch INSERT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-batch-insert-xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Batch INSERT XML 작성법
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-insert-on-duplicate-key-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 INSERT ON DUPLICATE KEY UPDATE
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 경상국립대 실제 코드
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 경상국립대 실제 코드">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 수강생 동기화의 핵심 전략
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-updatesyncstudstatus-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 updateSyncStudStatus (1단계: 전체 취소)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-mergesyncstudbatch-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 mergeSyncStudBatch (2단계: 확인된 학생 복원)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 전체 흐름 시각화
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-batch-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Batch vs 단건 처리 성능
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Batch vs 단건 처리 성능">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-1000" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 성능 비교 (1000건 기준)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-db" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 DB 커넥션 효율
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 주의사항
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 주의사항">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 SQL 빈 줄 금지
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-foreach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 foreach 항목이 비어있을 때 처리
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-batch-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 대량 데이터 시 Batch Size 조절
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-batch-update-foreach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Batch UPDATE는 foreach 방식이 다르다
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 확인 문제
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. 확인 문제">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        문제 1.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        문제 2.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        문제 3.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        문제 4.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        문제 5.
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="네비게이션" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    API 통신
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+  
+                  
+
+
+
+<h1 id="06-mybatis-batch-gamma">06. MyBatis Batch 처리 - Gamma<a class="headerlink" href="#06-mybatis-batch-gamma" title="Permanent link">&para;</a></h1>
+<hr />
+<h2 id="1-mybatis">1. MyBatis가 뭐야?<a class="headerlink" href="#1-mybatis" title="Permanent link">&para;</a></h2>
+<p><strong>SQL Mapper 프레임워크</strong>다. Java 코드에서 SQL을 직접 문자열로 짜는 대신, <strong>XML 파일에 SQL을 분리해서 작성</strong>하고, Java에서는 메서드만 호출하면 되게 만든 거야.</p>
+<h3 id="11">1.1 왜 필요한가<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// MyBatis 없이 (순수 JDBC)</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">String</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;SELECT * FROM TB_USER WHERE USER_NO = ?&quot;</span><span class="p">;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">PreparedStatement</span><span class="w"> </span><span class="n">pstmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">sql</span><span class="p">);</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">pstmt</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;U001&quot;</span><span class="p">);</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">ResultSet</span><span class="w"> </span><span class="n">rs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pstmt</span><span class="p">.</span><span class="na">executeQuery</span><span class="p">();</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">next</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">user</span><span class="p">.</span><span class="na">setUserNm</span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">getString</span><span class="p">(</span><span class="s">&quot;USER_NM&quot;</span><span class="p">));</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="n">user</span><span class="p">.</span><span class="na">setEmail</span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">getString</span><span class="p">(</span><span class="s">&quot;EMAIL&quot;</span><span class="p">));</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="c1">// ... 컬럼마다 일일이 매핑</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">}</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">rs</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="n">pstmt</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="n">conn</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">  </span><span class="c1">// 이거 빠뜨리면 커넥션 누수</span>
+</span></code></pre></div>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// MyBatis 사용</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">User</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">userMapper</span><span class="p">.</span><span class="na">selectUser</span><span class="p">(</span><span class="s">&quot;U001&quot;</span><span class="p">);</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1">// 끝. SQL은 XML에, 매핑은 MyBatis가 자동으로.</span>
+</span></code></pre></div>
+<p><strong>핵심:</strong> Java 코드와 SQL을 분리한다. Java 개발자는 비즈니스 로직에 집중하고, SQL은 XML에서 관리한다.</p>
+<h3 id="12-mybatis">1.2 MyBatis 구조<a class="headerlink" href="#12-mybatis" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TD
+    A["Java (Service/Controller)&lt;br/&gt;syncMapper.selectCourseCodeSyncList(sync)"] --&gt; B["Mapper 인터페이스 (Java)&lt;br/&gt;List&amp;lt;Sync&amp;gt; selectCourseCodeSyncList(Sync sync)"]
+    B --&gt; C["Mapper XML (SQL)&lt;br/&gt;&amp;lt;select id='selectCourseCodeSyncList' ...&amp;gt;&lt;br/&gt;SELECT * FROM subject_list WHERE ..."]
+    C --&gt; D["DB 실행 결과 → Java 객체(VO)로 자동 매핑"]</code></pre>
+<hr />
+<h2 id="2-crud">2. 기본 CRUD 매핑<a class="headerlink" href="#2-crud" title="Permanent link">&para;</a></h2>
+<h3 id="21">2.1 네 가지 기본 태그<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>태그</th>
+<th>용도</th>
+<th>반환값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;select&gt;</code></td>
+<td>조회</td>
+<td>resultType에 지정한 객체/리스트</td>
+</tr>
+<tr>
+<td><code>&lt;insert&gt;</code></td>
+<td>삽입</td>
+<td>영향받은 행 수 (int)</td>
+</tr>
+<tr>
+<td><code>&lt;update&gt;</code></td>
+<td>수정</td>
+<td>영향받은 행 수 (int)</td>
+</tr>
+<tr>
+<td><code>&lt;delete&gt;</code></td>
+<td>삭제</td>
+<td>영향받은 행 수 (int)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-parametertype-resulttype">2.2 parameterType과 resultType<a class="headerlink" href="#22-parametertype-resulttype" title="Permanent link">&para;</a></h3>
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="cm">&lt;!-- parameterType: Java에서 넘기는 파라미터 타입 --&gt;</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="cm">&lt;!-- resultType: DB 결과를 매핑할 Java 타입 --&gt;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">&lt;select</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;selectUser&quot;</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">        </span><span class="na">parameterType=</span><span class="s">&quot;String&quot;</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">        </span><span class="na">resultType=</span><span class="s">&quot;kr.co.mediopia.coss.hub.vo.UserVO&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span>SELECT<span class="w"> </span>USER_NO,<span class="w"> </span>USER_NM,<span class="w"> </span>EMAIL
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span>FROM<span class="w"> </span>TB_USER
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span>WHERE<span class="w"> </span>USER_NO<span class="w"> </span>=<span class="w"> </span>#{userNo}
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nt">&lt;/select&gt;</span>
+</span></code></pre></div>
+<ul>
+<li><strong>parameterType</strong>: 생략 가능. MyBatis가 자동 추론한다.</li>
+<li><strong>resultType</strong>: SELECT에서는 필수. 결과를 어떤 Java 객체에 담을지 지정.</li>
+</ul>
+<h3 id="23-vs-">2.3 #{} vs ${} - 이거 모르면 보안사고 난다<a class="headerlink" href="#23-vs-" title="Permanent link">&para;</a></h3>
+<div class="admonition danger">
+<p class="admonition-title">#{} vs ${}</p>
+<p><strong><code>#{value}</code></strong></p>
+<ul>
+<li>PreparedStatement의 ? 파라미터로 바인딩</li>
+<li>SQL Injection 방어됨</li>
+<li>값(value)에만 사용</li>
+</ul>
+<p><strong><code>${value}</code></strong></p>
+<ul>
+<li>문자열 그대로 치환 (문자열 결합)</li>
+<li>SQL Injection에 취약!</li>
+<li>테이블명, 컬럼명 등 구조에 사용</li>
+</ul>
+</div>
+<p><strong>실제로 뭐가 다른지:</strong></p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">-- #{userNo}로 넘기면 (userNo = &quot;U001&quot;)</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">TB_USER</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">USER_NO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1">-- PreparedStatement가 ?에 &#39;U001&#39;을 안전하게 바인딩</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1">-- ${userNo}로 넘기면 (userNo = &quot;U001&quot;)</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">TB_USER</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">USER_NO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">U001</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1">-- 문자열이 그대로 SQL에 박힘</span>
+</span></code></pre></div>
+<p><strong>SQL Injection 공격 시나리오:</strong></p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1">-- 악의적 입력: userNo = &quot;U001&#39; OR &#39;1&#39;=&#39;1&quot;</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1">-- #{userNo} 사용 시</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">TB_USER</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">USER_NO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;U001&#39;&#39; OR &#39;&#39;1&#39;&#39;=&#39;&#39;1&#39;</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1">-- → 이스케이프 처리됨. 공격 실패.</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1">-- ${userNo} 사용 시</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">TB_USER</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">USER_NO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">U001</span><span class="s1">&#39; OR &#39;</span><span class="mi">1</span><span class="s1">&#39;=&#39;</span><span class="mi">1</span><span class="err">&#39;</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="c1">-- → 조건이 항상 참. 전체 사용자 데이터 유출!</span>
+</span></code></pre></div>
+<p><strong>원칙:</strong> 값에는 <code>#{}</code>, 구조(테이블명/컬럼명/ORDER BY)에만 <code>${}</code> 사용. <code>${}</code>를 쓸 때는 반드시 화이트리스트 검증.</p>
+<hr />
+<h2 id="3-sql">3. 동적 SQL<a class="headerlink" href="#3-sql" title="Permanent link">&para;</a></h2>
+<p>SQL을 조건에 따라 다르게 생성하는 기능이다. Java에서 if문으로 SQL 문자열을 조립하던 지옥을 MyBatis가 해결해줬다.</p>
+<h3 id="31-if">3.1 if 태그<a class="headerlink" href="#31-if" title="Permanent link">&para;</a></h3>
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">&lt;select</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;selectUserList&quot;</span><span class="w"> </span><span class="na">resultType=</span><span class="s">&quot;UserVO&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span>SELECT<span class="w"> </span>*<span class="w"> </span>FROM<span class="w"> </span>TB_USER
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span>WHERE<span class="w"> </span>DEL_YN<span class="w"> </span>=<span class="w"> </span>&#39;N&#39;
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">&quot;userNm != null and userNm != &#39;&#39;&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">        </span>AND<span class="w"> </span>USER_NM<span class="w"> </span>LIKE<span class="w"> </span>CONCAT(&#39;%&#39;,<span class="w"> </span>#{userNm},<span class="w"> </span>&#39;%&#39;)
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="nt">&lt;/if&gt;</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">&quot;univCd != null and univCd != &#39;&#39;&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">        </span>AND<span class="w"> </span>UNIV_CD<span class="w"> </span>=<span class="w"> </span>#{univCd}
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="nt">&lt;/if&gt;</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="nt">&lt;/select&gt;</span>
+</span></code></pre></div>
+<ul>
+<li><code>test</code> 속성에 Java 조건식을 쓴다.</li>
+<li>조건이 참일 때만 해당 SQL 조각이 포함된다.</li>
+<li><strong>주의:</strong> <code>test</code> 안에서 문자열 비교는 <code>==</code>이 아니라 <code>.equals()</code> 또는 <code>!=</code> 사용.</li>
+</ul>
+<h3 id="32-choose-when-otherwise">3.2 choose / when / otherwise<a class="headerlink" href="#32-choose-when-otherwise" title="Permanent link">&para;</a></h3>
+<p>Java의 if - else if - else와 같다.</p>
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">&lt;select</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;selectUserList&quot;</span><span class="w"> </span><span class="na">resultType=</span><span class="s">&quot;UserVO&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span>SELECT<span class="w"> </span>*<span class="w"> </span>FROM<span class="w"> </span>TB_USER
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span>WHERE<span class="w"> </span>DEL_YN<span class="w"> </span>=<span class="w"> </span>&#39;N&#39;
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">&lt;choose&gt;</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">        </span><span class="nt">&lt;when</span><span class="w"> </span><span class="na">test=</span><span class="s">&quot;searchType == &#39;name&#39;&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">            </span>AND<span class="w"> </span>USER_NM<span class="w"> </span>LIKE<span class="w"> </span>CONCAT(&#39;%&#39;,<span class="w"> </span>#{keyword},<span class="w"> </span>&#39;%&#39;)
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="nt">&lt;/when&gt;</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">        </span><span class="nt">&lt;when</span><span class="w"> </span><span class="na">test=</span><span class="s">&quot;searchType == &#39;email&#39;&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">            </span>AND<span class="w"> </span>EMAIL<span class="w"> </span>LIKE<span class="w"> </span>CONCAT(&#39;%&#39;,<span class="w"> </span>#{keyword},<span class="w"> </span>&#39;%&#39;)
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">        </span><span class="nt">&lt;/when&gt;</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">        </span><span class="nt">&lt;otherwise&gt;</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">            </span>AND<span class="w"> </span>(USER_NM<span class="w"> </span>LIKE<span class="w"> </span>CONCAT(&#39;%&#39;,<span class="w"> </span>#{keyword},<span class="w"> </span>&#39;%&#39;)
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">                 </span>OR<span class="w"> </span>EMAIL<span class="w"> </span>LIKE<span class="w"> </span>CONCAT(&#39;%&#39;,<span class="w"> </span>#{keyword},<span class="w"> </span>&#39;%&#39;))
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">        </span><span class="nt">&lt;/otherwise&gt;</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">    </span><span class="nt">&lt;/choose&gt;</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="nt">&lt;/select&gt;</span>
+</span></code></pre></div>
+<ul>
+<li><code>&lt;choose&gt;</code> 안에서 <strong>첫 번째로 참인 <code>&lt;when&gt;</code>만 실행</strong>된다.</li>
+<li>아무것도 안 맞으면 <code>&lt;otherwise&gt;</code> 실행.</li>
+</ul>
+<h3 id="33-where">3.3 where 태그<a class="headerlink" href="#33-where" title="Permanent link">&para;</a></h3>
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="cm">&lt;!-- where 태그 없이 (위험한 패턴) --&gt;</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nt">&lt;select</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;selectUserList&quot;</span><span class="w"> </span><span class="na">resultType=</span><span class="s">&quot;UserVO&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span>SELECT<span class="w"> </span>*<span class="w"> </span>FROM<span class="w"> </span>TB_USER
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span>WHERE<span class="w"> </span>1=1<span class="w">  </span><span class="cm">&lt;!-- 이런 꼼수를 써야 함 --&gt;</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">&quot;userNm != null&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">        </span>AND<span class="w"> </span>USER_NM<span class="w"> </span>=<span class="w"> </span>#{userNm}
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="nt">&lt;/if&gt;</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="nt">&lt;/select&gt;</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="cm">&lt;!-- where 태그 사용 (올바른 패턴) --&gt;</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="nt">&lt;select</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;selectUserList&quot;</span><span class="w"> </span><span class="na">resultType=</span><span class="s">&quot;UserVO&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">    </span>SELECT<span class="w"> </span>*<span class="w"> </span>FROM<span class="w"> </span>TB_USER
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">    </span><span class="nt">&lt;where&gt;</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">        </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">&quot;userNm != null&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">            </span>AND<span class="w"> </span>USER_NM<span class="w"> </span>=<span class="w"> </span>#{userNm}
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">        </span><span class="nt">&lt;/if&gt;</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">        </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">&quot;univCd != null&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">            </span>AND<span class="w"> </span>UNIV_CD<span class="w"> </span>=<span class="w"> </span>#{univCd}
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">        </span><span class="nt">&lt;/if&gt;</span>
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">    </span><span class="nt">&lt;/where&gt;</span>
+</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="nt">&lt;/select&gt;</span>
+</span></code></pre></div>
+<p><code>&lt;where&gt;</code> 태그가 하는 일:
+- 내부에 조건이 하나라도 있으면 <code>WHERE</code>를 자동 추가한다.
+- 첫 번째 조건 앞의 <code>AND</code> / <code>OR</code>를 자동 제거한다.
+- 조건이 하나도 없으면 <code>WHERE</code> 자체를 생성하지 않는다.</p>
+<h3 id="34-foreach">3.4 foreach 태그 (핵심!)<a class="headerlink" href="#34-foreach" title="Permanent link">&para;</a></h3>
+<p><strong>리스트나 배열을 순회하면서 SQL을 반복 생성</strong>하는 태그. Batch 처리의 핵심이다.</p>
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">&lt;select</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;selectUserByNos&quot;</span><span class="w"> </span><span class="na">resultType=</span><span class="s">&quot;UserVO&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span>SELECT<span class="w"> </span>*<span class="w"> </span>FROM<span class="w"> </span>TB_USER
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span>WHERE<span class="w"> </span>USER_NO<span class="w"> </span>IN
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="nt">&lt;foreach</span><span class="w"> </span><span class="na">collection=</span><span class="s">&quot;list&quot;</span><span class="w"> </span><span class="na">item=</span><span class="s">&quot;userNo&quot;</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">             </span><span class="na">open=</span><span class="s">&quot;(&quot;</span><span class="w"> </span><span class="na">separator=</span><span class="s">&quot;,&quot;</span><span class="w"> </span><span class="na">close=</span><span class="s">&quot;)&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">        </span>#{userNo}
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">    </span><span class="nt">&lt;/foreach&gt;</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="nt">&lt;/select&gt;</span>
+</span></code></pre></div>
+<p>실행 결과:
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">TB_USER</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">USER_NO</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;U001&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;U002&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;U003&#39;</span><span class="p">)</span>
+</span></code></pre></div></p>
+<p><strong>foreach 속성 상세:</strong></p>
+<table>
+<thead>
+<tr>
+<th>속성</th>
+<th>설명</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>collection</strong></td>
+<td>순회할 대상. List면 "list", Map의 key면 key명</td>
+<td><code>collection="list"</code></td>
+</tr>
+<tr>
+<td><strong>item</strong></td>
+<td>각 요소를 담을 변수명</td>
+<td><code>item="userNo"</code></td>
+</tr>
+<tr>
+<td><strong>index</strong></td>
+<td>현재 인덱스 (0부터)</td>
+<td><code>index="idx"</code></td>
+</tr>
+<tr>
+<td><strong>open</strong></td>
+<td>반복 시작 전 추가할 문자열</td>
+<td><code>open="("</code></td>
+</tr>
+<tr>
+<td><strong>close</strong></td>
+<td>반복 끝난 후 추가할 문자열</td>
+<td><code>close=")"</code></td>
+</tr>
+<tr>
+<td><strong>separator</strong></td>
+<td>각 반복 사이에 넣을 구분자</td>
+<td><code>separator=","</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-foreach-batch">4. foreach로 Batch 처리<a class="headerlink" href="#4-foreach-batch" title="Permanent link">&para;</a></h2>
+<h3 id="41-insert-vs-batch-insert">4.1 단건 INSERT vs Batch INSERT<a class="headerlink" href="#41-insert-vs-batch-insert" title="Permanent link">&para;</a></h3>
+<div class="admonition example">
+<p class="admonition-title">단건 INSERT vs Batch INSERT (1000건 기준)</p>
+<p><strong>단건 INSERT</strong></p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1">// Java 루프:</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">User</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">userList</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="n">mapper</span><span class="p">.</span><span class="na">insertUser</span><span class="p">(</span><span class="n">user</span><span class="p">);</span><span class="w">  </span><span class="c1">// DB 왕복 1000번</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>실행되는 SQL: INSERT 문이 1000개 각각 실행됨</p>
+<ul>
+<li>DB 왕복: 1000회</li>
+<li>소요 시간: 느림 (네트워크 왕복 * 1000)</li>
+</ul>
+<hr />
+<p><strong>Batch INSERT (foreach 사용)</strong></p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1">// Java:</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">mapper</span><span class="p">.</span><span class="na">insertUserBatch</span><span class="p">(</span><span class="n">userList</span><span class="p">);</span><span class="w">  </span><span class="c1">// DB 왕복 1번</span>
+</span></code></pre></div>
+<p>실행되는 SQL: VALUES (), (), () 로 한 번에 1000건 INSERT</p>
+<ul>
+<li>DB 왕복: 1회</li>
+<li>소요 시간: 빠름 (네트워크 왕복 * 1)</li>
+</ul>
+</div>
+<h3 id="42-batch-insert-xml">4.2 Batch INSERT XML 작성법<a class="headerlink" href="#42-batch-insert-xml" title="Permanent link">&para;</a></h3>
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">&lt;insert</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;insertUserBatch&quot;</span><span class="w"> </span><span class="na">parameterType=</span><span class="s">&quot;java.util.List&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span>INSERT<span class="w"> </span>INTO<span class="w"> </span>TB_USER<span class="w"> </span>(USER_NO,<span class="w"> </span>USER_NM,<span class="w"> </span>EMAIL,<span class="w"> </span>REG_DT)
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span>VALUES
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="nt">&lt;foreach</span><span class="w"> </span><span class="na">collection=</span><span class="s">&quot;list&quot;</span><span class="w"> </span><span class="na">item=</span><span class="s">&quot;item&quot;</span><span class="w"> </span><span class="na">separator=</span><span class="s">&quot;,&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">        </span>(#{item.userNo},<span class="w"> </span>#{item.userNm},<span class="w"> </span>#{item.email},<span class="w"> </span>NOW())
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">    </span><span class="nt">&lt;/foreach&gt;</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="nt">&lt;/insert&gt;</span>
+</span></code></pre></div>
+<p>이게 실행되면:
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">TB_USER</span><span class="w"> </span><span class="p">(</span><span class="n">USER_NO</span><span class="p">,</span><span class="w"> </span><span class="n">USER_NM</span><span class="p">,</span><span class="w"> </span><span class="n">EMAIL</span><span class="p">,</span><span class="w"> </span><span class="n">REG_DT</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="p">(</span><span class="s1">&#39;U001&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;김철수&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;kim@test.com&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">NOW</span><span class="p">()),</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="p">(</span><span class="s1">&#39;U002&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;이영희&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;lee@test.com&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">NOW</span><span class="p">()),</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="p">(</span><span class="s1">&#39;U003&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;박민수&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;park@test.com&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">NOW</span><span class="p">())</span>
+</span></code></pre></div></p>
+<p><strong>하나의 INSERT 문으로 여러 행을 한 번에 넣는다.</strong> DB 왕복이 1회로 줄어들기 때문에 성능 차이가 극적이다.</p>
+<h3 id="43-insert-on-duplicate-key-update">4.3 INSERT ON DUPLICATE KEY UPDATE<a class="headerlink" href="#43-insert-on-duplicate-key-update" title="Permanent link">&para;</a></h3>
+<p>MySQL 전용 문법이다. <strong>INSERT 시도 → 키 중복이면 UPDATE로 전환.</strong></p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1">-- 기본 문법</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">테이블</span><span class="w"> </span><span class="p">(</span><span class="err">컬럼</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">컬럼</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">컬럼</span><span class="mi">3</span><span class="p">)</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;값1&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;값2&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;값3&#39;</span><span class="p">)</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="k">ON</span><span class="w"> </span><span class="n">DUPLICATE</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="k">UPDATE</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">    </span><span class="err">컬럼</span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="err">컬럼</span><span class="mi">2</span><span class="p">),</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">    </span><span class="err">컬럼</span><span class="mi">3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="err">컬럼</span><span class="mi">3</span><span class="p">)</span>
+</span></code></pre></div>
+<p>동작 원리:</p>
+<pre class="mermaid"><code>flowchart TD
+    A["INSERT 시도"] --&gt; B{"PK/UNIQUE 중복?"}
+    B --&gt;|"중복 없음"| C["INSERT 실행"]
+    B --&gt;|"중복 있음"| D["UPDATE 실행&lt;br/&gt;(ON DUPLICATE KEY UPDATE 부분)"]
+    C --&gt; E["'없으면 넣고, 있으면 갱신한다' = MERGE/UPSERT"]
+    D --&gt; E</code></pre>
+<p>이걸 <strong>foreach와 결합</strong>하면 Batch UPSERT가 된다:</p>
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nt">&lt;insert</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;mergeSyncStudBatch&quot;</span><span class="w"> </span><span class="na">parameterType=</span><span class="s">&quot;java.util.Map&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span>INSERT<span class="w"> </span>INTO<span class="w"> </span>subject_stud_list
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">        </span>(subjectNo,<span class="w"> </span>userNo,<span class="w"> </span>learnerStatus,<span class="w"> </span>enrlSts,<span class="w"> </span>haksaYn)
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span>VALUES
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">    </span><span class="nt">&lt;foreach</span><span class="w"> </span><span class="na">collection=</span><span class="s">&quot;studList&quot;</span><span class="w"> </span><span class="na">item=</span><span class="s">&quot;item&quot;</span><span class="w"> </span><span class="na">separator=</span><span class="s">&quot;,&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">        </span>(#{item.subjectNo},<span class="w"> </span>#{item.userNo},<span class="w"> </span>&#39;normal&#39;,<span class="w"> </span>&#39;S&#39;,<span class="w"> </span>&#39;Y&#39;)
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">    </span><span class="nt">&lt;/foreach&gt;</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">    </span>ON<span class="w"> </span>DUPLICATE<span class="w"> </span>KEY<span class="w"> </span>UPDATE
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">        </span>learnerStatus<span class="w"> </span>=<span class="w"> </span>VALUES(learnerStatus),
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">        </span>enrlSts<span class="w"> </span>=<span class="w"> </span>VALUES(enrlSts),
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">        </span>haksaYn<span class="w"> </span>=<span class="w"> </span>VALUES(haksaYn)
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="nt">&lt;/insert&gt;</span>
+</span></code></pre></div>
+<hr />
+<h2 id="5">5. 경상국립대 실제 코드<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<p>이론은 여기까지. 이제 실제 프로덕션 코드에서 이게 어떻게 쓰이는지 본다.</p>
+<h3 id="51">5.1 수강생 동기화의 핵심 전략<a class="headerlink" href="#51" title="Permanent link">&para;</a></h3>
+<p>경상국립대 학사연동에서 수강생 상태를 동기화하는 전략:</p>
+<div class="admonition abstract">
+<p class="admonition-title">경상국립대 수강생 동기화 전략</p>
+<p><strong>[1단계]</strong> 전체 수강생을 일괄 "수강취소" 처리</p>
+<ul>
+<li><code>updateSyncStudStatus</code></li>
+<li><code>learnerStatus = 'suspend'</code>, <code>enrlSts = 'D'</code></li>
+</ul>
+<p><strong>[2단계]</strong> API로 확인된 학생만 "정상" 복원</p>
+<ul>
+<li><code>mergeSyncStudBatch</code> (foreach + ON DUPLICATE KEY)</li>
+<li><code>learnerStatus = 'normal'</code>, <code>enrlSts = 'S'</code></li>
+</ul>
+<p><strong>결과:</strong> API에 없는 학생 = 휴학/자퇴 → 자동으로 취소 상태 / API에 있는 학생 = 재학 중 → 정상 상태 복원</p>
+</div>
+<p><strong>왜 이 순서인가?</strong></p>
+<p>이걸 이해 못 하면 아직 Lv1이야.</p>
+<div class="admonition question">
+<p class="admonition-title">확인된 학생만 정상 처리하면 안 되나?</p>
+<p><strong>안 된다.</strong></p>
+<p>이유: 자퇴/휴학한 학생을 어떻게 알아?</p>
+<p>경상국립대 API는 "현재 재학 중인 학생 목록"만 준다. "자퇴한 학생 목록"을 따로 주지 않는다.</p>
+<p>그래서:</p>
+<ol>
+<li>일단 전부 취소 (깨끗한 상태)</li>
+<li>API에서 확인된 학생만 복원</li>
+<li>API에 없는 학생 = 자연스럽게 취소 상태 유지</li>
+</ol>
+<p>이게 <strong>"전체 리셋 → 부분 복원" 패턴</strong>이다. Delete &amp; Re-insert 패턴과 개념이 같다.</p>
+</div>
+<h3 id="52-updatesyncstudstatus-1">5.2 updateSyncStudStatus (1단계: 전체 취소)<a class="headerlink" href="#52-updatesyncstudstatus-1" title="Permanent link">&para;</a></h3>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">UPDATE</span><span class="w"> </span><span class="n">subject_stud_list</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="k">SET</span><span class="w"> </span><span class="n">learnerStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">#</span><span class="err">{</span><span class="n">learnerStatus</span><span class="err">}</span><span class="p">,</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="n">enrlSts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">#</span><span class="err">{</span><span class="n">enrlSts</span><span class="err">}</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="k">WHERE</span><span class="w"> </span><span class="n">subjectNo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">#</span><span class="err">{</span><span class="n">item</span><span class="p">.</span><span class="n">subjectNo</span><span class="err">}</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="k">AND</span><span class="w"> </span><span class="n">userNo</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">userNo</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">univCd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">#</span><span class="err">{</span><span class="n">univCd</span><span class="err">}</span><span class="p">)</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="k">AND</span><span class="w"> </span><span class="n">haksaYn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Y&#39;</span>
+</span></code></pre></div>
+<p><strong>SQL 분석:</strong></p>
+<table>
+<thead>
+<tr>
+<th>부분</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SET learnerStatus = #{learnerStatus}</code></td>
+<td>학습자 상태를 변경 (suspend로)</td>
+</tr>
+<tr>
+<td><code>SET enrlSts = #{enrlSts}</code></td>
+<td>등록 상태를 변경 (D로)</td>
+</tr>
+<tr>
+<td><code>WHERE subjectNo = #{item.subjectNo}</code></td>
+<td>특정 과목의 수강생만</td>
+</tr>
+<tr>
+<td><code>AND userNo IN (SELECT ...)</code></td>
+<td>해당 대학 소속 학생만 (서브쿼리)</td>
+</tr>
+<tr>
+<td><code>AND haksaYn = 'Y'</code></td>
+<td>학사연동 대상만 (수동 등록 학생 제외)</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>haksaYn = 'Y'</code> 조건이 왜 있나?</strong></p>
+<p>수동으로 등록한 학생(관리자가 직접 추가)은 학사연동으로 건드리면 안 된다. 학사연동 대상(<code>haksaYn = 'Y'</code>)만 상태를 변경하는 안전장치다.</p>
+<h3 id="53-mergesyncstudbatch-2">5.3 mergeSyncStudBatch (2단계: 확인된 학생 복원)<a class="headerlink" href="#53-mergesyncstudbatch-2" title="Permanent link">&para;</a></h3>
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nt">&lt;insert</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;mergeSyncStudBatch&quot;</span><span class="w"> </span><span class="na">parameterType=</span><span class="s">&quot;java.util.Map&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">    </span>INSERT<span class="w"> </span>INTO<span class="w"> </span>subject_stud_list
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">        </span>(subjectNo,<span class="w"> </span>userNo,<span class="w"> </span>learnerStatus,<span class="w"> </span>enrlSts,<span class="w"> </span>haksaYn,<span class="w"> </span>regDt)
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span>VALUES
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">    </span><span class="nt">&lt;foreach</span><span class="w"> </span><span class="na">collection=</span><span class="s">&quot;studList&quot;</span><span class="w"> </span><span class="na">item=</span><span class="s">&quot;item&quot;</span><span class="w"> </span><span class="na">separator=</span><span class="s">&quot;,&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">        </span>(#{item.subjectNo},<span class="w"> </span>#{item.userNo},<span class="w"> </span>&#39;normal&#39;,<span class="w"> </span>&#39;S&#39;,<span class="w"> </span>&#39;Y&#39;,<span class="w"> </span>NOW())
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">    </span><span class="nt">&lt;/foreach&gt;</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">    </span>ON<span class="w"> </span>DUPLICATE<span class="w"> </span>KEY<span class="w"> </span>UPDATE
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">        </span>learnerStatus<span class="w"> </span>=<span class="w"> </span>&#39;normal&#39;,
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="w">        </span>enrlSts<span class="w"> </span>=<span class="w"> </span>&#39;S&#39;,
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="w">        </span>haksaYn<span class="w"> </span>=<span class="w"> </span>&#39;Y&#39;,
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="w">        </span>modDt<span class="w"> </span>=<span class="w"> </span>NOW()
+</span><span id="__span-17-13"><a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="nt">&lt;/insert&gt;</span>
+</span></code></pre></div>
+<p><strong>이 쿼리가 하는 일:</strong></p>
+<pre class="mermaid"><code>graph TD
+    A["foreach로 API에서 받은 학생 목록 순회"] --&gt; B{"PK 중복?"}
+    B --&gt;|"기존에 있는 학생&lt;br&gt;(PK 중복)"| C["ON DUPLICATE KEY UPDATE 실행&lt;br&gt;learnerStatus = 'normal', enrlSts = 'S'로 복원"]
+    B --&gt;|"신규 학생&lt;br&gt;(PK 없음)"| D["INSERT 실행&lt;br&gt;새 수강생으로 등록"]</code></pre>
+<p><strong>핵심 포인트:</strong></p>
+<ol>
+<li><strong>foreach</strong>로 여러 학생을 한 번의 SQL로 처리한다 (Batch).</li>
+<li><strong>ON DUPLICATE KEY UPDATE</strong>로 있으면 갱신, 없으면 삽입한다 (UPSERT).</li>
+<li>1단계에서 <code>suspend/D</code>로 바꿔놓은 걸 <code>normal/S</code>로 되돌린다.</li>
+</ol>
+<h3 id="54">5.4 전체 흐름 시각화<a class="headerlink" href="#54" title="Permanent link">&para;</a></h3>
+<div class="admonition example">
+<p class="admonition-title">수강생 동기화 전체 흐름</p>
+<p><strong>DB 초기 상태:</strong></p>
+<table>
+<thead>
+<tr>
+<th>subjectNo</th>
+<th>userNo</th>
+<th>learnerStatus</th>
+<th>enrlSts</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S001</td>
+<td>U001</td>
+<td>normal</td>
+<td>S</td>
+<td></td>
+</tr>
+<tr>
+<td>S001</td>
+<td>U002</td>
+<td>normal</td>
+<td>S</td>
+<td></td>
+</tr>
+<tr>
+<td>S001</td>
+<td>U003</td>
+<td>normal</td>
+<td>S</td>
+<td>자퇴 예정</td>
+</tr>
+</tbody>
+</table>
+<p><strong>[1단계] updateSyncStudStatus → 전체 suspend/D</strong></p>
+<table>
+<thead>
+<tr>
+<th>subjectNo</th>
+<th>userNo</th>
+<th>learnerStatus</th>
+<th>enrlSts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S001</td>
+<td>U001</td>
+<td>suspend</td>
+<td>D</td>
+</tr>
+<tr>
+<td>S001</td>
+<td>U002</td>
+<td>suspend</td>
+<td>D</td>
+</tr>
+<tr>
+<td>S001</td>
+<td>U003</td>
+<td>suspend</td>
+<td>D</td>
+</tr>
+</tbody>
+</table>
+<p>경상국립대 API 응답: [U001, U002, U004(신규)] -- U003은 목록에 없음 = 자퇴</p>
+<p><strong>[2단계] mergeSyncStudBatch → 확인된 학생 normal/S</strong></p>
+<table>
+<thead>
+<tr>
+<th>subjectNo</th>
+<th>userNo</th>
+<th>learnerStatus</th>
+<th>enrlSts</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S001</td>
+<td>U001</td>
+<td>normal</td>
+<td>S</td>
+<td>복원</td>
+</tr>
+<tr>
+<td>S001</td>
+<td>U002</td>
+<td>normal</td>
+<td>S</td>
+<td>복원</td>
+</tr>
+<tr>
+<td>S001</td>
+<td>U003</td>
+<td>suspend</td>
+<td>D</td>
+<td>자퇴!</td>
+</tr>
+<tr>
+<td>S001</td>
+<td>U004</td>
+<td>normal</td>
+<td>S</td>
+<td>신규!</td>
+</tr>
+</tbody>
+</table>
+<p>U003은 API에 없었으니 1단계 상태 그대로 = 자동 취소. U004는 새로운 학생이니 INSERT = 자동 등록</p>
+</div>
+<hr />
+<h2 id="6-batch-vs">6. Batch vs 단건 처리 성능<a class="headerlink" href="#6-batch-vs" title="Permanent link">&para;</a></h2>
+<h3 id="61-1000">6.1 성능 비교 (1000건 기준)<a class="headerlink" href="#61-1000" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>방식</th>
+<th>DB 왕복</th>
+<th>커넥션 점유</th>
+<th>상대 속도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>단건 INSERT</td>
+<td>1000회</td>
+<td>길다</td>
+<td>1x (기준)</td>
+</tr>
+<tr>
+<td>Batch INSERT (foreach)</td>
+<td>1회</td>
+<td>짧다</td>
+<td>10~50x</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">왜 이렇게 차이 나냐?</p>
+<ul>
+<li>단건: [Java] → 네트워크 → [DB] → 네트워크 → [Java] 이걸 1000번 반복</li>
+<li>Batch: [Java] → 네트워크 → [DB에서 1000건 처리] → 네트워크 → [Java] 왕복 1번</li>
+</ul>
+<p><strong>네트워크 왕복(Round Trip)이 병목이다.</strong> SQL 실행 자체보다 왕복 비용이 훨씬 크다.</p>
+</div>
+<h3 id="62-db">6.2 DB 커넥션 효율<a class="headerlink" href="#62-db" title="Permanent link">&para;</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">커넥션 풀 관점</p>
+<p>커넥션 풀 (보통 10~20개) - 총 10개라고 가정</p>
+<p><strong>단건 처리:</strong></p>
+<ul>
+<li>스레드 A가 커넥션 1번을 물고 1000번 왕복</li>
+<li>그 동안 다른 요청은 9개 커넥션으로 버텨야 함</li>
+<li>오래 걸리면 커넥션 고갈 → 다른 서비스 장애</li>
+</ul>
+<p><strong>Batch 처리:</strong></p>
+<ul>
+<li>스레드 A가 커넥션 1번으로 1회 왕복 후 즉시 반환</li>
+<li>커넥션을 짧게 쓰고 빨리 돌려놓음</li>
+<li>다른 요청에 영향 최소화</li>
+</ul>
+</div>
+<hr />
+<h2 id="7">7. 주의사항<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<h3 id="71-sql">7.1 SQL 빈 줄 금지<a class="headerlink" href="#71-sql" title="Permanent link">&para;</a></h3>
+<p><strong>이건 MyBatis에서 실제로 파싱 오류를 일으킨다. 절대 금지.</strong></p>
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="cm">&lt;!-- 금지: SQL 중간에 빈 줄 --&gt;</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="nt">&lt;update</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;updateUser&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span>UPDATE<span class="w"> </span>TB_USER
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span>SET<span class="w"> </span>USER_NM<span class="w"> </span>=<span class="w"> </span>#{userNm}
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">    </span>WHERE<span class="w"> </span>USER_NO<span class="w"> </span>=<span class="w"> </span>#{userNo}
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="nt">&lt;/update&gt;</span>
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="cm">&lt;!-- 올바름: 빈 줄 없이 연속 작성 --&gt;</span>
+</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="nt">&lt;update</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;updateUser&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="w">    </span>UPDATE<span class="w"> </span>TB_USER
+</span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="w">    </span>SET<span class="w"> </span>USER_NM<span class="w"> </span>=<span class="w"> </span>#{userNm}
+</span><span id="__span-18-13"><a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="w">    </span>WHERE<span class="w"> </span>USER_NO<span class="w"> </span>=<span class="w"> </span>#{userNo}
+</span><span id="__span-18-14"><a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="nt">&lt;/update&gt;</span>
+</span></code></pre></div>
+<p>MyBatis가 XML을 파싱할 때 빈 줄이 들어가면 SQL이 잘리거나 예상치 못한 문법 오류가 발생할 수 있다. 특히 동적 SQL 태그(<code>&lt;if&gt;</code>, <code>&lt;where&gt;</code>, <code>&lt;foreach&gt;</code>) 사이에 빈 줄을 넣으면 더 위험하다.</p>
+<h3 id="72-foreach">7.2 foreach 항목이 비어있을 때 처리<a class="headerlink" href="#72-foreach" title="Permanent link">&para;</a></h3>
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="cm">&lt;!-- 위험: list가 비어있으면 SQL 문법 오류 --&gt;</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="nt">&lt;insert</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;insertBatch&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">    </span>INSERT<span class="w"> </span>INTO<span class="w"> </span>TB_USER<span class="w"> </span>VALUES
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">    </span><span class="nt">&lt;foreach</span><span class="w"> </span><span class="na">collection=</span><span class="s">&quot;list&quot;</span><span class="w"> </span><span class="na">item=</span><span class="s">&quot;item&quot;</span><span class="w"> </span><span class="na">separator=</span><span class="s">&quot;,&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">        </span>(#{item.userNo},<span class="w"> </span>#{item.userNm})
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">    </span><span class="nt">&lt;/foreach&gt;</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="nt">&lt;/insert&gt;</span>
+</span></code></pre></div>
+<p>list가 비어있으면 실행되는 SQL:
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">TB_USER</span><span class="w"> </span><span class="k">VALUES</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="c1">-- 여기서 끝. VALUES 뒤에 아무것도 없으니 문법 오류!</span>
+</span></code></pre></div></p>
+<p><strong>해결:</strong></p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1">// Java에서 먼저 체크</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">studList</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">studList</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">    </span><span class="n">syncMapper</span><span class="p">.</span><span class="na">mergeSyncStudBatch</span><span class="p">(</span><span class="n">paramMap</span><span class="p">);</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="cm">&lt;!-- 또는 XML에서 if로 감싸기 --&gt;</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="nt">&lt;insert</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;insertBatch&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">&quot;list != null and list.size() &gt; 0&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">        </span>INSERT<span class="w"> </span>INTO<span class="w"> </span>TB_USER<span class="w"> </span>VALUES
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">        </span><span class="nt">&lt;foreach</span><span class="w"> </span><span class="na">collection=</span><span class="s">&quot;list&quot;</span><span class="w"> </span><span class="na">item=</span><span class="s">&quot;item&quot;</span><span class="w"> </span><span class="na">separator=</span><span class="s">&quot;,&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">            </span>(#{item.userNo},<span class="w"> </span>#{item.userNm})
+</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="w">        </span><span class="nt">&lt;/foreach&gt;</span>
+</span><span id="__span-22-8"><a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="w">    </span><span class="nt">&lt;/if&gt;</span>
+</span><span id="__span-22-9"><a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="nt">&lt;/insert&gt;</span>
+</span></code></pre></div>
+<h3 id="73-batch-size">7.3 대량 데이터 시 Batch Size 조절<a class="headerlink" href="#73-batch-size" title="Permanent link">&para;</a></h3>
+<p>foreach로 한 번에 너무 많은 데이터를 넣으면 문제가 생긴다.</p>
+<div class="admonition danger">
+<p class="admonition-title">Batch Size 주의사항</p>
+<p><strong>MySQL의 max_allowed_packet 제한</strong></p>
+<ul>
+<li>하나의 SQL 패킷 최대 크기 (기본 4MB~64MB)</li>
+<li>foreach로 10만 건 넣으면 이 제한 초과할 수 있음</li>
+</ul>
+<p><strong>PreparedStatement 파라미터 제한</strong></p>
+<ul>
+<li>MySQL은 65535개 제한</li>
+<li>컬럼 10개 * 6554건 = 65540 → 초과!</li>
+</ul>
+<p><strong>권장: 500~1000건씩 나눠서 Batch 실행</strong></p>
+</div>
+<p><strong>실전 코드 패턴:</strong></p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1">// 1000건씩 나눠서 Batch INSERT</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="kt">int</span><span class="w"> </span><span class="n">batchSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">studList</span><span class="p">.</span><span class="na">size</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">batchSize</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Math</span><span class="p">.</span><span class="na">min</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">batchSize</span><span class="p">,</span><span class="w"> </span><span class="n">studList</span><span class="p">.</span><span class="na">size</span><span class="p">());</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">StudVO</span><span class="o">&gt;</span><span class="w"> </span><span class="n">subList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">studList</span><span class="p">.</span><span class="na">subList</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">);</span>
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>
+</span><span id="__span-23-7"><a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="w">    </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">paramMap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+</span><span id="__span-23-8"><a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="w">    </span><span class="n">paramMap</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;studList&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">subList</span><span class="p">);</span>
+</span><span id="__span-23-9"><a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="w">    </span><span class="n">syncMapper</span><span class="p">.</span><span class="na">mergeSyncStudBatch</span><span class="p">(</span><span class="n">paramMap</span><span class="p">);</span>
+</span><span id="__span-23-10"><a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="74-batch-update-foreach">7.4 Batch UPDATE는 foreach 방식이 다르다<a class="headerlink" href="#74-batch-update-foreach" title="Permanent link">&para;</a></h3>
+<p>INSERT는 VALUES (), (), () 패턴이 있지만, UPDATE는 그런 문법이 없다. 각각 따로 실행해야 한다.</p>
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="cm">&lt;!-- Batch UPDATE: 여러 UPDATE문을 세미콜론으로 연결 --&gt;</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="cm">&lt;!-- JDBC URL에 allowMultiQueries=true 필요 --&gt;</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="nt">&lt;update</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;updateBatch&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="nt">&lt;foreach</span><span class="w"> </span><span class="na">collection=</span><span class="s">&quot;list&quot;</span><span class="w"> </span><span class="na">item=</span><span class="s">&quot;item&quot;</span><span class="w"> </span><span class="na">separator=</span><span class="s">&quot;;&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">        </span>UPDATE<span class="w"> </span>TB_USER
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">        </span>SET<span class="w"> </span>USER_NM<span class="w"> </span>=<span class="w"> </span>#{item.userNm}
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">        </span>WHERE<span class="w"> </span>USER_NO<span class="w"> </span>=<span class="w"> </span>#{item.userNo}
+</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">    </span><span class="nt">&lt;/foreach&gt;</span>
+</span><span id="__span-24-9"><a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="nt">&lt;/update&gt;</span>
+</span></code></pre></div>
+<p>이 방식은 JDBC 연결 설정에 <code>allowMultiQueries=true</code>가 필요하다. 없으면 여러 SQL을 한 번에 보내지 못해서 에러가 난다.</p>
+<p>경상국립대 코드에서 <code>updateSyncStudStatus</code>를 Batch가 아닌 단건 UPDATE로 처리하는 이유도 이것이다. WHERE 조건으로 한 번에 여러 행을 업데이트하기 때문에 foreach가 필요 없다.</p>
+<hr />
+<h2 id="8">8. 확인 문제<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
+<h3 id="1">문제 1.<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
+<p><code>#{}</code> 와 <code>${}</code>의 차이를 설명하고, SQL Injection 공격이 가능한 쪽은 어느 쪽인지, 그 이유는 뭔지 말해봐.</p>
+<details class="success">
+<summary>정답 보기</summary>
+<p><code>#{}</code>는 PreparedStatement의 파라미터 바인딩을 사용한다. SQL이 먼저 파싱/컴파일된 후 값이 바인딩되므로 SQL 구조를 변경할 수 없다. SQL Injection 방어됨.</p>
+<p><code>${}</code>는 문자열 그대로 치환(String Substitution)이다. SQL 파싱 전에 값이 문자열로 결합되므로, 악의적 입력이 SQL 구조 자체를 변경할 수 있다. SQL Injection에 취약.</p>
+<p><code>${}</code>가 SQL Injection에 취약한 이유는 <strong>값이 SQL의 일부로 해석</strong>되기 때문이다. PreparedStatement의 바인딩은 값을 항상 "데이터"로만 취급하지만, 문자열 치환은 값을 "SQL 코드"로 취급한다.</p>
+</details>
+<hr />
+<h3 id="2">문제 2.<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
+<p>경상국립대 수강생 동기화에서 "전체 취소 → 확인된 학생 복원" 순서로 처리하는 이유를 설명해봐. 반대로 "확인된 학생만 정상 처리"하면 안 되는 이유는?</p>
+<details class="success">
+<summary>정답 보기</summary>
+<p>경상국립대 API는 <strong>현재 재학 중인 학생 목록</strong>만 제공하고, "자퇴/휴학한 학생 목록"은 별도로 제공하지 않는다.</p>
+<p>"확인된 학생만 정상 처리"하면 <strong>자퇴/휴학한 학생을 식별할 방법이 없다.</strong> 기존에 정상이었던 학생이 자퇴했는데 API 목록에 안 나오면, 그 학생의 상태를 변경할 트리거가 없다.</p>
+<p>"전체 취소 → 확인된 학생 복원" 순서로 하면:</p>
+<ol>
+<li>모든 학생을 취소 상태로 리셋</li>
+<li>API에 있는 학생만 복원</li>
+<li>API에 없는 학생(자퇴/휴학)은 자연스럽게 취소 상태 유지</li>
+</ol>
+<p>이것이 "전체 리셋 → 부분 복원" 패턴이다.</p>
+</details>
+<hr />
+<h3 id="3">문제 3.<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<p>foreach에서 collection 속성에 "list"라고 쓰는 경우와 Map의 key명을 쓰는 경우의 차이를 설명해봐. <code>mergeSyncStudBatch</code>에서는 왜 <code>collection="studList"</code>로 쓰는지도 설명해.</p>
+<details class="success">
+<summary>정답 보기</summary>
+<p>MyBatis에서 foreach의 collection 값은 파라미터 타입에 따라 달라진다:</p>
+<ul>
+<li><strong>파라미터가 List 자체</strong>일 때: <code>collection="list"</code> (MyBatis가 List를 "list"라는 키로 자동 등록)</li>
+<li><strong>파라미터가 Map</strong>일 때: <code>collection="Map에 넣은 key명"</code></li>
+</ul>
+<p><code>mergeSyncStudBatch</code>는 parameterType이 <code>java.util.Map</code>이다. Java에서 <code>paramMap.put("studList", subList)</code>로 Map에 넣었기 때문에 <code>collection="studList"</code>로 해당 key를 지정하는 것이다.</p>
+<p>만약 Mapper 메서드가 <code>void insertBatch(List&lt;StudVO&gt; list)</code>처럼 List를 직접 받으면 <code>collection="list"</code>를 쓴다.</p>
+</details>
+<hr />
+<h3 id="4">문제 4.<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<p>Batch INSERT 시 foreach로 한 번에 10만 건을 넣으면 어떤 문제가 발생할 수 있어? 최소 2가지 말해봐.</p>
+<details class="success">
+<summary>정답 보기</summary>
+<ol>
+<li>
+<p><strong>max_allowed_packet 초과</strong>: MySQL은 하나의 SQL 패킷 크기에 제한이 있다(기본 4MB~64MB). 10만 건의 VALUES 절이 생성되면 이 제한을 초과하여 패킷 에러가 발생한다.</p>
+</li>
+<li>
+<p><strong>PreparedStatement 파라미터 수 제한</strong>: MySQL은 하나의 PreparedStatement에 65535개의 파라미터까지만 허용한다. 컬럼이 10개면 6554건부터 초과한다. 10만 건이면 파라미터 100만 개로 한참 초과.</p>
+</li>
+</ol>
+<p>추가로:</p>
+<ul>
+<li><strong>메모리 부족</strong>: MyBatis가 SQL 문자열을 메모리에 구성하는데, 10만 건의 SQL은 거대한 문자열이 된다.</li>
+<li><strong>트랜잭션 로그 폭발</strong>: 하나의 트랜잭션에 10만 건이 몰리면 undo/redo 로그가 폭발적으로 증가한다.</li>
+<li><strong>타임아웃</strong>: SQL 실행 시간이 길어져 쿼리 타임아웃에 걸릴 수 있다.</li>
+</ul>
+</details>
+<hr />
+<h3 id="5_1">문제 5.<a class="headerlink" href="#5_1" title="Permanent link">&para;</a></h3>
+<p>아래 코드에 버그가 있다. 찾아서 설명하고, 어떻게 고쳐야 하는지 말해봐.</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">syncStudents</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">StudVO</span><span class="o">&gt;</span><span class="w"> </span><span class="n">studList</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">    </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">paramMap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">    </span><span class="n">paramMap</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;studList&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">studList</span><span class="p">);</span>
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">    </span><span class="n">syncMapper</span><span class="p">.</span><span class="na">mergeSyncStudBatch</span><span class="p">(</span><span class="n">paramMap</span><span class="p">);</span>
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="nt">&lt;insert</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;mergeSyncStudBatch&quot;</span><span class="w"> </span><span class="na">parameterType=</span><span class="s">&quot;java.util.Map&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">    </span>INSERT<span class="w"> </span>INTO<span class="w"> </span>subject_stud_list<span class="w"> </span>(subjectNo,<span class="w"> </span>userNo,<span class="w"> </span>learnerStatus)
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">    </span>VALUES
+</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">    </span><span class="nt">&lt;foreach</span><span class="w"> </span><span class="na">collection=</span><span class="s">&quot;studList&quot;</span><span class="w"> </span><span class="na">item=</span><span class="s">&quot;item&quot;</span><span class="w"> </span><span class="na">separator=</span><span class="s">&quot;,&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-26-5"><a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="w">        </span>(#{item.subjectNo},<span class="w"> </span>#{item.userNo},<span class="w"> </span>&#39;normal&#39;)
+</span><span id="__span-26-6"><a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="w">    </span><span class="nt">&lt;/foreach&gt;</span>
+</span><span id="__span-26-7"><a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">    </span>ON<span class="w"> </span>DUPLICATE<span class="w"> </span>KEY<span class="w"> </span>UPDATE
+</span><span id="__span-26-8"><a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="w">        </span>learnerStatus<span class="w"> </span>=<span class="w"> </span>&#39;normal&#39;
+</span><span id="__span-26-9"><a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="nt">&lt;/insert&gt;</span>
+</span></code></pre></div>
+<details class="success">
+<summary>정답 보기</summary>
+<p><strong>studList가 비어있을(empty) 때의 처리가 없다.</strong></p>
+<p>studList가 빈 리스트(<code>size == 0</code>)이면 foreach가 아무것도 생성하지 않아서 실행되는 SQL이:</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">subject_stud_list</span><span class="w"> </span><span class="p">(</span><span class="n">subjectNo</span><span class="p">,</span><span class="w"> </span><span class="n">userNo</span><span class="p">,</span><span class="w"> </span><span class="n">learnerStatus</span><span class="p">)</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="k">VALUES</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="k">ON</span><span class="w"> </span><span class="n">DUPLICATE</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="k">UPDATE</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">    </span><span class="n">learnerStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;normal&#39;</span>
+</span></code></pre></div>
+<p>이 되어 <strong>SQL 문법 오류</strong>가 발생한다.</p>
+<p>수정 방법:</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1">// Java에서 빈 리스트 체크</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">syncStudents</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">StudVO</span><span class="o">&gt;</span><span class="w"> </span><span class="n">studList</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">studList</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">studList</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="w">        </span><span class="k">return</span><span class="p">;</span><span class="w">  </span><span class="c1">// 빈 리스트면 실행하지 않음</span>
+</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="w">    </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">paramMap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="w">    </span><span class="n">paramMap</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;studList&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">studList</span><span class="p">);</span>
+</span><span id="__span-28-8"><a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="w">    </span><span class="n">syncMapper</span><span class="p">.</span><span class="na">mergeSyncStudBatch</span><span class="p">(</span><span class="n">paramMap</span><span class="p">);</span>
+</span><span id="__span-28-9"><a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>또는 XML에서 <code>&lt;if&gt;</code> 태그로 감싸는 방법도 있다.</p>
+</details>
+<hr />
+<div class="admonition tip">
+<p class="admonition-title">마무리</p>
+<blockquote>
+<p>"There are no two words in the English language more harmful than 'good job'."</p>
+</blockquote>
+<p>foreach 쓸 줄 아는 건 Lv1이야. VALUES (), (), () 패턴 외우는 건 Lv2고.</p>
+<p>ON DUPLICATE KEY UPDATE가 왜 필요한지, "전체 리셋 → 부분 복원" 패턴이 왜 이 상황에서 최선인지, 빈 리스트 들어오면 뭐가 터지는지, 10만 건 넣으면 왜 장애 나는지, 그걸 아는 게 Lv4야.</p>
+<p>"그냥 foreach 쓰면 되잖아요?" 이런 소리 하는 놈은 아직 프로덕션 안 겪어본 거야. 프로덕션은 빈 리스트도 오고, 10만 건도 오고, 네트워크도 끊기고, 패킷도 넘친다.</p>
+<p>MyBatis는 도구일 뿐이야. 도구를 잘 쓰는 놈과 도구에 쓰이는 놈의 차이가 뭔지 알아? 예외 상황을 얼마나 상상할 수 있느냐야.</p>
+<blockquote>
+<p>"Were you rushing or were you dragging?"</p>
+</blockquote>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+
+  <!-- Floating Remote Control -->
+  <nav class="page-remote" id="pageRemote">
+    <button class="page-remote__btn" id="btnTop" title="맨 위로">
+      <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+    </button>
+    <div class="page-remote__row">
+      <a class="page-remote__btn page-remote__btn--nav" id="btnPrev" title="이전 글">
+        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </a>
+      <a class="page-remote__btn page-remote__btn--nav" id="btnNext" title="다음 글">
+        <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+      </a>
+    </div>
+    <button class="page-remote__btn" id="btnBottom" title="맨 아래로">
+      <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+    </button>
+  </nav>
+
+  <script>
+    (function() {
+      var btnTop = document.getElementById('btnTop');
+      var btnBottom = document.getElementById('btnBottom');
+      var btnPrev = document.getElementById('btnPrev');
+      var btnNext = document.getElementById('btnNext');
+
+      btnTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      btnBottom.addEventListener('click', function() {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      });
+
+      // Get prev/next from footer links
+      var prevLink = document.querySelector('.md-footer__link--prev');
+      var nextLink = document.querySelector('.md-footer__link--next');
+
+      if (prevLink) {
+        btnPrev.href = prevLink.href;
+      } else {
+        btnPrev.classList.add('page-remote__btn--disabled');
+      }
+
+      if (nextLink) {
+        btnNext.href = nextLink.href;
+      } else {
+        btnNext.classList.add('page-remote__btn--disabled');
+      }
+    })();
+  </script>
+
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  맨위로
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
+        
+          
+          <a href="../05_Spring_Transactional/" class="md-footer__link md-footer__link--prev" aria-label="이전: Spring Transactional">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                이전
+              </span>
+              <div class="md-ellipsis">
+                Spring Transactional
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../07_%EC%9E%AC%EC%8B%9C%EB%8F%84_%ED%8C%A8%ED%84%B4/" class="md-footer__link md-footer__link--next" aria-label="다음: 재시도 패턴">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                다음
+              </span>
+              <div class="md-ellipsis">
+                재시도 패턴
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/tideflo" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.footer", "navigation.instant", "navigation.tracking", "navigation.path", "navigation.indexes", "content.code.copy", "content.code.annotate", "content.tabs.link", "toc.follow", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
