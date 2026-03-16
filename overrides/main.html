@@ -26,35 +26,59 @@
   </nav>
 
   <script>
-    (function() {
+    function setupRemote() {
       var btnTop = document.getElementById('btnTop');
       var btnBottom = document.getElementById('btnBottom');
       var btnPrev = document.getElementById('btnPrev');
       var btnNext = document.getElementById('btnNext');
+      if (!btnTop) return;
 
-      btnTop.addEventListener('click', function() {
+      btnTop.onclick = function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-
-      btnBottom.addEventListener('click', function() {
+      };
+      btnBottom.onclick = function() {
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-      });
+      };
 
-      // Get prev/next from footer links
-      var prevLink = document.querySelector('.md-footer__link--prev');
-      var nextLink = document.querySelector('.md-footer__link--next');
+      // nav에서 현재 페이지 기준 이전/다음 찾기
+      var allLinks = Array.from(document.querySelectorAll('.md-nav__link[href]'));
+      var current = window.location.pathname;
+      var currentIdx = -1;
 
-      if (prevLink) {
-        btnPrev.href = prevLink.href;
+      for (var i = 0; i < allLinks.length; i++) {
+        try {
+          var linkPath = new URL(allLinks[i].href).pathname;
+          if (linkPath === current) {
+            currentIdx = i;
+            break;
+          }
+        } catch(e) {}
+      }
+
+      // 이전
+      btnPrev.classList.remove('page-remote__btn--disabled');
+      btnNext.classList.remove('page-remote__btn--disabled');
+
+      if (currentIdx > 0) {
+        btnPrev.href = allLinks[currentIdx - 1].href;
       } else {
+        btnPrev.removeAttribute('href');
         btnPrev.classList.add('page-remote__btn--disabled');
       }
 
-      if (nextLink) {
-        btnNext.href = nextLink.href;
+      // 다음
+      if (currentIdx >= 0 && currentIdx < allLinks.length - 1) {
+        btnNext.href = allLinks[currentIdx + 1].href;
       } else {
+        btnNext.removeAttribute('href');
         btnNext.classList.add('page-remote__btn--disabled');
       }
-    })();
+    }
+
+    // 최초 실행 + instant navigation 대응
+    setupRemote();
+    if (typeof document$ !== 'undefined') {
+      document$.subscribe(function() { setupRemote(); });
+    }
   </script>
 {% endblock %}
