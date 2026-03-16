@@ -63,12 +63,14 @@ body {
 /* --- Left Sidebar (Navigation) --- */
 .md-sidebar--primary {
   scrollbar-width: thin;
-  width: 11rem;
 }
 
 .md-sidebar--primary .md-nav {
-  padding: 0.2rem 0;
-  font-size: 0.68rem;
+  padding: 0;
+}
+
+.md-sidebar--primary .md-nav__item {
+  padding: 0;
 }
 
 /* Section headers (카테고리 이름) */
@@ -79,8 +81,8 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--md-primary-fg-color);
-  padding: 0.4em 0.6em;
-  margin-top: 0.3em;
+  padding: 0.3em 0.6em;
+  margin-top: 0.1em;
   border-left: 3px solid var(--md-primary-fg-color);
   background: rgba(0, 150, 136, 0.04);
   border-radius: 0 6px 6px 0;
@@ -88,10 +90,12 @@ body {
 
 /* Sub-items (챕터) */
 .md-nav__link {
-  font-size: 0.68rem;
-  padding: 0.3em 0.6em;
+  font-size: 0.72rem;
+  padding: 0.2em 0.6em;
+  margin: 0;
   border-radius: 6px;
   transition: all var(--transition-speed);
+  line-height: 1.4;
 }
 
 .md-nav__link:hover {
