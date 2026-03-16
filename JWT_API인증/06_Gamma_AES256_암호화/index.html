@@ -8000,46 +8000,42 @@
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
       };
 
-      // nav에서 현재 페이지 기준 이전/다음 찾기
-      var allLinks = Array.from(document.querySelectorAll('.md-nav__link[href]'));
-      var current = window.location.pathname;
-      var currentIdx = -1;
+      // footer에서 이전/다음 링크 가져오기 (footer는 숨겨져 있지만 DOM에 존재)
+      var prevLink = document.querySelector('a.md-footer__link--prev');
+      var nextLink = document.querySelector('a.md-footer__link--next');
 
-      for (var i = 0; i < allLinks.length; i++) {
-        try {
-          var linkPath = new URL(allLinks[i].href).pathname;
-          if (linkPath === current) {
-            currentIdx = i;
-            break;
-          }
-        } catch(e) {}
-      }
-
-      // 이전
       btnPrev.classList.remove('page-remote__btn--disabled');
       btnNext.classList.remove('page-remote__btn--disabled');
 
-      if (currentIdx > 0) {
-        btnPrev.href = allLinks[currentIdx - 1].href;
+      if (prevLink && prevLink.href) {
+        btnPrev.href = prevLink.href;
       } else {
         btnPrev.removeAttribute('href');
         btnPrev.classList.add('page-remote__btn--disabled');
       }
 
-      // 다음
-      if (currentIdx >= 0 && currentIdx < allLinks.length - 1) {
-        btnNext.href = allLinks[currentIdx + 1].href;
+      if (nextLink && nextLink.href) {
+        btnNext.href = nextLink.href;
       } else {
         btnNext.removeAttribute('href');
         btnNext.classList.add('page-remote__btn--disabled');
       }
     }
 
-    // 최초 실행 + instant navigation 대응
+    // instant navigation 대응: 페이지 변경 시마다 재실행
+    var _interval = setInterval(function() {
+      if (typeof document$ !== 'undefined') {
+        clearInterval(_interval);
+        document$.subscribe(function() {
+          setTimeout(setupRemote, 100);
+        });
+      }
+    }, 50);
+    // 최초 실행
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(setupRemote, 100);
+    });
     setupRemote();
-    if (typeof document$ !== 'undefined') {
-      document$.subscribe(function() { setupRemote(); });
-    }
   </script>
 
               </article>
