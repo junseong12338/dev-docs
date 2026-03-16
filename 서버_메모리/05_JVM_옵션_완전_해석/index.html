@@ -1,0 +1,9390 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Claude와 함께 만든 개발 학습 문서">
+      
+      
+        <meta name="author" content="이준성">
+      
+      
+      
+        <link rel="prev" href="../04_%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4%EC%9D%98_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EC%82%AC%EC%9A%A9_%EC%9B%90%EB%A6%AC/">
+      
+      
+        <link rel="next" href="../06_JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0%EC%99%80_%ED%9E%99_%ED%99%95%EC%9E%A5/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../material/book-open-page-variant">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>JVM 옵션 완전 해석 - Junsung's Dev Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#05-jvm-gamma" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../.." title="Junsung&#39;s Dev Docs" class="md-header__button md-logo" aria-label="Junsung's Dev Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Junsung's Dev Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              JVM 옵션 완전 해석
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="deep-orange"  aria-label="다크 모드"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="amber"  aria-label="라이트 모드"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Junsung&#39;s Dev Docs" class="md-nav__button md-logo" aria-label="Junsung's Dev Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    Junsung's Dev Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    메모리
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리 기본기초
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    메모리 기본기초
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/01_%EB%A9%94%EB%AA%A8%EB%A6%AC%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/02_%EA%B0%80%EC%83%81_%EB%A9%94%EB%AA%A8%EB%A6%AC%EC%99%80_%ED%8E%98%EC%9D%B4%EC%A7%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    가상 메모리와 페이징
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/03_%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    프로세스 메모리 구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/04_JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 메모리 구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/05_%EA%B0%80%EB%B9%84%EC%A7%80_%EC%BB%AC%EB%A0%89%EC%85%98_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    가비지 컬렉션 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/06_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%88%84%EC%88%98_%ED%8C%A8%ED%84%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리 누수 패턴
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/07_%EB%A6%AC%EB%88%85%EC%8A%A4_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    리눅스 메모리 관리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/08_JVM_%ED%8A%9C%EB%8B%9D%EA%B3%BC_%EC%A7%84%EB%8B%A8%EB%8F%84%EA%B5%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 튜닝과 진단도구
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/09_%EC%8B%A4%EC%A0%84_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EC%9E%A5%EC%95%A0%EB%8C%80%EC%9D%91/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전 메모리 장애대응
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/11_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버 메모리
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    서버 메모리
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_%EB%A9%94%EB%AA%A8%EB%A6%AC%EC%9D%98_%EA%B8%B0%EC%B4%88_%EC%A4%91%EC%9D%98_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리의 기초 중의 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_%EC%84%9C%EB%B2%84%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_OS%EC%9D%98_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OS의 메모리 관리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4%EC%9D%98_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EC%82%AC%EC%9A%A9_%EC%9B%90%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    프로세스의 메모리 사용 원리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 옵션 완전 해석
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 옵션 완전 해석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 왜 이걸 알아야 해? - "이게 뭐야?"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 왜 이걸 알아야 해? - &#34;이게 뭐야?&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        비유로 문 열기
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jvm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JVM 옵션의 본질
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-ps-ef" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 우리 서버 ps -ef 출력 원본
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-jvm-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. JVM 옵션의 분류 체계 - "어떤 종류가 있어?"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. JVM 옵션의 분류 체계 - &#34;어떤 종류가 있어?&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-1. 분류 전체 구조
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-2-standard-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-2. 표준 옵션 (Standard Options)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-3-x-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-3. 비표준 옵션 (-X Options)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-4-xx-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-4. 고급 옵션 (-XX: Options)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-5-d-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-5. 시스템 프로퍼티 (-D Options)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-6-javaagent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-6. 에이전트 옵션 (-javaagent)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-7. 분류 요약 표
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 옵션 하나하나 완전 해석 - "이게 다 뭐야?"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 옵션 하나하나 완전 해석 - &#34;이게 다 뭐야?&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4-1-java" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-1. Java 실행 경로
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-2. 톰캣 로깅 설정 파일 경로
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-3. 톰캣 전용 로그 매니저
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-4-tls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-4. TLS 보안 설정
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-5-apm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-5. APM 에이전트
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-6. 힙 메모리 초기 크기
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-7. 힙 메모리 최대 크기
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-8-xms-xmx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-8. -Xms와 -Xmx의 관계 심화
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-9-permgen-java-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-9. PermGen 크기 (Java 8에서 무시!)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-10-oom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-10. OOM 시 힙덤프 자동 생성
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-11. 힙덤프 저장 경로
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-12. 프로토콜 핸들러
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-13-umask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-13. 보안 UMASK 설정
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-14-endorsed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-14. Endorsed 디렉토리 무시
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-15. 클래스패스
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-16-catalinabase-catalinahome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-16. 톰캣 경로 설정 (catalina.base / catalina.home)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-17. 임시 파일 경로
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-18. 메인 클래스와 인수
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-ps-ef" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ps -ef 출력 전체 구조 정리
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 메모리 관련 옵션 심화 - "이건 꼭 알아야 해"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 메모리 관련 옵션 심화 - &#34;이건 꼭 알아야 해&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#6-1-xss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6-1. -Xss (스레드 스택 크기)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-2-xmn-young-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6-2. -Xmn (Young Generation 크기)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-jvm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 운영에서 자주 쓰는 추가 JVM 옵션들
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 운영에서 자주 쓰는 추가 JVM 옵션들">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#7-1-gc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7-1. GC 알고리즘 선택
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-2-metaspace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7-2. Metaspace 관련
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-3-gc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7-3. GC 로그 관련
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 함정과 실수 - "이거 모르면 당한다"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 우리 서버 설정 진단 - "이 설정 괜찮은 거야?"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 정리
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. 정리">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        전체 옵션 분류 요약표
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        핵심 요약 표
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        이 챕터에서 반드시 기억할 것
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        한 줄 정리
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        확인 문제 (5문제)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06_JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0%EC%99%80_%ED%9E%99_%ED%99%95%EC%9E%A5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 메모리 구조와 힙 확장
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_GC%EC%9D%98_%EB%AA%A8%EB%93%A0_%EA%B2%83/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GC의 모든 것
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_GC%EC%99%80_OS_%ED%8E%98%EC%9D%B4%EC%A7%80_%EA%B4%80%EB%A6%AC%EB%8A%94_%EB%8B%A4%EB%A5%B8_%EA%B2%83%EC%9D%B4%EB%8B%A4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GC와 OS 페이지 관리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81_%EC%88%98%EC%B9%98_%EC%99%84%EC%A0%84_%ED%95%B4%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    모니터링 수치 완전 해석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10_%EC%8B%A4%EC%A0%84_%EC%9A%B0%EB%A6%AC_%EC%84%9C%EB%B2%84_%EC%82%AC%EB%A1%80_%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전 우리 서버 사례 분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 메모리 분석
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JVM 메모리 분석
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/01_JVM%EC%9D%B4%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM이란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/02_JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 메모리 구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/03_%EA%B0%9D%EC%B2%B4%EC%99%80_%ED%81%B4%EB%9E%98%EC%8A%A4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    객체와 클래스
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/04_%ED%81%B4%EB%9E%98%EC%8A%A4%EB%A1%9C%EB%8D%94/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    클래스로더
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/05_%EA%B0%80%EB%B9%84%EC%A7%80_%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC_GC_Roots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    가비지 컬렉션과 GC Roots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/06_%ED%9E%99%EB%8D%A4%ED%94%84%EC%99%80_hprof/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    힙덤프와 hprof
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/07_JVM_%EC%98%B5%EC%85%98%EA%B3%BC_%ED%8A%9C%EB%8B%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 옵션과 튜닝
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/08_MAT_%EB%A6%AC%ED%8F%AC%ED%8A%B8_%EC%99%84%EC%A0%84%ED%95%B4%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAT 리포트 완전해석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/09_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swap 메모리 관리
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Swap 메모리 관리
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/01_OS_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OS 메모리 구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/02_buff_cache%EB%9E%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    buff/cache란
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/03_Swap%EC%9D%B4%EB%9E%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swap이란
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/04_vm_swappiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vm.swappiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/05_Swap%EC%9D%98_%EB%B9%84%EA%B0%80%EC%97%AD%EC%84%B1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swap의 비가역성
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/06_%EB%B0%B1%EC%97%85%EA%B3%BC_%EB%A9%94%EB%AA%A8%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    백업과 메모리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/07_%EC%8B%A4%EC%A0%84_WAS02_%EC%9E%A5%EC%95%A0%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전 WAS02 장애분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/08_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/09_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스프링 / Java
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    스프링 / Java
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Core
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Spring Core
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/01_Spring%EC%9D%B4_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring이 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/02_Bean%EC%9D%B4_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bean이 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/03_DI_%EC%9D%98%EC%A1%B4%EC%84%B1_%EC%A3%BC%EC%9E%85/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DI 의존성 주입
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/04_XML_%EC%84%A4%EC%A0%95_%EC%99%84%EC%A0%84%EC%A0%95%EB%B3%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XML 설정
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/05_Bean_%EC%83%9D%EB%AA%85%EC%A3%BC%EA%B8%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bean 생명주기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/06_Bean_Scope/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bean Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/07_%EC%96%B4%EB%85%B8%ED%85%8C%EC%9D%B4%EC%85%98_%EC%84%A4%EC%A0%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    어노테이션 설정
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/08_Spring_Context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/09_%EC%9A%B0%EB%A6%AC_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A1%9C_%EB%B3%B4%EB%8A%94_Spring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    우리 프로젝트로 보는 Spring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring 요청 흐름과 세션
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Spring 요청 흐름과 세션
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/01_HTTP_%EC%9A%94%EC%B2%AD%EC%9D%B4_%EC%84%9C%EB%B2%84%EC%97%90_%EB%8F%84%EC%B0%A9%ED%95%98%EB%A9%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP 요청이 서버에 도착하면
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/02_DispatcherServlet_%EA%B5%90%ED%86%B5%EC%A0%95%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DispatcherServlet 교통정리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/03_%EC%9D%B8%ED%84%B0%EC%85%89%ED%84%B0_%EA%B2%BD%EB%B9%84%EC%9B%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    인터셉터 경비원
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/04_%EC%84%B8%EC%85%98%EC%9D%B4%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    세션이란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/05_Redis%EC%99%80_%EC%84%B8%EC%85%98_%EA%B3%B5%EC%9C%A0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redis와 세션 공유
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/06_%EC%9D%B8%EC%A6%9D_%EC%B2%B4%ED%81%AC_%ED%9D%90%EB%A6%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    인증 체크 흐름
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/07_%EC%84%B8%EC%85%98_%EB%A7%8C%EB%A3%8C_%EC%A0%84%EC%B2%B4_%ED%9D%90%EB%A6%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    세션 만료 전체 흐름
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/08_printStackTrace_vs_Logger/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    printStackTrace vs Logger
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/09_%EC%8B%A4%EC%A0%84_WAS02_%EB%A1%9C%EA%B7%B8%ED%8F%AD%EC%A6%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전 WAS02 로그폭증
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/11_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JPA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JPA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/01_Alpha_JPA%EA%B0%80_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JPA가 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/02_Alpha_%EC%97%94%ED%8B%B0%ED%8B%B0_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    엔티티 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/03_Beta_Repository%EC%99%80_CRUD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository와 CRUD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/04_Beta_%EC%97%B0%EA%B4%80%EA%B4%80%EA%B3%84_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    연관관계 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/05_Gamma_%EC%98%81%EC%86%8D%EC%84%B1_%EC%BB%A8%ED%85%8D%EC%8A%A4%ED%8A%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    영속성 컨텍스트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/06_Gamma_JPQL%EA%B3%BC_%EC%BF%BC%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JPQL과 쿼리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/07_Delta_%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%EA%B3%BC_%EB%8F%99%EC%8B%9C%EC%84%B1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    트랜잭션과 동시성
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/08_Delta_%EC%84%B1%EB%8A%A5_%EC%B5%9C%EC%A0%81%ED%99%94/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    성능 최적화
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/09_Omega_NexClass_%EC%8B%A4%EC%A0%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NexClass 실전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/11_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    스레드
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/01_%EC%8A%A4%EB%A0%88%EB%93%9C%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/02_%EC%8A%A4%EB%A0%88%EB%93%9C_%EC%83%9D%EC%84%B1%EA%B3%BC_%EC%8B%A4%ED%96%89/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드 생성과 실행
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/03_%EC%8A%A4%EB%A0%88%EB%93%9C_%EC%83%9D%EB%AA%85%EC%A3%BC%EA%B8%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드 생명주기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/04_%EB%8F%99%EA%B8%B0%ED%99%94%EC%99%80_%EB%9D%BD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    동기화와 락
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/05_Timer%EC%99%80_TimerTask/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Timer와 TimerTask
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/06_%EC%8A%A4%EB%A0%88%EB%93%9C%ED%92%80%EA%B3%BC_Executor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드풀과 Executor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/07_%EB%8D%B0%EB%AA%AC%EC%8A%A4%EB%A0%88%EB%93%9C%EC%99%80_GC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    데몬스레드와 GC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/08_%EC%9A%B0%EB%A6%AC_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A1%9C_%EB%B3%B4%EB%8A%94_%EC%8A%A4%EB%A0%88%EB%93%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    우리 프로젝트로 보는 스레드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/09_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버 / 인프라
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    서버 / 인프라
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버 인프라
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    서버 인프라
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/01_%EC%84%9C%EB%B2%84%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/02_%EB%A6%AC%EB%88%85%EC%8A%A4_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    리눅스 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/03_%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    네트워크 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/04_WEB%EC%84%9C%EB%B2%84_Apache/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WEB서버 Apache
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/05_WAS%EC%97%B0%EB%8F%99_mod_jk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WAS연동 mod_jk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/06_SSL_%EB%B3%B4%EC%95%88_%EB%B0%B1%EC%97%85/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSL 보안 백업
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DNS Nginx 인프라
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DNS Nginx 인프라
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/01_IP%EC%99%80_%ED%8F%AC%ED%8A%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IP와 포트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/02_DNS_%EB%8F%84%EB%A9%94%EC%9D%B8%EC%9D%98_%EB%B9%84%EB%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DNS 도메인의 비밀
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/03_HTTP%EC%99%80_HTTPS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP와 HTTPS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/04_SSL_%EC%9D%B8%EC%A6%9D%EC%84%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSL 인증서
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/05_Nginx_%EB%A6%AC%EB%B2%84%EC%8A%A4%ED%94%84%EB%A1%9D%EC%8B%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nginx 리버스프록시
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/06_Cloudflare/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cloudflare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/07_WEB_WAS_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WEB WAS 아키텍처
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/08_NexClass_%EC%9D%B8%ED%94%84%EB%9D%BC_%EC%8B%A4%EC%A0%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NexClass 인프라 실전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/09_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    네트워크 / API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    네트워크 / API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 통신
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API 통신
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/01_HTTP_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/02_JSON_%EC%99%84%EC%A0%84%EC%A0%95%EB%B3%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JSON 완전정복
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/03_REST_API/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/04_Java_%ED%83%80%EC%9E%85%EC%BA%90%EC%8A%A4%ED%8C%85/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java 타입캐스팅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/05_Spring_Transactional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Transactional
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/06_MyBatis_Batch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MyBatis Batch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/07_%EC%9E%AC%EC%8B%9C%EB%8F%84_%ED%8C%A8%ED%84%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    재시도 패턴
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/08_%EC%8B%A4%EC%A0%84_%EA%B2%BD%EC%83%81%EA%B5%AD%EB%A6%BD%EB%8C%80_%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전 경상국립대 분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/09_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/11_%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC_%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버 인프라 네트워크
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Webhook
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/01_API_%ED%98%B8%EC%B6%9C%EC%9D%B4_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 호출이 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/02_Webhook%EC%9D%B4_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook이 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/03_Push%EC%99%80_Pull/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Push와 Pull
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/04_Webhook_%EB%8F%99%EC%9E%91_%EC%9B%90%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook 동작 원리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/05_Webhook_vs_API_%ED%98%B8%EC%B6%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook vs API 호출
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/06_Zoom_Webhook_%EC%9D%B4%EB%B2%A4%ED%8A%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zoom Webhook 이벤트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/07_Webhook_%EB%B3%B4%EC%95%88%EA%B3%BC_%EC%84%A4%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook 보안과 설계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/08_NexClass_%EC%8B%A4%EC%A0%84_%EA%B5%AC%ED%98%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NexClass 실전 구현
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/09_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    네트워크 스토리지
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    네트워크 스토리지
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/01_%EC%A0%84%EC%B2%B4_%EA%B5%AC%EC%A1%B0%EB%8F%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    전체 구조도
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/02_%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C_%EB%B9%84%EA%B5%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    프로토콜 비교
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/03_S3_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80_%EC%9D%B4%ED%95%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    S3 스토리지 이해
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/04_HTTP_%EC%83%81%ED%83%9C%EC%BD%94%EB%93%9C_%EC%9D%B8%EC%A6%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP 상태코드 인증
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/05_CDN_CMS_%ED%9D%90%EB%A6%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CDN CMS 흐름
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/06_Python_%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC_%EC%A0%95%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python 라이브러리 정리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/07_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    인증 / 세션
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    인증 / 세션
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_1" id="__nav_6_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT API인증
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JWT API인증
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/01_Alpha_JWT%EA%B0%80_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT가 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/02_Alpha_%EC%95%94%ED%98%B8%ED%99%94_%EC%9D%B8%EC%BD%94%EB%94%A9_%ED%95%B4%EC%8B%B1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    암호화 인코딩 해싱
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/03_Beta_JWT_3%EC%A1%B0%EA%B0%81_%ED%95%B4%EB%B6%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 3조각 해부
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/04_Beta_JWT_%EC%83%9D%EC%84%B1%EA%B3%BC_%EA%B2%80%EC%A6%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 생성과 검증
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/05_Gamma_API_%EC%9D%B8%EC%A6%9D%EA%B3%BC_JWT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 인증과 JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/06_Gamma_AES256_%EC%95%94%ED%98%B8%ED%99%94/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AES256 암호화
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/07_Delta_JWT_%EB%B3%B4%EC%95%88_%EC%84%A4%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 보안 설계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/08_Omega_NexClass_LMS_%EC%8B%A4%EC%A0%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NexClass LMS 실전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/09_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/10_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_2" id="__nav_6_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 세션 디버깅
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JWT 세션 디버깅
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/01_JWT_%EA%B8%B0%EB%B3%B8%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 기본구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/02_%EC%84%B8%EC%85%98%EA%B3%BC_%ED%86%A0%ED%81%B0_%EA%B4%80%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    세션과 토큰 관계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/03_%EC%BD%94%EB%93%9C%EB%B2%A0%EC%9D%B4%EC%8A%A4_%EA%B2%80%EC%83%89_%EA%B8%B0%EC%88%A0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    코드베이스 검색 기술
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/04_%EC%99%B8%EB%B6%80%EC%97%B0%EB%8F%99_%EB%94%94%EB%B2%84%EA%B9%85_%EB%B0%A9%EB%B2%95%EB%A1%A0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부연동 디버깅 방법론
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/05_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redis
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Redis
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/01_Redis_%EA%B8%B0%EB%B3%B8%EA%B0%9C%EB%85%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redis 기본개념
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/02_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%B3%84_Redis_%EC%A0%81%EC%9A%A9%ED%98%84%ED%99%A9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    프로젝트별 Redis 적용현황
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/03_Redis_%EC%84%A4%EC%A0%95_%EC%83%81%EC%84%B8%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redis 설정 상세분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/04_%EC%8B%A4%EC%A0%9C_%EC%BD%94%EB%93%9C_%ED%8C%A8%ED%84%B4_%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실제 코드 패턴 분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/05_%ED%86%B5%ED%95%A9_%EB%A7%88%EC%8A%A4%ED%84%B0_%EA%B0%80%EC%9D%B4%EB%93%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    통합 마스터 가이드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/06_%EB%B9%84%EC%A0%84%EA%B3%B5%EC%9E%90%EC%9A%A9_Redis_%EC%9A%94%EC%95%BD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    비전공자용 Redis 요약
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/07_LMS_%EC%A4%91%EB%B3%B5%EC%B2%B4%ED%81%AC_%EB%A9%94%EC%BB%A4%EB%8B%88%EC%A6%98_%EC%A0%95%ED%99%95%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LMS 중복체크 메커니즘
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DB
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DB
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/01_DB%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/02_SQL_%EA%B8%B0%EC%B4%88_DDL_DML_DCL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL 기초 DDL DML DCL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/03_DELETE_TRUNCATE_DROP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DELETE TRUNCATE DROP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/04_%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%EA%B3%BC_Auto-Commit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    트랜잭션과 Auto-Commit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/05_%EA%B2%A9%EB%A6%AC%EC%88%98%EC%A4%80%EA%B3%BC_MVCC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    격리수준과 MVCC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/06_%EB%9D%BD%EC%9D%98_%EC%84%B8%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    락의 세계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/07_SHOW_PROCESSLIST_%EC%8B%A4%EC%A0%84%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SHOW PROCESSLIST 실전분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/08_information_schema_%ED%99%9C%EC%9A%A9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    information_schema 활용
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/09_%EC%9D%B8%EB%8D%B1%EC%8A%A4_%EC%99%84%EC%A0%84%EC%A0%95%EB%B3%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    인덱스 완전정복
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/10_InnoDB_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80_%EC%97%94%EC%A7%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    InnoDB 스토리지 엔진
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/11_mysqldump%EC%99%80_%EB%B0%B1%EC%97%85%EC%A0%84%EB%9E%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mysqldump와 백업전략
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/12_%EB%94%94%EC%8A%A4%ED%81%AC%EC%99%80_DB%EC%9D%98_%EA%B4%80%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    디스크와 DB의 관계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/13_%EC%8B%A4%EC%A0%84%EC%A2%85%ED%95%A9_%EC%9E%A5%EC%95%A0%EB%8C%80%EC%9D%91/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전종합 장애대응
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/14_%EB%B9%A0%EC%8B%BA_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    빠싺 최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 왜 이걸 알아야 해? - "이게 뭐야?"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 왜 이걸 알아야 해? - &#34;이게 뭐야?&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        비유로 문 열기
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jvm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JVM 옵션의 본질
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-ps-ef" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 우리 서버 ps -ef 출력 원본
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-jvm-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. JVM 옵션의 분류 체계 - "어떤 종류가 있어?"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. JVM 옵션의 분류 체계 - &#34;어떤 종류가 있어?&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-1. 분류 전체 구조
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-2-standard-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-2. 표준 옵션 (Standard Options)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-3-x-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-3. 비표준 옵션 (-X Options)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-4-xx-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-4. 고급 옵션 (-XX: Options)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-5-d-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-5. 시스템 프로퍼티 (-D Options)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-6-javaagent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-6. 에이전트 옵션 (-javaagent)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-7. 분류 요약 표
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 옵션 하나하나 완전 해석 - "이게 다 뭐야?"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 옵션 하나하나 완전 해석 - &#34;이게 다 뭐야?&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4-1-java" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-1. Java 실행 경로
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-2. 톰캣 로깅 설정 파일 경로
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-3. 톰캣 전용 로그 매니저
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-4-tls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-4. TLS 보안 설정
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-5-apm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-5. APM 에이전트
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-6. 힙 메모리 초기 크기
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-7. 힙 메모리 최대 크기
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-8-xms-xmx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-8. -Xms와 -Xmx의 관계 심화
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-9-permgen-java-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-9. PermGen 크기 (Java 8에서 무시!)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-10-oom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-10. OOM 시 힙덤프 자동 생성
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-11. 힙덤프 저장 경로
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-12. 프로토콜 핸들러
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-13-umask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-13. 보안 UMASK 설정
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-14-endorsed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-14. Endorsed 디렉토리 무시
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-15. 클래스패스
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-16-catalinabase-catalinahome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-16. 톰캣 경로 설정 (catalina.base / catalina.home)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-17. 임시 파일 경로
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-18. 메인 클래스와 인수
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-ps-ef" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ps -ef 출력 전체 구조 정리
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 메모리 관련 옵션 심화 - "이건 꼭 알아야 해"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 메모리 관련 옵션 심화 - &#34;이건 꼭 알아야 해&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#6-1-xss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6-1. -Xss (스레드 스택 크기)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-2-xmn-young-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6-2. -Xmn (Young Generation 크기)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-jvm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 운영에서 자주 쓰는 추가 JVM 옵션들
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 운영에서 자주 쓰는 추가 JVM 옵션들">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#7-1-gc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7-1. GC 알고리즘 선택
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-2-metaspace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7-2. Metaspace 관련
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-3-gc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7-3. GC 로그 관련
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 함정과 실수 - "이거 모르면 당한다"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 우리 서버 설정 진단 - "이 설정 괜찮은 거야?"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 정리
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. 정리">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        전체 옵션 분류 요약표
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        핵심 요약 표
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        이 챕터에서 반드시 기억할 것
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        한 줄 정리
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        확인 문제 (5문제)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="네비게이션" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    메모리
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    서버 메모리
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+  
+                  
+
+
+
+<h1 id="05-jvm-gamma">05. JVM 옵션 완전 해석 - Gamma<a class="headerlink" href="#05-jvm-gamma" title="Permanent link">&para;</a></h1>
+<hr />
+<h2 id="1-">1. 왜 이걸 알아야 해? - "이게 뭐야?"<a class="headerlink" href="#1-" title="Permanent link">&para;</a></h2>
+<h3 id="_1">비유로 문 열기<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p>자동차 계기판을 생각해봐.</p>
+<p>운전 초보는 속도계만 봐. 근데 정비사는? RPM, 수온, 유압, 연료분사량 전부 본다. 계기판 숫자 하나하나가 뭘 의미하는지 알거든. 차에 이상이 생기면 "아, RPM이 불안정하고 수온이 높으니까 냉각수 문제겠다"고 추론할 수 있어.</p>
+<p>서버도 똑같아. <code>ps -ef | grep java</code>를 치면 JVM 옵션이 한 줄로 쭉 나와. 이걸 못 읽는 개발자는 "뭔가 많네..." 하고 넘어가지. 읽을 줄 아는 개발자는 5초 만에 서버 설정 전체를 파악해.</p>
+<div class="admonition note">
+<p class="admonition-title">초보 vs 괴물 개발자의 차이</p>
+<p><strong>초보 개발자가 ps -ef를 보면:</strong></p>
+<p>"java -Xms8192m -Xmx12288m -XX:MaxPermSize=4096m ..."
+--&gt; "음... 자바가 돌아가고 있네... 뭔가 숫자가 크네..."
+--&gt; 끝. 더 이상 읽을 수 없음.</p>
+<p><strong>괴물 개발자가 ps -ef를 보면:</strong></p>
+<p>--&gt; "Java 8 OpenJDK, 초기 힙 8GB, 최대 12GB,
+MaxPermSize는 Java 8이니까 무시되겠네,
+힙덤프 설정 있고, APM 에이전트(jspd) 붙어 있고,
+톰캣이고, TLS DH 키 2048비트..."
+--&gt; 5초 안에 서버 상태 파악 끝.</p>
+<p>이 차이를 만드는 게 이 챕터야.</p>
+</div>
+<h3 id="jvm">JVM 옵션의 본질<a class="headerlink" href="#jvm" title="Permanent link">&para;</a></h3>
+<p>JVM을 실행할 때 전달하는 옵션(플래그)들이야. 이 옵션들이 JVM의 동작 방식을 결정해. 메모리를 얼마나 쓸지, 보안을 어떻게 처리할지, 로그를 어디에 남길지, 모니터링 에이전트를 붙일지 전부 여기서 결정돼.</p>
+<hr />
+<h2 id="2-ps-ef">2. 우리 서버 ps -ef 출력 원본<a class="headerlink" href="#2-ps-ef" title="Permanent link">&para;</a></h2>
+<p>이거 우리 LMS 서버(WAS01, 15GB RAM, Java 8)에서 실제로 <code>ps -ef | grep java</code>로 뽑은 결과야. 한 글자도 안 바꿨어. 이걸 이 챕터에서 완전히 해부한다.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  -Djava.util.logging.config.file=/usr/local/tomcat/conf/logging.properties
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  -Djdk.tls.ephemeralDHKeySize=2048
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  -javaagent:/home/jspd/jspd/lib/jspd.agent.jar
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  -Xms8192m
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  -Xmx12288m
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  -XX:MaxPermSize=4096m
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  -XX:+HeapDumpOnOutOfMemoryError
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  -XX:HeapDumpPath=/home/heapdump
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  -Dorg.apache.catalina.security.SecurityListener.UMASK=0027
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  -Dignore.endorsed.dirs=
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  -classpath /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  -Dcatalina.base=/usr/local/tomcat
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>  -Dcatalina.home=/usr/local/tomcat
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>  -Djava.io.tmpdir=/usr/local/tomcat/temp
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>  org.apache.catalina.startup.Bootstrap start
+</span></code></pre></div>
+<p>위에서 줄바꿈으로 나눴지만, 실제 ps -ef 출력에서는 한 줄이야. 보기 좋게 나눈 거야.</p>
+<p>이 한 줄에 서버의 모든 정보가 들어 있어. 자바 버전, 톰캣 설정, 메모리 설정, 보안 설정, 모니터링 설정 전부.</p>
+<hr />
+<h2 id="3-jvm-">3. JVM 옵션의 분류 체계 - "어떤 종류가 있어?"<a class="headerlink" href="#3-jvm-" title="Permanent link">&para;</a></h2>
+<p>JVM 옵션은 <strong>접두사(prefix)</strong>로 종류가 나뉘어. 접두사만 보면 "이건 어떤 성격의 옵션이구나"를 바로 알 수 있어. 처음 보는 옵션이라도 접두사만 보면 역할을 추측할 수 있다는 거야.</p>
+<h3 id="3-1">3-1. 분류 전체 구조<a class="headerlink" href="#3-1" title="Permanent link">&para;</a></h3>
+<div class="admonition abstract">
+<p class="admonition-title">JVM 옵션 분류 체계</p>
+<table>
+<thead>
+<tr>
+<th>접두사</th>
+<th>이름</th>
+<th>안정성</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(없음, -로 시작)</td>
+<td>표준 옵션</td>
+<td>모든 JVM 보장</td>
+<td>-classpath, -jar, -version</td>
+</tr>
+<tr>
+<td>-X</td>
+<td>비표준 옵션</td>
+<td>HotSpot 지원, 변경 가능</td>
+<td>-Xms, -Xmx, -Xss, -Xmn</td>
+</tr>
+<tr>
+<td>-XX:</td>
+<td>고급(실험) 옵션</td>
+<td>예고 없이 변경/삭제</td>
+<td>-XX:+UseG1GC, -XX:MaxPermSize</td>
+</tr>
+<tr>
+<td>-D</td>
+<td>시스템 프로퍼티</td>
+<td>자바 표준</td>
+<td>-Dcatalina.home, -Djava.io.tmpdir</td>
+</tr>
+<tr>
+<td>-javaagent:</td>
+<td>에이전트</td>
+<td>자바 표준</td>
+<td>-javaagent:apm.jar</td>
+</tr>
+<tr>
+<td>(맨 마지막)</td>
+<td>메인 클래스</td>
+<td>-</td>
+<td>Bootstrap start</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="3-2-standard-options">3-2. 표준 옵션 (Standard Options)<a class="headerlink" href="#3-2-standard-options" title="Permanent link">&para;</a></h3>
+<p>접두사가 그냥 <code>-</code>로 시작하는 옵션. 모든 JVM 구현체에서 동작이 <strong>보장</strong>돼. Oracle JDK, OpenJDK, IBM JDK, Azul Zulu 어디서든 똑같이 동작해.</p>
+<div class="admonition note">
+<p class="admonition-title">표준 옵션 예시</p>
+<ul>
+<li><strong>-classpath (또는 -cp)</strong>: JVM이 클래스 파일을 찾을 경로 지정. "이 jar 파일들 안에서 클래스를 찾아라"</li>
+<li><strong>-jar</strong>: 실행 가능한 JAR 파일 직접 실행. <code>java -jar myapp.jar</code></li>
+<li><strong>-version</strong>: JVM 버전 정보 출력. <code>java -version</code></li>
+<li><strong>-verbose:class / -verbose:gc</strong>: 클래스 로딩 / GC 동작 로그를 콘솔에 출력</li>
+</ul>
+<p><strong>핵심: 표준 옵션은 어떤 JVM에서든 동작한다. 가장 안전하다.</strong></p>
+</div>
+<h3 id="3-3-x-options">3-3. 비표준 옵션 (-X Options)<a class="headerlink" href="#3-3-x-options" title="Permanent link">&para;</a></h3>
+<p><code>-X</code>로 시작하는 옵션. HotSpot JVM(Oracle/OpenJDK)에서 동작하지만, 다른 JVM 구현체에서는 보장 안 돼. 다만 현실에서는 거의 모든 서버가 HotSpot 계열이라 사실상 표준처럼 쓰여.</p>
+<div class="admonition note">
+<p class="admonition-title">비표준 옵션 (-X) 예시</p>
+<table>
+<thead>
+<tr>
+<th>옵션</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-Xms\&lt;size&gt;</td>
+<td>힙 메모리 초기 크기 (minimum starting)</td>
+</tr>
+<tr>
+<td>-Xmx\&lt;size&gt;</td>
+<td>힙 메모리 최대 크기 (maximum)</td>
+</tr>
+<tr>
+<td>-Xss\&lt;size&gt;</td>
+<td>스레드 스택 크기 (stack size)</td>
+</tr>
+<tr>
+<td>-Xmn\&lt;size&gt;</td>
+<td>Young Generation 크기 (new generation)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>크기 단위:</strong> k = 킬로바이트(KB), m = 메가바이트(MB), g = 기가바이트(GB)</p>
+<p><strong>예:</strong> -Xms8192m = -Xms8g = 8GB / -Xmx12288m = -Xmx12g = 12GB / -Xss512k = 스레드 하나당 512KB 스택</p>
+<p><strong>핵심: 메모리 관련 핵심 옵션은 대부분 -X 계열이다. 이것만 읽을 줄 알아도 서버 메모리 설정 절반은 파악 가능.</strong></p>
+</div>
+<h3 id="3-4-xx-options">3-4. 고급 옵션 (-XX: Options)<a class="headerlink" href="#3-4-xx-options" title="Permanent link">&para;</a></h3>
+<p><code>-XX:</code>로 시작하는 옵션. JVM 내부 동작을 세밀하게 제어해. <strong>예고 없이 변경되거나 삭제</strong>될 수 있어서 "실험적" 옵션이라고도 불러.</p>
+<p><strong>문법이 2가지야. 이거 중요해:</strong></p>
+<div class="admonition note">
+<p class="admonition-title">고급 옵션 (-XX:) 문법</p>
+<p><strong>[타입 1] 불린(Boolean) 타입 -- 켜기/끄기</strong></p>
+<ul>
+<li><code>-XX:+HeapDumpOnOutOfMemoryError</code> -- "+" = 켜기 (ON)</li>
+<li><code>-XX:-HeapDumpOnOutOfMemoryError</code> -- "-" = 끄기 (OFF)</li>
+<li><code>-XX:+UseG1GC</code> -- G1 GC 사용 켜기</li>
+<li><code>-XX:-UseCompressedOops</code> -- 압축 포인터 끄기</li>
+</ul>
+<p><strong>+는 켜기, -는 끄기. 딱 이것만 기억해.</strong></p>
+<p><strong>[타입 2] 값 설정 타입 -- key=value</strong></p>
+<ul>
+<li><code>-XX:MaxPermSize=4096m</code> -- PermGen 최대 크기</li>
+<li><code>-XX:HeapDumpPath=/home/heapdump</code> -- 힙덤프 저장 경로</li>
+<li><code>-XX:MaxMetaspaceSize=512m</code> -- Metaspace 최대 크기</li>
+<li><code>-XX:MaxGCPauseMillis=200</code> -- GC 목표 정지 시간 (밀리초)</li>
+</ul>
+<p><strong>요약: +는 켜기, -는 끄기, =는 값 설정.</strong></p>
+</div>
+<h3 id="3-5-d-options">3-5. 시스템 프로퍼티 (-D Options)<a class="headerlink" href="#3-5-d-options" title="Permanent link">&para;</a></h3>
+<p><code>-D</code>로 시작하는 옵션. 이건 JVM 자체의 설정이 아니라, <strong>자바 애플리케이션에 전달하는 설정값</strong>이야. 쪽지를 건네준다고 생각해. JVM한테 "이 쪽지를 애플리케이션에 전달해"라고 하는 거야.</p>
+<div class="admonition note">
+<p class="admonition-title">시스템 프로퍼티 (-D) 동작</p>
+<p>명령줄: <code>java -Dcatalina.home=/usr/local/tomcat MyApp</code></p>
+<p>JVM 내부 System Properties (Map 자료구조):</p>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+<th>출처</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>catalina.home</td>
+<td>/usr/local/tomcat</td>
+<td>-D로 넣은 값</td>
+</tr>
+<tr>
+<td>os.name</td>
+<td>"Linux"</td>
+<td>JVM이 자동으로 넣은 값</td>
+</tr>
+<tr>
+<td>java.version</td>
+<td>"1.8.0_xxx"</td>
+<td>JVM이 자동으로 넣은 값</td>
+</tr>
+</tbody>
+</table>
+<p>자바 코드에서 꺼내 쓰기:</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">String</span><span class="w"> </span><span class="n">home</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">getProperty</span><span class="p">(</span><span class="s">&quot;catalina.home&quot;</span><span class="p">);</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1">// home = &quot;/usr/local/tomcat&quot;</span>
+</span></code></pre></div>
+<p><strong>원리:</strong> -D로 넘기면 JVM이 내부 Properties 맵에 key=value로 저장. 애플리케이션이 System.getProperty()로 꺼내 쓰는 구조야.</p>
+</div>
+<h3 id="3-6-javaagent">3-6. 에이전트 옵션 (-javaagent)<a class="headerlink" href="#3-6-javaagent" title="Permanent link">&para;</a></h3>
+<p><code>-javaagent:</code>로 시작하는 옵션. JVM이 시작될 때 <strong>바이트코드를 조작</strong>할 수 있는 에이전트 JAR을 로딩해. APM(Application Performance Management) 도구가 이 방식으로 동작해.</p>
+<div class="admonition note">
+<p class="admonition-title">-javaagent 동작 원리</p>
+<pre class="mermaid"><code>flowchart LR
+    A[".class 파일"] --&gt; B["클래스 로더"]
+    B --&gt; C["에이전트가&lt;br/&gt;바이트코드 수정"]
+    C --&gt; D["JVM 메모리에 적재"]
+    D --&gt; E["실행"]</code></pre>
+<p>에이전트가 끼워넣는 코드 예시:</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// 원래 메서드:</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">processOrder</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="c1">// 비즈니스 로직</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">}</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1">// 에이전트가 수정한 후:</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">processOrder</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">nanoTime</span><span class="p">();</span><span class="w">  </span><span class="c1">// &lt;-- 에이전트가 삽입</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="c1">// 비즈니스 로직 (원래 코드)</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">elapsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">nanoTime</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="p">;</span><span class="w">  </span><span class="c1">// &lt;-- 에이전트가 삽입</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="n">agent</span><span class="p">.</span><span class="na">report</span><span class="p">(</span><span class="n">elapsed</span><span class="p">);</span><span class="w">  </span><span class="c1">// &lt;-- 에이전트가 삽입</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><strong>결과:</strong> APM 대시보드에서 "이 API 응답시간 3초" 같은 정보가 나옴. 개발자가 코드에 직접 측정 코드를 안 넣어도 됨. 코드 수정 없이 모니터링이 가능한 이유가 바로 이거야.</p>
+</div>
+<h3 id="3-7">3-7. 분류 요약 표<a class="headerlink" href="#3-7" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>접두사</th>
+<th>종류</th>
+<th>대상</th>
+<th>안정성</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(없음, -)</td>
+<td>표준 옵션</td>
+<td>모든 JVM 공통</td>
+<td>보장됨</td>
+<td>-classpath, -jar, -version</td>
+</tr>
+<tr>
+<td>-X</td>
+<td>비표준 옵션</td>
+<td>HotSpot JVM</td>
+<td>변경 가능</td>
+<td>-Xms, -Xmx, -Xss</td>
+</tr>
+<tr>
+<td>-XX:</td>
+<td>고급 옵션</td>
+<td>HotSpot 내부</td>
+<td>예고 없이 변경/삭제</td>
+<td>-XX:+UseG1GC</td>
+</tr>
+<tr>
+<td>-D</td>
+<td>시스템 프로퍼티</td>
+<td>자바 애플리케이션</td>
+<td>자바 표준</td>
+<td>-Dcatalina.home</td>
+</tr>
+<tr>
+<td>-javaagent:</td>
+<td>에이전트</td>
+<td>바이트코드 조작</td>
+<td>자바 표준</td>
+<td>-javaagent:apm.jar</td>
+</tr>
+<tr>
+<td>(맨 마지막)</td>
+<td>메인 클래스</td>
+<td>실행 대상</td>
+<td>-</td>
+<td>Bootstrap start</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-">4. 옵션 하나하나 완전 해석 - "이게 다 뭐야?"<a class="headerlink" href="#4-" title="Permanent link">&para;</a></h2>
+<p>이제 우리 서버의 ps -ef 출력을 위에서 아래로, <strong>한 줄도 빠짐없이</strong> 해석한다.</p>
+<h3 id="4-1-java">4-1. Java 실행 경로<a class="headerlink" href="#4-1-java" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Java 실행 경로 해석</p>
+<table>
+<thead>
+<tr>
+<th>경로 부분</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/usr/lib/jvm/</code></td>
+<td>리눅스에서 JVM이 설치되는 표준 경로</td>
+</tr>
+<tr>
+<td><code>java-8-openjdk-amd64/</code></td>
+<td>Java 8, OpenJDK, 64비트 AMD 아키텍처</td>
+</tr>
+<tr>
+<td><code>jre/bin/java</code></td>
+<td>JRE의 java 실행 파일</td>
+</tr>
+</tbody>
+</table>
+<p>이 한 줄에서 알 수 있는 것:</p>
+<ol>
+<li><strong>Java 버전: 8</strong> (= 1.8) -- 2014년 출시. 구버전이지만 엔터프라이즈에서 아직도 많이 씀</li>
+<li><strong>JDK 종류: OpenJDK</strong> (Oracle JDK가 아님) -- Oracle JDK는 유료 라이선스 이슈가 있어서 많은 기업이 무료인 OpenJDK로 전환함</li>
+<li><strong>아키텍처: amd64</strong> (= x86_64, 64비트) -- 서버는 거의 100% 64비트. 32비트면 메모리 주소를 4GB까지만 쓸 수 있어서 서버에 부적합</li>
+<li><strong>실행 위치: JRE 내부</strong> (JDK가 아닌 JRE) -- JRE = Java Runtime Environment (실행만 가능), JDK = Java Development Kit (개발+실행). 서버에서는 실행만 하면 되니까 JRE만 있어도 됨</li>
+</ol>
+<p><strong>왜 중요해?</strong> Java 버전에 따라 JVM 옵션이 달라져. 예: -XX:MaxPermSize는 Java 7까지만 유효하고 Java 8부터 무시. Java 버전을 모르면 옵션 해석을 잘못할 수 있어.</p>
+</div>
+<h3 id="4-2">4-2. 톰캣 로깅 설정 파일 경로<a class="headerlink" href="#4-2" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>-Djava.util.logging.config.file=/usr/local/tomcat/conf/logging.properties
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">옵션: -Djava.util.logging.config.file (분류: -D 시스템 프로퍼티)</p>
+<p><strong>뭘 하는 건지:</strong> 자바의 기본 로깅 프레임워크(java.util.logging, 줄여서 JUL)에게 "설정 파일은 여기에 있어"라고 알려주는 거야.</p>
+<p>logging.properties 파일 안에는: 로그 레벨 (INFO, WARNING, SEVERE 등), 로그 출력 위치 (콘솔, 파일), 로그 포맷 (날짜, 클래스명, 메시지 형식) 이런 설정이 들어 있어.</p>
+<p><strong>왜 설정했는지:</strong> 톰캣은 내부적으로 JUL을 사용해서 로그를 남겨. 이 설정 파일로 catalina.log, localhost.log 등의 로그 설정을 제어해.</p>
+<p><strong>없으면 어떻게 되는지:</strong> JVM 기본 로깅 설정($JAVA_HOME/lib/logging.properties) 사용. 톰캣 전용 로그 설정이 안 먹혀서 로그가 이상해짐.</p>
+<p><strong>실무 팁:</strong> 톰캣 로그가 안 나오거나 이상하면 이 파일을 확인해. 참고로 이건 톰캣 자체 로그 설정이고, 우리 앱(Spring)의 로그는 logback이나 log4j 설정에서 별도로 관리돼.</p>
+</div>
+<h3 id="4-3">4-3. 톰캣 전용 로그 매니저<a class="headerlink" href="#4-3" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">옵션: -Djava.util.logging.manager (분류: -D 시스템 프로퍼티)</p>
+<p><strong>뭘 하는 건지:</strong> 자바 로깅 시스템의 "관리자(Manager)"를 톰캣이 만든 커스텀 로그 매니저(JULI)로 교체하는 거야. JULI = Java Util Logging Implementation (톰캣 버전)</p>
+<p><strong>왜 커스텀 로그 매니저가 필요해?</strong> 톰캣은 하나의 JVM에 여러 웹 애플리케이션(WAR)을 올려. 각 WAR는 자기만의 ClassLoader를 갖고 있어.</p>
+<ul>
+<li>자바 기본 LogManager: JVM 전체에 1개 --&gt; 모든 WAR의 로그가 섞임</li>
+<li>톰캣 JULI LogManager: ClassLoader별로 분리 --&gt; WAR별 로그 분리 가능</li>
+</ul>
+<p><strong>비유:</strong> 건물에 사무실이 5개 있는데, 기본 로그 매니저는 건물 전체에 스피커 1개 --&gt; 다 섞여서 들림. 톰캣 로그 매니저는 사무실마다 스피커 1개 --&gt; 각자 따로 들림.</p>
+<p>catalina.sh 스크립트가 이 옵션을 자동으로 추가해. 개발자가 직접 건드릴 일은 거의 없어.</p>
+</div>
+<h3 id="4-4-tls">4-4. TLS 보안 설정<a class="headerlink" href="#4-4-tls" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>-Djdk.tls.ephemeralDHKeySize=2048
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">옵션: -Djdk.tls.ephemeralDHKeySize=2048 (분류: -D 시스템 프로퍼티)</p>
+<p><strong>용어:</strong> TLS = Transport Layer Security (HTTPS의 보안 프로토콜) / DH = Diffie-Hellman (키 교환 알고리즘) / ephemeral = 임시 (매 연결마다 새 키를 생성) / 2048 = 키 크기 (2048비트)</p>
+<p><strong>뭘 하는 건지:</strong> HTTPS 통신할 때 사용하는 DH 키의 크기를 2048비트로 설정. 기본값(1024비트)보다 큰 키를 사용해서 보안을 강화하는 거야.</p>
+<p><strong>왜 2048?</strong> 1024비트는 2015년 Logjam 공격으로 취약한 것으로 판명됨. 2048비트는 현재 업계 권장 최소 크기. 4096비트는 더 안전하지만 TLS 핸드셰이크 시 성능 저하.</p>
+<p><strong>실무 팁:</strong> 보안 점검에서 "Weak DH Key" 경고가 나오면 이 옵션이 없거나 값이 1024 이하인 경우야. 외부 API 연동(결제 등)할 때 상대방이 2048비트를 요구하면 이 설정 없이는 TLS 연결 자체가 실패할 수 있어.</p>
+</div>
+<h3 id="4-5-apm">4-5. APM 에이전트<a class="headerlink" href="#4-5-apm" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>-javaagent:/home/jspd/jspd/lib/jspd.agent.jar
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">옵션: -javaagent:jspd.agent.jar (분류: Java Agent)</p>
+<p>jspd = Java Server Performance Diagnostics --&gt; 인터맥스(InterMax)라는 국산 APM 솔루션의 에이전트</p>
+<p><strong>APM이 뭐야?</strong> Application Performance Management. 애플리케이션 성능을 실시간으로 모니터링하는 도구.</p>
+<p><strong>이 에이전트가 하는 일:</strong></p>
+<ol>
+<li>모든 HTTP 요청의 응답 시간 측정 -- "이 API 호출에 3.2초 걸렸다"</li>
+<li>SQL 쿼리 실행 시간/횟수 추적 -- "이 쿼리가 2.1초나 걸렸다 (느린 쿼리!)"</li>
+<li>메서드 호출 스택 추적 (프로파일링) -- "어디서 병목이 걸렸는지" 콜 스택으로 보여줌</li>
+<li>JVM 메모리/GC 상태 수집 -- 힙 사용량, GC 횟수 등을 대시보드에 표시</li>
+<li>스레드 상태 모니터링 -- 스레드 덤프, 데드락 감지</li>
+<li>이상 징후 감지 / 알림 -- 응답 시간 급증 시 알람</li>
+</ol>
+<p><strong>원리:</strong> JVM이 클래스를 로딩할 때 에이전트가 바이트코드에 측정 코드를 끼워넣어. 개발자 코드를 수정하지 않고도 성능 데이터 수집이 가능.</p>
+<p><strong>주의:</strong> 에이전트 자체도 CPU/메모리를 쓰기 때문에 약간의 오버헤드(보통 3~5%)가 발생해. 에이전트 JAR 파일이 없으면 JVM 시작 자체가 실패해! --&gt; 톰캣 안 뜸 --&gt; 서비스 장애</p>
+</div>
+<h3 id="4-6">4-6. 힙 메모리 초기 크기<a class="headerlink" href="#4-6" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>-Xms8192m
+</span></code></pre></div>
+<p>이거 04장에서 배운 committed 개념이랑 직결돼.</p>
+<div class="admonition danger">
+<p class="admonition-title">옵션: -Xms8192m (분류: -X 비표준 JVM 옵션)</p>
+<p><strong>뭘 하는 건지:</strong> JVM 힙 메모리의 "시작(초기) 크기"를 8192MB(= 8GB)로 설정. "JVM아, 시작할 때 힙을 최소 8GB 확보해라."</p>
+<p><strong>동작:</strong> JVM이 시작되면 OS한테 8GB의 가상 메모리를 요청(committed)해. 이 시점에서 8GB가 전부 물리 RAM에 올라가는 건 아니야. 실제로 객체를 생성하면서 사용하는 부분만 물리 RAM에 올라가. (page fault --&gt; 물리 페이지 할당, 04장에서 배운 거)</p>
+<p><strong>계산:</strong> 8192m = 8,192 MB = 8,192 x 1,024 KB = 8,388,608 KB = 8 GB</p>
+<p><strong>왜 설정했는지:</strong> JVM이 시작할 때부터 충분한 힙을 확보해서, 나중에 힙 확장으로 인한 성능 저하를 줄이려고.</p>
+<p><strong>없으면 어떻게 되는지:</strong> JVM 기본값 사용 (보통 물리 RAM의 1/64 또는 256MB). 서버 앱에는 턱없이 부족해서 시작하자마자 GC 폭탄 맞음.</p>
+<p><strong>주의:</strong> 'm'은 메가바이트, 'g'로 쓰면 기가바이트 (-Xms8g도 같은 뜻). -Xms &gt; -Xmx로 설정하면 JVM이 아예 안 뜸 (시작 거부). JVM이 필요하면 -Xms보다 더 키울 수 있어 (-Xmx까지)</p>
+</div>
+<h3 id="4-7">4-7. 힙 메모리 최대 크기<a class="headerlink" href="#4-7" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>-Xmx12288m
+</span></code></pre></div>
+<div class="admonition danger">
+<p class="admonition-title">옵션: -Xmx12288m (분류: -X 비표준 JVM 옵션)</p>
+<p><strong>뭘 하는 건지:</strong> JVM 힙 메모리의 "최대 크기"를 12288MB(= 12GB)로 설정. "JVM아, 힙을 아무리 키워도 12GB를 넘기지 마라."</p>
+<p><strong>동작:</strong> JVM은 -Xms(8GB)로 시작해서, 힙이 부족하면 자동으로 확장해. 근데 절대로 -Xmx(12GB)를 넘지는 않아. 12GB까지 써도 모자라면? OutOfMemoryError가 터져.</p>
+<p><strong>계산:</strong> 12288m = 12,288 MB = 12 GB</p>
+<p><strong>우리 서버 상황:</strong></p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>크기</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>서버 총 RAM</td>
+<td>15 GB</td>
+</tr>
+<tr>
+<td>-Xmx (힙 최대)</td>
+<td>12 GB</td>
+</tr>
+<tr>
+<td>남은 여유</td>
+<td>15 - 12 = 3 GB</td>
+</tr>
+</tbody>
+</table>
+<p>3GB로 해야 하는 일: OS 커널 자체 동작 (~0.5~1 GB) / Metaspace (~0.1~0.5 GB) / Thread Stacks (~0.2 GB, 200개x1MB) / APM Agent (~0.1~0.3 GB) / Code Cache, Native 등 (~0.2 GB). 빠듯하지만, 실제로는 힙이 12GB까지 안 차는 경우가 많아서 돌아가고 있는 거야.</p>
+<p><strong>없으면 어떻게 되는지:</strong> JVM 기본값 (보통 물리 RAM의 1/4). 우리 서버면 약 3.75GB. LMS에는 부족해서 서비스 운영 중 OOM 터질 가능성 높음.</p>
+</div>
+<h3 id="4-8-xms-xmx">4-8. -Xms와 -Xmx의 관계 심화<a class="headerlink" href="#4-8-xms-xmx" title="Permanent link">&para;</a></h3>
+<p>이 두 옵션의 관계가 정말 중요해. 따로 이해하면 안 되고 반드시 같이 이해해야 해.</p>
+<div class="admonition note">
+<p class="admonition-title">-Xms와 -Xmx 관계 시각화</p>
+<p>우리 서버: -Xms8192m -Xmx12288m (다르게 설정)</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>힙 크기
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>12GB ---- -Xmx (천장, 절대 못 넘음)
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>                                현재 우리 서버 (11.26GB)
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>                          /
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>                     /
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>                /    &lt;-- JVM이 필요에 따라 확장
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>           /
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>      /
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>8GB --  &lt;-- 시작점 (-Xms)
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>     ---------------------------------&gt; 시간
+</span></code></pre></div>
+<p>만약 같게 설정하면 (-Xms12288m -Xmx12288m):</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>12GB ---------------------------------- 시작부터 끝까지 일정
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>     ---------------------------------&gt; 시간
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>--&gt; 확장/축소 없음. GC 예측 가능. 모니터링 안정.
+</span></code></pre></div>
+<p>-Xms &gt; -Xmx 로 설정하면 JVM이 시작을 거부함. 에러: "Initial heap size set to a larger value than the maximum heap"</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>다르게 (-Xms &lt; -Xmx)</th>
+<th>같게 (-Xms = -Xmx)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>시작 시 메모리</td>
+<td>적게 차지 (8GB)</td>
+<td>많이 차지 (12GB)</td>
+</tr>
+<tr>
+<td>힙 확장</td>
+<td>런타임에 점진 확장 발생</td>
+<td>확장 없음</td>
+</tr>
+<tr>
+<td>확장 비용</td>
+<td>GC + OS 추가 메모리 요청 (page fault)</td>
+<td>없음</td>
+</tr>
+<tr>
+<td>GC 예측</td>
+<td>확장 타이밍에 GC 패턴이 변동</td>
+<td>예측 가능, 일정</td>
+</tr>
+<tr>
+<td>모니터링</td>
+<td>RSS가 점진적 증가 (누수와 혼동 위험)</td>
+<td>시작부터 안정적</td>
+</tr>
+<tr>
+<td>메모리 절약</td>
+<td>안 쓸 때 적게 차지</td>
+<td>항상 최대치 점유</td>
+</tr>
+<tr>
+<td>운영 권장</td>
+<td>개발/테스트 환경</td>
+<td><strong>운영 서버 권장</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>실무 권장</strong>: 운영 서버에서는 <strong>-Xms = -Xmx를 같게</strong> 설정하는 게 일반적이야. 힙 확장 비용을 없애고, 모니터링을 안정적으로 만들기 위해서. 우리 서버처럼 다르게 설정하면 "메모리가 올라갔다!" 같은 불필요한 경보가 울릴 수 있어. 06장에서 더 자세히 다뤄.</p>
+<h3 id="4-9-permgen-java-8">4-9. PermGen 크기 (Java 8에서 무시!)<a class="headerlink" href="#4-9-permgen-java-8" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>-XX:MaxPermSize=4096m
+</span></code></pre></div>
+<div class="admonition danger">
+<p class="admonition-title">옵션: -XX:MaxPermSize=4096m -- Java 8에서 무시됨!</p>
+<p><strong>이 옵션은 우리 서버(Java 8)에서 "무시"되고 있다! 실제로 아무 효과가 없어!</strong></p>
+<p>PermGen(Permanent Generation)이 뭐였냐? 클래스 메타데이터, 메서드 정보, static 변수 등을 저장하는 공간. 힙 메모리의 일부였어 (Java 7까지).</p>
+<p><strong>Java 7 이전:</strong> Heap = Young Gen + Old Gen + PermGen. -XX:MaxPermSize로 PermGen 크기를 설정 (유효!)</p>
+<p><strong>Java 8 이후:</strong> Heap = Young Gen + Old Gen (PermGen 삭제!). Metaspace가 Native Memory(힙 바깥)에서 대체. -XX:MaxPermSize --&gt; 무시됨! -XX:MaxMetaspaceSize --&gt; 이걸 써야 함.</p>
+<p><strong>왜 PermGen을 없앴어?</strong></p>
+<ol>
+<li>PermGen은 크기가 고정이라 "PermGen space" OOM이 자주 발생</li>
+<li>클래스를 동적으로 많이 로딩하는 앱(Spring, Hibernate 등)에서 PermGen이 부족해지는 문제가 반복됐어</li>
+<li>Metaspace로 바꾸면서 네이티브 메모리를 사용하게 해서 자동 확장이 가능해짐 (기본 제한 없음)</li>
+</ol>
+<p><strong>우리 서버에 이 옵션이 남아 있는 이유:</strong> 과거 Java 7 시절에 설정한 게 그대로 남아 있는 거야. JVM은 경고만 찍고 정상 동작해:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Java HotSpot(TM) 64-Bit Server VM warning:
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>ignoring option MaxPermSize=4096m; support was removed in 8.0
+</span></code></pre></div>
+</div>
+<p><strong>PermGen vs Metaspace 비교표:</strong></p>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>PermGen (Java 7 이전)</th>
+<th>Metaspace (Java 8+)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>위치</td>
+<td>힙 메모리 내부</td>
+<td>네이티브 메모리 (힙 바깥)</td>
+</tr>
+<tr>
+<td>크기 제한</td>
+<td>-XX:MaxPermSize로 고정</td>
+<td>기본 무제한 (OS 메모리까지)</td>
+</tr>
+<tr>
+<td>OOM 에러</td>
+<td>PermGen space</td>
+<td>Metaspace</td>
+</tr>
+<tr>
+<td>크기 조절</td>
+<td>수동으로 -XX:MaxPermSize 설정</td>
+<td>자동 확장 (-XX:MaxMetaspaceSize로 상한선 가능)</td>
+</tr>
+<tr>
+<td>설정 옵션</td>
+<td>-XX:PermSize, -XX:MaxPermSize</td>
+<td>-XX:MetaspaceSize, -XX:MaxMetaspaceSize</td>
+</tr>
+<tr>
+<td>문제점</td>
+<td>크기 예측 어려움, OOM 자주 발생</td>
+<td>제한 안 걸면 무한 확장 위험</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-10-oom">4-10. OOM 시 힙덤프 자동 생성<a class="headerlink" href="#4-10-oom" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>-XX:+HeapDumpOnOutOfMemoryError
+</span></code></pre></div>
+<div class="admonition danger">
+<p class="admonition-title">옵션: -XX:+HeapDumpOnOutOfMemoryError -- 운영 서버 필수!</p>
+<p><strong>뭘 하는 건지:</strong> OutOfMemoryError가 발생하면 자동으로 힙덤프 파일을 생성해. 힙덤프 = 그 순간 JVM 힙에 있는 모든 객체를 .hprof 파일로 저장한 것. MAT(Memory Analyzer Tool) 같은 도구로 분석 가능.</p>
+<p><strong>비유:</strong> 비행기 블랙박스야. 추락(OOM) 했을 때 원인 분석을 위한 증거물. 블랙박스 없이 추락하면 "왜 떨어졌는지 모르겠어요"밖에 못 해.</p>
+<p><strong>왜 중요해?</strong> OOM이 터지면 서버가 죽거나 불안정해져. 근데 왜 OOM이 터졌는지 모르면 재발 방지를 못 해. 나중에 재현이 안 될 수도 있으니까, 터지는 순간 자동으로 덤프를 떠놓는 거야.</p>
+<p><strong>없으면 어떻게 되는지:</strong> OOM 터져도 힙덤프 안 남음. "왜 터졌어?" --&gt; "몰라, 다시 안 터지길 기도해..." 이런 상황이 됨.</p>
+<p><strong>운영 서버에서는 반드시 켜놔야 하는 옵션. 이거 없으면 장애 분석 불가능.</strong></p>
+<p><strong>주의:</strong> 힙덤프 생성 중에 JVM이 멈춤 (수십 초~수 분). 덤프 파일 크기 = 힙 사용량과 비슷 (수 GB 될 수 있음)</p>
+</div>
+<h3 id="4-11">4-11. 힙덤프 저장 경로<a class="headerlink" href="#4-11" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>-XX:HeapDumpPath=/home/heapdump
+</span></code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">옵션: -XX:HeapDumpPath=/home/heapdump</p>
+<p><strong>뭘 하는 건지:</strong> OOM 발생 시 힙덤프 파일이 /home/heapdump 디렉토리에 생성됨. 파일명 형식: <code>java_pid&lt;PID&gt;.hprof</code> (예: java_pid12345.hprof)</p>
+<p><strong>없으면 어떻게 되는지:</strong> JVM 실행 디렉토리(working directory)에 떨어짐. 톰캣의 경우 보통 bin/ 디렉토리인데, 관리가 어려워. 전용 디렉토리에 모아놓으면 찾기 쉽고 디스크 관리도 편해.</p>
+<p><strong>주의사항 (진짜 중요):</strong></p>
+<ol>
+<li>힙덤프 파일 크기 = 최대 -Xmx까지! 우리 서버: 최대 12GB짜리 파일이 생길 수 있어! <code>df -h /home/heapdump</code>으로 여유 공간 확인</li>
+<li>같은 경로에 이미 파일이 있으면 덮어쓰지 않아. OOM 발생 후 파일을 다른 곳으로 옮겨놔야 해</li>
+<li>디렉토리가 존재해야 함 (자동 생성 안 됨). 디렉토리 없으면 덤프 생성 실패</li>
+<li>쓰기 권한 필요. 톰캣 실행 유저가 해당 경로에 쓸 수 있어야 함</li>
+</ol>
+</div>
+<h3 id="4-12">4-12. 프로토콜 핸들러<a class="headerlink" href="#4-12" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>-Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">옵션: -Djava.protocol.handler.pkgs (분류: -D 시스템 프로퍼티)</p>
+<p><strong>뭘 하는 건지:</strong> 자바에서 URL을 처리할 때, 어떤 패키지에서 프로토콜 핸들러를 찾을지 지정. org.apache.catalina.webresources = 톰캣의 웹 리소스 처리 패키지. WAR 파일 안의 리소스를 URL로 접근할 수 있게 해줌.</p>
+<p>톰캣 8+ 이상에서 필요한 설정이고, catalina.sh가 자동 추가해. 개발자가 직접 건드릴 일은 거의 없어.</p>
+</div>
+<h3 id="4-13-umask">4-13. 보안 UMASK 설정<a class="headerlink" href="#4-13-umask" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>-Dorg.apache.catalina.security.SecurityListener.UMASK=0027
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">옵션: -D...SecurityListener.UMASK=0027 (분류: -D 시스템 프로퍼티)</p>
+<p>UMASK = 새로 생성되는 파일의 기본 권한을 제한하는 마스크</p>
+<p><strong>0027 의미:</strong> 0 = 특수 권한 없음 / 0 = 소유자(owner): 제한 없음 (rwx 전부) / 2 = 그룹(group): 쓰기만 제한 (r-x) / 7 = 기타(others): 전부 제한 (---)</p>
+<p><strong>결과:</strong> 파일: 666 - 027 = 640 (rw-r-----) / 디렉토리: 777 - 027 = 750 (rwxr-x---). 톰캣이 만드는 파일을 다른 사용자가 못 읽게 하는 보안 설정.</p>
+<p>톰캣의 SecurityListener가 시작 시 이 UMASK 값을 체크해서 너무 느슨하면 경고를 출력해.</p>
+</div>
+<h3 id="4-14-endorsed">4-14. Endorsed 디렉토리 무시<a class="headerlink" href="#4-14-endorsed" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>-Dignore.endorsed.dirs=
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">옵션: -Dignore.endorsed.dirs= (빈 값) (분류: -D 시스템 프로퍼티)</p>
+<p><strong>Endorsed Standards Override Mechanism:</strong> 옛날 Java에서 JDK 표준 라이브러리의 일부를 외부 JAR로 교체하는 기능. Java 9부터 완전히 제거됨.</p>
+<p>빈 값(=) → endorsed 디렉토리를 무시하겠다는 뜻.</p>
+<p><strong>톰캣이 이 옵션을 넣는 이유:</strong> endorsed 디렉토리 관련 경고 메시지를 없애기 위해. catalina.sh가 자동으로 추가하는 설정이야. 기능적으로는 "아무 것도 안 함". 개발자가 건드릴 일 없어.</p>
+</div>
+<h3 id="4-15">4-15. 클래스패스<a class="headerlink" href="#4-15" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>-classpath /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">옵션: -classpath (= -cp) (분류: 표준 옵션)</p>
+<p><strong>뭘 하는 건지:</strong> JVM이 클래스 파일(.class)이나 JAR 파일을 찾을 경로를 지정.</p>
+<p>경로 구분자: <code>:</code> (리눅스), <code>;</code> (윈도우)</p>
+<p><strong>지정된 JAR 2개:</strong></p>
+<ol>
+<li><strong>bootstrap.jar</strong> → 톰캣의 부트스트랩 로더. 톰캣 시작에 필요한 최소한의 클래스가 들어 있어. 이 안에 메인 클래스(Bootstrap)가 있어 (4-18에서 설명)</li>
+<li><strong>tomcat-juli.jar</strong> → 톰캣의 로깅 구현체 (4-3에서 설명한 JULI). 클래스패스에 있어야 로그 매니저가 동작해</li>
+</ol>
+<p><strong>"겨우 2개?"</strong> 톰캣은 자체 클래스로더 구조가 있어. 시작에 필요한 최소한만 시스템 classpath에 넣고, 나머지 라이브러리(lib/, webapps/)는 톰캣이 자체 클래스로더로 동적 로딩해. 이래야 웹앱 간 라이브러리 격리가 됨.</p>
+<p><strong>비유:</strong> 자동차 시동 걸 때 키(bootstrap.jar)만 있으면 돼. 나머지 부품(나머지 JAR)은 엔진 걸리고 나면 알아서 동작.</p>
+<p><strong>없으면 어떻게 되는지:</strong> JVM이 Bootstrap 클래스를 못 찾아서 시작 불가. "Error: Could not find or load main class" 에러.</p>
+</div>
+<h3 id="4-16-catalinabase-catalinahome">4-16. 톰캣 경로 설정 (catalina.base / catalina.home)<a class="headerlink" href="#4-16-catalinabase-catalinahome" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>-Dcatalina.base=/usr/local/tomcat
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>-Dcatalina.home=/usr/local/tomcat
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">옵션: -Dcatalina.base, -Dcatalina.home (분류: -D 시스템 프로퍼티)</p>
+<ul>
+<li><strong>catalina.home</strong> = 톰캣 "설치" 디렉토리 (바이너리가 있는 곳) → bin/, lib/ 등 톰캣 공통 파일</li>
+<li><strong>catalina.base</strong> = 톰캣 "인스턴스" 디렉토리 (설정/데이터가 있는 곳) → conf/, logs/, webapps/, temp/, work/</li>
+</ul>
+<p>보통은 둘 다 같은 경로야 (우리 서버처럼). 다른 경우는 이런 상황:</p>
+<p><strong>톰캣 하나 설치 → 여러 인스턴스 실행:</strong></p>
+<ul>
+<li><code>catalina.home = /opt/tomcat</code> (설치, 공유)</li>
+<li><code>catalina.base = /var/tomcat/instance1</code> (인스턴스1의 설정/로그)</li>
+<li><code>catalina.base = /var/tomcat/instance2</code> (인스턴스2의 설정/로그)</li>
+<li>→ 실행 파일(home)은 공유하고, 설정/데이터(base)는 분리하는 구조</li>
+</ul>
+<p><strong>우리 서버:</strong> home = base = /usr/local/tomcat → 톰캣 하나만 돌리고 있다는 뜻. Docker 컨테이너 환경에서 흔한 설정.</p>
+<p><strong>없으면 어떻게 되는지:</strong> 톰캣이 conf/server.xml 등을 못 찾아서 시작 실패.</p>
+</div>
+<h3 id="4-17">4-17. 임시 파일 경로<a class="headerlink" href="#4-17" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>-Djava.io.tmpdir=/usr/local/tomcat/temp
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">옵션: -Djava.io.tmpdir=/usr/local/tomcat/temp (분류: -D 시스템 프로퍼티)</p>
+<p><strong>뭘 하는 건지:</strong> Java에서 File.createTempFile() 등으로 임시 파일을 만들 때 사용하는 디렉토리를 지정.</p>
+<ul>
+<li><strong>기본값:</strong> /tmp (리눅스 시스템 임시 디렉토리)</li>
+<li><strong>우리 설정:</strong> /usr/local/tomcat/temp (톰캣 전용 임시 디렉토리)</li>
+</ul>
+<p><strong>왜 /tmp 안 쓰고 별도로 설정하냐?</strong></p>
+<ol>
+<li>/tmp는 시스템 전체가 공유 → 다른 프로세스와 충돌 가능</li>
+<li>일부 리눅스에서 /tmp를 주기적으로 비워버림 → 톰캣이 사용 중인 임시 파일이 날아갈 수 있어</li>
+<li>톰캣 전용 temp에 두면 관리가 편해</li>
+</ol>
+<p><strong>이 디렉토리에 저장되는 것들:</strong> 파일 업로드 시 멀티파트 임시 저장 파일, JSP 컴파일 결과 (일부), 세션 직렬화 데이터 등</p>
+<p><strong>주의: 이 디렉토리 디스크가 꽉 차면 파일 업로드가 안 돼!</strong></p>
+</div>
+<h3 id="4-18">4-18. 메인 클래스와 인수<a class="headerlink" href="#4-18" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>org.apache.catalina.startup.Bootstrap start
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">옵션: org.apache.catalina.startup.Bootstrap start (분류: 메인 클래스 + 실행 인수)</p>
+<p><strong>org.apache.catalina.startup.Bootstrap</strong> → 톰캣의 메인 클래스. 이 클래스의 main() 메서드가 실행됨. bootstrap.jar 안에 들어 있어 (4-15에서 classpath로 지정)</p>
+<p><strong>start</strong> → main() 메서드에 전달되는 인수 (args[0] = "start"). "톰캣을 시작해라"라는 명령</p>
+<p>ps -ef에서 맨 마지막에 있는 게 항상 "메인 클래스 + 인수"야. 앞의 모든 -D, -X, -XX 옵션은 JVM 설정이고, 마지막에 오는 이게 "뭘 실행할 건지"야.</p>
+<p><strong>실행 흐름:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>java [JVM 옵션들...] Bootstrap start
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>  └→ Bootstrap.main([&quot;start&quot;])
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>       └→ 톰캣 초기화
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>            └→ server.xml 로드
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>                 └→ 커넥터(HTTP/AJP), 호스트, 엔진 구성
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>                      └→ webapps/ 아래 WAR 배포
+</span><span id="__span-23-7"><a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>                           └→ 서비스 시작! 요청 대기.
+</span></code></pre></div>
+<p><strong>다른 인수:</strong> start(톰캣 시작), stop(톰캣 중지), configtest(설정 파일 문법 검사)</p>
+</div>
+<hr />
+<h2 id="5-ps-ef">5. ps -ef 출력 전체 구조 정리<a class="headerlink" href="#5-ps-ef" title="Permanent link">&para;</a></h2>
+<p>전체를 한 번에 보면 이런 구조야:</p>
+<div class="admonition abstract">
+<p class="admonition-title">ps -ef 출력의 구조 (전체 조감도)</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>/usr/lib/jvm/.../java                    ← [1] 실행 파일 경로
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>                                            Java 8 OpenJDK 64비트
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>[시스템 프로퍼티 -D: 로깅/보안]
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>  -Djava.util.logging.config.file=...    ← [2] 로깅 설정 파일
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>  -Djava.util.logging.manager=...        ← [3] 톰캣 로그 매니저
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>  -Djdk.tls.ephemeralDHKeySize=2048      ← [4] TLS 보안 강화
+</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>
+</span><span id="__span-24-9"><a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>[에이전트]
+</span><span id="__span-24-10"><a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a>  -javaagent:.../jspd.agent.jar          ← [5] APM 에이전트(InterMax)
+</span><span id="__span-24-11"><a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>
+</span><span id="__span-24-12"><a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a>[메모리 설정 -X]
+</span><span id="__span-24-13"><a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a>  -Xms8192m                              ← [6] 초기 힙 8GB
+</span><span id="__span-24-14"><a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a>  -Xmx12288m                             ← [7] 최대 힙 12GB
+</span><span id="__span-24-15"><a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a>
+</span><span id="__span-24-16"><a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a>[고급 옵션 -XX]
+</span><span id="__span-24-17"><a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a>  -XX:MaxPermSize=4096m                  ← [8] 무시됨! (Java 8)
+</span><span id="__span-24-18"><a id="__codelineno-24-18" name="__codelineno-24-18" href="#__codelineno-24-18"></a>  -XX:+HeapDumpOnOutOfMemoryError        ← [9] OOM 힙덤프 ON
+</span><span id="__span-24-19"><a id="__codelineno-24-19" name="__codelineno-24-19" href="#__codelineno-24-19"></a>  -XX:HeapDumpPath=/home/heapdump        ← [10] 덤프 저장 경로
+</span><span id="__span-24-20"><a id="__codelineno-24-20" name="__codelineno-24-20" href="#__codelineno-24-20"></a>
+</span><span id="__span-24-21"><a id="__codelineno-24-21" name="__codelineno-24-21" href="#__codelineno-24-21"></a>[시스템 프로퍼티 -D: 톰캣 내부]
+</span><span id="__span-24-22"><a id="__codelineno-24-22" name="__codelineno-24-22" href="#__codelineno-24-22"></a>  -Djava.protocol.handler.pkgs=...       ← [11] WAR 프로토콜 핸들러
+</span><span id="__span-24-23"><a id="__codelineno-24-23" name="__codelineno-24-23" href="#__codelineno-24-23"></a>  -Dorg.apache...UMASK=0027              ← [12] 파일 보안 마스크
+</span><span id="__span-24-24"><a id="__codelineno-24-24" name="__codelineno-24-24" href="#__codelineno-24-24"></a>  -Dignore.endorsed.dirs=                ← [13] endorsed 무시
+</span><span id="__span-24-25"><a id="__codelineno-24-25" name="__codelineno-24-25" href="#__codelineno-24-25"></a>
+</span><span id="__span-24-26"><a id="__codelineno-24-26" name="__codelineno-24-26" href="#__codelineno-24-26"></a>[클래스패스]
+</span><span id="__span-24-27"><a id="__codelineno-24-27" name="__codelineno-24-27" href="#__codelineno-24-27"></a>  -classpath bootstrap.jar:tomcat-juli.jar ← [14] 시작용 JAR 2개
+</span><span id="__span-24-28"><a id="__codelineno-24-28" name="__codelineno-24-28" href="#__codelineno-24-28"></a>
+</span><span id="__span-24-29"><a id="__codelineno-24-29" name="__codelineno-24-29" href="#__codelineno-24-29"></a>[시스템 프로퍼티 -D: 톰캣 경로]
+</span><span id="__span-24-30"><a id="__codelineno-24-30" name="__codelineno-24-30" href="#__codelineno-24-30"></a>  -Dcatalina.base=/usr/local/tomcat      ← [15] 인스턴스 경로
+</span><span id="__span-24-31"><a id="__codelineno-24-31" name="__codelineno-24-31" href="#__codelineno-24-31"></a>  -Dcatalina.home=/usr/local/tomcat      ← [16] 설치 경로
+</span><span id="__span-24-32"><a id="__codelineno-24-32" name="__codelineno-24-32" href="#__codelineno-24-32"></a>  -Djava.io.tmpdir=.../temp              ← [17] 임시 파일 경로
+</span><span id="__span-24-33"><a id="__codelineno-24-33" name="__codelineno-24-33" href="#__codelineno-24-33"></a>
+</span><span id="__span-24-34"><a id="__codelineno-24-34" name="__codelineno-24-34" href="#__codelineno-24-34"></a>[메인 클래스 + 인수]
+</span><span id="__span-24-35"><a id="__codelineno-24-35" name="__codelineno-24-35" href="#__codelineno-24-35"></a>  o.a.c.startup.Bootstrap start          ← [18] 톰캣 시작!
+</span></code></pre></div>
+</div>
+<hr />
+<h2 id="6-">6. 메모리 관련 옵션 심화 - "이건 꼭 알아야 해"<a class="headerlink" href="#6-" title="Permanent link">&para;</a></h2>
+<p>ps -ef에 나온 옵션 말고도, 메모리 관련해서 꼭 알아야 하는 옵션이 있어.</p>
+<h3 id="6-1-xss">6-1. -Xss (스레드 스택 크기)<a class="headerlink" href="#6-1-xss" title="Permanent link">&para;</a></h3>
+<p>우리 서버에는 이 옵션이 없어. 없으면 기본값을 쓴다는 뜻이야. 근데 이게 뭔지는 반드시 알아야 해.</p>
+<div class="admonition danger">
+<p class="admonition-title">-Xss: 스레드 스택 크기</p>
+<p><strong>-Xss</strong> = 스레드 하나당 할당되는 스택 메모리 크기. Linux 64비트 Java 8 기본값: <strong>1MB (= 1024KB)</strong></p>
+<p><strong>스레드 스택에 저장되는 것:</strong> 메서드 호출 정보 (call stack frame), 지역 변수 (int, String 등의 참조값), 메서드 매개변수, 리턴 주소 (어디로 돌아갈지)</p>
+<p><strong>!! 핵심: 힙 메모리(-Xmx)에 포함되지 않는다! !!</strong></p>
+<p><strong>계산:</strong> 톰캣 기본 스레드 최대 200개 가정 → 200 스레드 x 1MB = <strong>200MB</strong> (힙 바깥에서 추가로 소비!)</p>
+<p><code>총 메모리 사용량 = 힙(-Xmx) + (스레드 수 x Xss) + Metaspace + ...</code> → -Xmx만 보면 실제 메모리 사용량을 과소 예측하게 돼</p>
+<p><strong>스택이 부족하면:</strong> java.lang.StackOverflowError 발생. 재귀 호출이 너무 깊거나, 호출 체인이 길 때. Spring + JPA + 복잡한 비즈니스 로직 조합이면 호출 깊이가 깊어질 수 있어.</p>
+<ul>
+<li>-Xss를 너무 작게 잡으면: StackOverflowError 위험</li>
+<li>-Xss를 너무 크게 잡으면: 스레드 수 x 큰 값 = 메모리 낭비</li>
+<li>→ 기본값(1MB) 쓰는 게 보통 가장 안전해.</li>
+</ul>
+</div>
+<h3 id="6-2-xmn-young-generation">6-2. -Xmn (Young Generation 크기)<a class="headerlink" href="#6-2-xmn-young-generation" title="Permanent link">&para;</a></h3>
+<p>이것도 우리 서버에는 없지만 알아야 하는 옵션이야. 06장에서 Young Generation을 자세히 다루지만, 옵션 해석 차원에서 여기서 짚고 간다.</p>
+<div class="admonition note">
+<p class="admonition-title">-Xmn: Young Generation 크기</p>
+<p><strong>-Xmn</strong> = Young Generation(Eden + Survivor0 + Survivor1)의 크기. 지정하지 않으면: JVM이 알아서 결정 (보통 힙의 1/3 ~ 1/4)</p>
+<p><strong>Young Gen이 크면:</strong></p>
+<ul>
+<li>(+) Minor GC 간격이 길어짐 (Eden이 크니까 덜 자주 참)</li>
+<li>(-) Minor GC 한 번에 걸리는 시간이 길어짐 (더 많은 객체 스캔)</li>
+<li>(-) Old Gen이 작아짐 → Full GC 더 자주 발생 가능</li>
+</ul>
+<p><strong>Young Gen이 작으면:</strong></p>
+<ul>
+<li>(-) Minor GC가 자주 발생</li>
+<li>(+) Minor GC 한 번은 빨리 끝남</li>
+<li>(+) Old Gen에 더 많은 공간</li>
+</ul>
+<p>보통은 JVM에게 맡기는 게 제일 나아. GC 튜닝은 측정 → 분석 → 변경 → 재측정 사이클이야. 감으로 하면 더 나빠질 수 있어.</p>
+</div>
+<hr />
+<h2 id="7-jvm">7. 운영에서 자주 쓰는 추가 JVM 옵션들<a class="headerlink" href="#7-jvm" title="Permanent link">&para;</a></h2>
+<p>우리 서버 ps -ef에는 없지만, 다른 서버에서 자주 보이는 옵션들이야. 이것들도 알아야 다른 서버의 ps -ef를 읽을 때 당황 안 해.</p>
+<h3 id="7-1-gc">7-1. GC 알고리즘 선택<a class="headerlink" href="#7-1-gc" title="Permanent link">&para;</a></h3>
+<div class="admonition note">
+<p class="admonition-title">GC 알고리즘 선택 옵션</p>
+<p><strong>-XX:+UseSerialGC</strong> → 단일 스레드 GC. 클라이언트 앱이나 테스트용. 운영 서버에서 절대 쓰면 안 돼.</p>
+<p><strong>-XX:+UseParallelGC</strong> → 멀티 스레드로 병렬 GC. Java 8 기본값. 처리량(throughput) 중심. STW 시간은 길 수 있음. 우리 서버 기본값! (GC 옵션을 명시적으로 안 잡았으니까)</p>
+<p><strong>-XX:+UseConcMarkSweepGC (CMS)</strong> → 동시(concurrent) 마킹. STW 시간 줄이는 게 목표. Java 9에서 deprecated, Java 14에서 제거.</p>
+<p><strong>-XX:+UseG1GC</strong> → G1 (Garbage First). 큰 힙(4GB+)에 적합. Java 9부터 기본값. STW 시간 목표를 설정 가능 (<code>-XX:MaxGCPauseMillis=200</code>). 우리 서버 힙(12GB)이면 G1으로 바꾸는 게 이득일 수 있어.</p>
+<p><strong>-XX:+UseZGC (Java 11+)</strong> → 초저지연 GC. STW &lt; 10ms 목표. 대규모 힙(수십GB~TB급)에 적합.</p>
+<p><strong>-XX:+UseShenandoahGC (Java 12+)</strong> → ZGC와 비슷한 목표. OpenJDK에서 제공.</p>
+<p><strong>우리 서버:</strong> Java 8 + GC 옵션 미지정 = Parallel GC (기본값) 사용 중. 12GB 힙에 Parallel GC면 Full GC 시 STW가 수 초 걸릴 수 있어. 07장(GC의 모든 것)에서 자세히 다뤄.</p>
+</div>
+<h3 id="7-2-metaspace">7-2. Metaspace 관련<a class="headerlink" href="#7-2-metaspace" title="Permanent link">&para;</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Metaspace 관련 옵션</p>
+<p><strong>-XX:MetaspaceSize=256m</strong> → Metaspace 초기 크기 (이 크기까지 차면 GC 시도). 기본값: 약 20MB (의외로 작아!)</p>
+<p><strong>-XX:MaxMetaspaceSize=512m</strong> → Metaspace 최대 크기. 기본값: <strong>제한 없음!</strong> (OS 메모리가 허용하는 한 무한 확장)</p>
+<p><strong>왜 위험해?</strong> MaxMetaspaceSize를 안 걸어두면 클래스 로딩 누수(ClassLoader Leak) 시 네이티브 메모리를 끝없이 먹을 수 있어. → 서서히 OS 메모리를 잠식하다가 갑자기 서버 다운. → 제한을 걸면 OOM으로 빠르게 발견 가능.</p>
+<p><strong>우리 서버 상황:</strong></p>
+<ul>
+<li>-XX:MaxPermSize=4096m → 무시됨 (Java 8)</li>
+<li>-XX:MaxMetaspaceSize → 설정 없음!</li>
+<li>결론: Metaspace 제한이 안 걸려 있는 상태</li>
+<li><strong>운영 개선 포인트야.</strong></li>
+</ul>
+</div>
+<h3 id="7-3-gc">7-3. GC 로그 관련<a class="headerlink" href="#7-3-gc" title="Permanent link">&para;</a></h3>
+<div class="admonition tip">
+<p class="admonition-title">GC 로그 관련 옵션 (Java 8)</p>
+<ul>
+<li><strong>-verbose:gc</strong> → GC 발생 시 기본 정보 출력 (콘솔)</li>
+<li><strong>-XX:+PrintGCDetails</strong> → GC 상세 정보 출력 (각 영역별 변화량)</li>
+<li><strong>-XX:+PrintGCDateStamps</strong> → GC 로그에 날짜/시간 포함. 없으면 JVM 시작 후 경과 시간(초)만 나옴 → 분석 어려움</li>
+<li><strong>-Xloggc:/var/log/gc.log</strong> → GC 로그를 파일로 저장 (콘솔 대신)</li>
+<li><strong>-XX:+UseGCLogFileRotation / NumberOfGCLogFiles=5 / GCLogFileSize=20M</strong> → GC 로그 파일 롤링 (20MB씩, 5개까지 유지, 오래된 것 삭제)</li>
+</ul>
+<p><strong>운영 서버 권장 설정 조합 (Java 8):</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>-verbose:gc
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>-XX:+PrintGCDetails
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>-XX:+PrintGCDateStamps
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>-Xloggc:/var/log/tomcat/gc.log
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>-XX:+UseGCLogFileRotation
+</span><span id="__span-25-6"><a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>-XX:NumberOfGCLogFiles=5
+</span><span id="__span-25-7"><a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>-XX:GCLogFileSize=20M
+</span></code></pre></div>
+<p><strong>우리 서버: GC 로그 옵션이 하나도 없어!</strong> → GC 이벤트가 어디에도 기록되지 않고 있는 상태. → "서버가 간헐적으로 느려요" 할 때 Full GC 때문인지 확인 불가. → <strong>운영 개선 포인트.</strong></p>
+</div>
+<hr />
+<h2 id="8-">8. 함정과 실수 - "이거 모르면 당한다"<a class="headerlink" href="#8-" title="Permanent link">&para;</a></h2>
+<div class="admonition danger">
+<p class="admonition-title">자주 당하는 함정 6가지</p>
+<p><strong>함정 1: MaxPermSize가 Java 8에서 효과 있다고 착각</strong></p>
+<ul>
+<li>착각: "MaxPermSize=4GB 잡았으니까 PermGen이 4GB까지 쓸 수 있겠지"</li>
+<li>현실: Java 8에서 PermGen은 삭제됨. 이 옵션은 무시됨.</li>
+<li>해결: <code>-XX:MaxMetaspaceSize=512m</code> 으로 교체</li>
+</ul>
+<p><strong>함정 2: -Xmx를 서버 RAM과 같게 설정</strong></p>
+<ul>
+<li>착각: "RAM 15GB니까 -Xmx15g!"</li>
+<li>현실: JVM은 힙 외에도 메모리를 쓰거든! Metaspace + Thread Stack + Native + OS 자체 사용. 이것들 합치면 힙 외로 1~3GB 더 필요해. 15GB 전부 힙에 주면 나머지가 없잖아. → swap 발생 → 서버 극심한 성능 저하. → 최악의 경우 OOM Killer가 톰캣 강제 종료</li>
+<li>해결: -Xmx는 RAM의 70~80% 까지만. 나머지는 OS + 비힙용.</li>
+</ul>
+<p><strong>함정 3: -Xms와 -Xmx 차이가 큰데 "누수"로 오해</strong></p>
+<ul>
+<li>착각: "모니터링에서 메모리가 계속 올라가요! 누수 아니에요?"</li>
+<li>현실: JVM이 정상적으로 힙을 확장하는 것일 수 있어. -Xms와 -Xmx가 다르면 중간에 확장이 일어나거든.</li>
+<li>해결: 같게 설정하거나, jstat으로 GC 후 Old 사용량 추이 확인.</li>
+</ul>
+<p><strong>함정 4: HeapDumpPath에 디스크 공간 없음</strong></p>
+<ul>
+<li>착각: "HeapDump 설정 했으니 OOM 나면 덤프 뜨겠지"</li>
+<li>현실: /home/heapdump 파티션에 공간 없으면 생성 실패. 힙덤프 크기는 최대 12GB까지 될 수 있어!</li>
+<li>해결: <code>df -h /home/heapdump</code> 로 여유 공간 정기 확인. 기존 .hprof 파일이 있으면 옮기거나 삭제.</li>
+</ul>
+<p><strong>함정 5: -javaagent JAR가 없으면 JVM이 안 뜸</strong></p>
+<ul>
+<li>착각: "에이전트 빼면 그냥 모니터링만 안 되겠지"</li>
+<li>현실: JAR 파일이 없으면 JVM 시작 자체가 실패! → 톰캣 안 뜸 → 서비스 장애</li>
+<li>해결: 에이전트 제거 시 반드시 JVM 옵션에서도 제거.</li>
+</ul>
+<p><strong>함정 6: GC 로그 안 남기고 운영</strong></p>
+<ul>
+<li>착각: "GC 로그 없어도 되지 뭐"</li>
+<li>현실: "서버가 간헐적으로 느려요" → Full GC 때문인지 확인 불가. GC 로그 없으면 "왜 느렸는지" 사후 분석 불가능.</li>
+<li>해결: GC 로그 옵션 추가 (7-3 참고).</li>
+</ul>
+</div>
+<hr />
+<h2 id="9-">9. 우리 서버 설정 진단 - "이 설정 괜찮은 거야?"<a class="headerlink" href="#9-" title="Permanent link">&para;</a></h2>
+<div class="admonition abstract">
+<p class="admonition-title">WAS01 JVM 설정 진단 결과</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>현재 설정</th>
+<th>판정</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Java 버전</td>
+<td>Java 8 OpenJDK</td>
+<td>정상</td>
+<td>구버전이지만 안정적</td>
+</tr>
+<tr>
+<td>-Xms</td>
+<td>8192m (8GB)</td>
+<td>정상</td>
+<td></td>
+</tr>
+<tr>
+<td>-Xmx</td>
+<td>12288m (12GB)</td>
+<td>정상</td>
+<td>RAM의 80%</td>
+</tr>
+<tr>
+<td>-Xms != -Xmx</td>
+<td>8GB != 12GB</td>
+<td>주의</td>
+<td>힙 확장 발생, 모니터링 혼란</td>
+</tr>
+<tr>
+<td>-XX:MaxPermSize</td>
+<td>4096m</td>
+<td>불필요</td>
+<td>Java 8에서 완전 무시됨</td>
+</tr>
+<tr>
+<td>HeapDump 설정</td>
+<td>ON + 경로 지정</td>
+<td>좋음</td>
+<td>디스크 여유 확인 필요</td>
+</tr>
+<tr>
+<td>GC 알고리즘</td>
+<td>미지정 (Parallel)</td>
+<td>주의</td>
+<td>12GB 힙이면 G1 검토 필요</td>
+</tr>
+<tr>
+<td>GC 로그</td>
+<td>없음</td>
+<td>부족</td>
+<td>운영 서버에는 필수</td>
+</tr>
+<tr>
+<td>Metaspace 제한</td>
+<td>없음</td>
+<td>주의</td>
+<td>무제한 확장 위험 있음</td>
+</tr>
+<tr>
+<td>APM 에이전트</td>
+<td>jspd (InterMax)</td>
+<td>좋음</td>
+<td>성능 모니터링 가능</td>
+</tr>
+<tr>
+<td>TLS 보안</td>
+<td>DH 2048비트</td>
+<td>좋음</td>
+<td>업계 권장 수준</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>개선 권장 사항 5가지:</strong></p>
+<ol>
+<li><strong>-Xms = -Xmx 동일 설정 검토</strong> -- 힙 확장으로 인한 불필요한 GC/모니터링 혼란 제거</li>
+<li><strong>-XX:MaxPermSize 제거</strong> -- 의미 없는 옵션. 경고 로그만 불필요하게 남김</li>
+<li><strong>-XX:MaxMetaspaceSize 추가</strong> -- 무제한 확장 방지. 클래스 로더 누수 시 빠른 감지</li>
+<li><strong>GC 로그 옵션 추가</strong> -- 장애 사후 분석의 핵심 자료. 반드시 필요</li>
+<li><strong>G1 GC 전환 검토</strong> -- 12GB 힙에는 Parallel보다 G1이 STW 시간을 줄일 수 있음</li>
+</ol>
+<hr />
+<h2 id="10">10. 정리<a class="headerlink" href="#10" title="Permanent link">&para;</a></h2>
+<h3 id="_2">전체 옵션 분류 요약표<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>분류</th>
+<th>접두사</th>
+<th>우리 서버 옵션</th>
+<th>핵심</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>표준</td>
+<td>-classpath</td>
+<td>bootstrap.jar, tomcat-juli.jar</td>
+<td>시작용 JAR</td>
+</tr>
+<tr>
+<td>비표준 (-X)</td>
+<td>-Xms, -Xmx</td>
+<td>8GB, 12GB</td>
+<td>힙 크기</td>
+</tr>
+<tr>
+<td>고급 (-XX:)</td>
+<td>MaxPermSize, HeapDump</td>
+<td>덤프 ON, 경로 지정</td>
+<td>OOM 대비</td>
+</tr>
+<tr>
+<td>시스템 프로퍼티 (-D)</td>
+<td>catalina.<em>, logging.</em>, tls.*</td>
+<td>톰캣/로깅/보안</td>
+<td>앱 설정 전달</td>
+</tr>
+<tr>
+<td>에이전트</td>
+<td>-javaagent</td>
+<td>jspd.agent.jar</td>
+<td>APM 모니터링</td>
+</tr>
+<tr>
+<td>메인 클래스</td>
+<td>(맨 마지막)</td>
+<td>Bootstrap start</td>
+<td>톰캣 시작</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">핵심 요약 표<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>한 줄 정리</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>JVM 옵션 분류</strong></td>
+<td>접두사(없음/-X/-XX:/-D/-javaagent)로 종류가 나뉜다</td>
+</tr>
+<tr>
+<td><strong>-Xms</strong></td>
+<td>힙 초기 크기. 시작 시 OS한테 committed 하는 양</td>
+</tr>
+<tr>
+<td><strong>-Xmx</strong></td>
+<td>힙 최대 크기. 이 벽을 넘으면 OOM</td>
+</tr>
+<tr>
+<td><strong>-Xms = -Xmx</strong></td>
+<td>같게 설정하면 힙 확장 없음. 운영 서버 권장</td>
+</tr>
+<tr>
+<td><strong>MaxPermSize</strong></td>
+<td>Java 8에서 무시됨. PermGen이 Metaspace로 대체</td>
+</tr>
+<tr>
+<td><strong>HeapDump</strong></td>
+<td>OOM 시 블랙박스. 운영 서버 필수</td>
+</tr>
+<tr>
+<td><strong>-javaagent</strong></td>
+<td>바이트코드 조작으로 APM 동작. JAR 없으면 JVM 안 뜸</td>
+</tr>
+<tr>
+<td><strong>비힙 메모리</strong></td>
+<td>힙(-Xmx) 외에 스택, Metaspace, Native 등이 추가로 필요</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">이 챕터에서 반드시 기억할 것<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<div class="admonition danger">
+<p class="admonition-title">이 챕터에서 반드시 기억할 것</p>
+<ol>
+<li>JVM 옵션은 접두사(-X, -XX:, -D, -javaagent)로 분류된다.</li>
+<li>-Xms는 초기 힙, -Xmx는 최대 힙. 같게 설정하면 확장 없음.</li>
+<li>-XX:MaxPermSize는 Java 8에서 무시된다 (Metaspace로 대체).</li>
+<li>+HeapDumpOnOutOfMemoryError는 운영 서버 필수 옵션이다.</li>
+<li>ps -ef 한 줄만 읽어도 서버 설정을 전부 파악할 수 있다.</li>
+<li>JVM은 힙(-Xmx) 외에도 메모리를 쓴다 (스택, Metaspace 등).</li>
+</ol>
+</div>
+<h3 id="_5">한 줄 정리<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>ps -ef의 JVM 옵션 한 줄 한 줄이 "이 서버가 어떻게 설정돼 있는지"를 말한다. 접두사(-D, -X, -XX, -javaagent)만 구분할 줄 알면 처음 보는 옵션도 역할을 추측할 수 있다.</strong></p>
+</blockquote>
+<hr />
+<h3 id="5">확인 문제 (5문제)<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>다음 문제를 풀어봐. 답 못 하면 위에서 다시 읽어.</p>
+</blockquote>
+<p><strong>Q1.</strong> ps -ef 출력에서 <code>-XX:MaxPermSize=4096m</code>이 보인다. 우리 서버가 Java 8인데, 이 설정은 실제로 동작하고 있는가? 이유를 설명해봐.</p>
+<p><strong>Q2.</strong> 서버 RAM이 15GB인데 <code>-Xmx=15g</code>로 설정하면 안 되는 이유를 3가지 말해봐.</p>
+<p><strong>Q3.</strong> <code>-XX:+HeapDumpOnOutOfMemoryError</code>와 <code>-XX:HeapDumpPath</code>를 둘 다 설정했는데, OOM이 터졌을 때 힙덤프가 안 생겼다. 가능한 원인 2가지를 말해봐.</p>
+<p><strong>Q4.</strong> <code>-Xms8192m -Xmx12288m</code>으로 설정된 서버에서 모니터링 도구가 "메모리 사용량이 55%에서 75%로 올랐다"고 보고했다. 이것만으로 메모리 누수라고 판단할 수 있는가?</p>
+<p><strong>Q5.</strong> 다음 JVM 옵션을 분류(표준/비표준/고급/시스템 프로퍼티/에이전트)해봐:
+- (A) -Xmx4g
+- (B) -Dcatalina.home=/usr/local/tomcat
+- (C) -XX:+UseG1GC
+- (D) -classpath /lib/app.jar
+- (E) -javaagent:/opt/agent.jar</p>
+<details class="success">
+<summary>정답 보기</summary>
+<p><strong>A1.</strong> 동작하지 않는다. Java 8에서 PermGen(Permanent Generation)은 제거되고 Metaspace로 대체되었다. -XX:MaxPermSize는 Java 7 이전에만 유효하며, Java 8에서는 JVM이 이 옵션을 무시하고 경고 메시지("ignoring option MaxPermSize=4096m; support was removed in 8.0")를 출력한다. Metaspace를 제한하려면 -XX:MaxMetaspaceSize를 사용해야 한다. 우리 서버에 이 옵션이 남아 있는 건 Java 7에서 8로 업그레이드하면서 설정을 안 지운 잔재다.</p>
+<p><strong>A2.</strong> (1) JVM은 힙(-Xmx) 외에도 Metaspace, Thread Stack, Code Cache, Native Memory 등 비힙 메모리를 사용한다. 힙만 15GB 잡으면 비힙 메모리(보통 1~3GB)를 위한 공간이 없다. (2) OS 자체도 동작에 메모리가 필요하다(커널, 파일 캐시 등). 약 0.5~1GB는 OS용으로 남겨야 한다. (3) 물리 RAM을 100% committed 하면 swap이 발생하거나, 최악의 경우 OOM Killer가 프로세스를 강제 종료할 수 있다.</p>
+<p><strong>A3.</strong> (1) HeapDumpPath로 지정한 경로(/home/heapdump)의 디스크에 여유 공간이 부족한 경우. 힙덤프 크기는 최대 -Xmx(12GB)까지 될 수 있으므로, 그만큼의 디스크 여유가 필요하다. (2) 같은 경로에 이전 OOM 시 생성된 힙덤프 파일(java_pid<PID>.hprof)이 이미 존재하는 경우. 같은 이름의 파일이 있으면 덮어쓰지 않아서 새 파일이 생성되지 않는다.</p>
+<p><strong>A4.</strong> 메모리 누수라고 판단할 수 없다. -Xms(8GB)와 -Xmx(12GB)가 다르게 설정돼 있으므로, JVM이 8GB에서 시작해서 트래픽 증가에 따라 정상적으로 힙을 확장하는 과정일 수 있다. 힙 확장은 JVM의 정상 동작이다. 메모리 누수를 판단하려면 JVM 내부에서 Full GC 후에도 Old Generation 사용량이 계속 증가하는지를 jstat -gc로 확인해야 한다. GC 후 줄어들면 정상, 안 줄어들면 그때 누수를 의심해야 한다.</p>
+<p><strong>A5.</strong> (A) -Xmx4g -- 비표준 옵션 (-X 접두사). (B) -Dcatalina.home -- 시스템 프로퍼티 (-D 접두사). (C) -XX:+UseG1GC -- 고급(실험) 옵션 (-XX: 접두사). (D) -classpath -- 표준 옵션 (- 접두사, 모든 JVM에서 동작 보장). (E) -javaagent -- 에이전트 옵션 (-javaagent: 접두사).</p>
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+
+  <!-- Floating Remote Control -->
+  <nav class="page-remote" id="pageRemote">
+    <button class="page-remote__btn" id="btnTop" title="맨 위로">
+      <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+    </button>
+    <div class="page-remote__row">
+      <a class="page-remote__btn page-remote__btn--nav" id="btnPrev" title="이전 글">
+        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </a>
+      <a class="page-remote__btn page-remote__btn--nav" id="btnNext" title="다음 글">
+        <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+      </a>
+    </div>
+    <button class="page-remote__btn" id="btnBottom" title="맨 아래로">
+      <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+    </button>
+  </nav>
+
+  <script>
+    function setupRemote() {
+      var btnTop = document.getElementById('btnTop');
+      var btnBottom = document.getElementById('btnBottom');
+      var btnPrev = document.getElementById('btnPrev');
+      var btnNext = document.getElementById('btnNext');
+      if (!btnTop) return;
+
+      btnTop.onclick = function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+      btnBottom.onclick = function() {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      };
+
+      // nav에서 현재 페이지 기준 이전/다음 찾기
+      var allLinks = Array.from(document.querySelectorAll('.md-nav__link[href]'));
+      var current = window.location.pathname;
+      var currentIdx = -1;
+
+      for (var i = 0; i < allLinks.length; i++) {
+        try {
+          var linkPath = new URL(allLinks[i].href).pathname;
+          if (linkPath === current) {
+            currentIdx = i;
+            break;
+          }
+        } catch(e) {}
+      }
+
+      // 이전
+      btnPrev.classList.remove('page-remote__btn--disabled');
+      btnNext.classList.remove('page-remote__btn--disabled');
+
+      if (currentIdx > 0) {
+        btnPrev.href = allLinks[currentIdx - 1].href;
+      } else {
+        btnPrev.removeAttribute('href');
+        btnPrev.classList.add('page-remote__btn--disabled');
+      }
+
+      // 다음
+      if (currentIdx >= 0 && currentIdx < allLinks.length - 1) {
+        btnNext.href = allLinks[currentIdx + 1].href;
+      } else {
+        btnNext.removeAttribute('href');
+        btnNext.classList.add('page-remote__btn--disabled');
+      }
+    }
+
+    // 최초 실행 + instant navigation 대응
+    setupRemote();
+    if (typeof document$ !== 'undefined') {
+      document$.subscribe(function() { setupRemote(); });
+    }
+  </script>
+
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  맨위로
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
+        
+          
+          <a href="../04_%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4%EC%9D%98_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EC%82%AC%EC%9A%A9_%EC%9B%90%EB%A6%AC/" class="md-footer__link md-footer__link--prev" aria-label="이전: 프로세스의 메모리 사용 원리">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                이전
+              </span>
+              <div class="md-ellipsis">
+                프로세스의 메모리 사용 원리
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../06_JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0%EC%99%80_%ED%9E%99_%ED%99%95%EC%9E%A5/" class="md-footer__link md-footer__link--next" aria-label="다음: JVM 메모리 구조와 힙 확장">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                다음
+              </span>
+              <div class="md-ellipsis">
+                JVM 메모리 구조와 힙 확장
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/tideflo" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.footer", "navigation.instant", "navigation.tracking", "navigation.path", "navigation.indexes", "content.code.copy", "content.code.annotate", "content.tabs.link", "toc.follow", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
