@@ -1,0 +1,9610 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="DNS에서 TCP, HTTP, REST API, Webhook, 서명 검증까지 - 01장부터 27장까지 전부 연결하는 최종 챕터">
+      
+      
+        <meta name="author" content="이준성">
+      
+      
+      
+        <link rel="prev" href="../27_%EC%8B%A4%EC%A0%84_NexClass_Zoom_Webhook/">
+      
+      
+        <link rel="next" href="../29_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../material/book-open-page-variant">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>28. 전체 흐름 통합 - Junsung's Dev Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#28" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../.." title="Junsung&#39;s Dev Docs" class="md-header__button md-logo" aria-label="Junsung's Dev Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Junsung's Dev Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              28. 전체 흐름 통합
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="deep-orange"  aria-label="다크 모드"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="amber"  aria-label="라이트 모드"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Junsung&#39;s Dev Docs" class="md-nav__button md-logo" aria-label="Junsung's Dev Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    Junsung's Dev Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    메모리
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리 기본기초
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    메모리 기본기초
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/01_%EB%A9%94%EB%AA%A8%EB%A6%AC%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/02_%EA%B0%80%EC%83%81_%EB%A9%94%EB%AA%A8%EB%A6%AC%EC%99%80_%ED%8E%98%EC%9D%B4%EC%A7%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    가상 메모리와 페이징
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/03_%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    프로세스 메모리 구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/04_JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 메모리 구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/05_%EA%B0%80%EB%B9%84%EC%A7%80_%EC%BB%AC%EB%A0%89%EC%85%98_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    가비지 컬렉션 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/06_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%88%84%EC%88%98_%ED%8C%A8%ED%84%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리 누수 패턴
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/07_%EB%A6%AC%EB%88%85%EC%8A%A4_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    리눅스 메모리 관리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/08_JVM_%ED%8A%9C%EB%8B%9D%EA%B3%BC_%EC%A7%84%EB%8B%A8%EB%8F%84%EA%B5%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 튜닝과 진단도구
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/09_%EC%8B%A4%EC%A0%84_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EC%9E%A5%EC%95%A0%EB%8C%80%EC%9D%91/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전 메모리 장애대응
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/10_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B8%B0%EB%B3%B8%EA%B8%B0%EC%B4%88/11_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버 메모리
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    서버 메모리
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/01_%EB%A9%94%EB%AA%A8%EB%A6%AC%EC%9D%98_%EA%B8%B0%EC%B4%88_%EC%A4%91%EC%9D%98_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리의 기초 중의 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/02_%EC%84%9C%EB%B2%84%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/03_OS%EC%9D%98_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OS의 메모리 관리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/04_%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4%EC%9D%98_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EC%82%AC%EC%9A%A9_%EC%9B%90%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    프로세스의 메모리 사용 원리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/05_JVM_%EC%98%B5%EC%85%98_%EC%99%84%EC%A0%84_%ED%95%B4%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 옵션 완전 해석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/06_JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0%EC%99%80_%ED%9E%99_%ED%99%95%EC%9E%A5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 메모리 구조와 힙 확장
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/07_GC%EC%9D%98_%EB%AA%A8%EB%93%A0_%EA%B2%83/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GC의 모든 것
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/08_GC%EC%99%80_OS_%ED%8E%98%EC%9D%B4%EC%A7%80_%EA%B4%80%EB%A6%AC%EB%8A%94_%EB%8B%A4%EB%A5%B8_%EA%B2%83%EC%9D%B4%EB%8B%A4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GC와 OS 페이지 관리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/09_%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81_%EC%88%98%EC%B9%98_%EC%99%84%EC%A0%84_%ED%95%B4%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    모니터링 수치 완전 해석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/10_%EC%8B%A4%EC%A0%84_%EC%9A%B0%EB%A6%AC_%EC%84%9C%EB%B2%84_%EC%82%AC%EB%A1%80_%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전 우리 서버 사례 분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/11_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EB%A9%94%EB%AA%A8%EB%A6%AC/12_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 메모리 분석
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JVM 메모리 분석
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/01_JVM%EC%9D%B4%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM이란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/02_JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 메모리 구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/03_%EA%B0%9D%EC%B2%B4%EC%99%80_%ED%81%B4%EB%9E%98%EC%8A%A4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    객체와 클래스
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/04_%ED%81%B4%EB%9E%98%EC%8A%A4%EB%A1%9C%EB%8D%94/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    클래스로더
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/05_%EA%B0%80%EB%B9%84%EC%A7%80_%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC_GC_Roots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    가비지 컬렉션과 GC Roots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/06_%ED%9E%99%EB%8D%A4%ED%94%84%EC%99%80_hprof/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    힙덤프와 hprof
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/07_JVM_%EC%98%B5%EC%85%98%EA%B3%BC_%ED%8A%9C%EB%8B%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JVM 옵션과 튜닝
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/08_MAT_%EB%A6%AC%ED%8F%AC%ED%8A%B8_%EC%99%84%EC%A0%84%ED%95%B4%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAT 리포트 완전해석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JVM_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EB%B6%84%EC%84%9D/09_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swap 메모리 관리
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Swap 메모리 관리
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/01_OS_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OS 메모리 구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/02_buff_cache%EB%9E%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    buff/cache란
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/03_Swap%EC%9D%B4%EB%9E%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swap이란
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/04_vm_swappiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vm.swappiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/05_Swap%EC%9D%98_%EB%B9%84%EA%B0%80%EC%97%AD%EC%84%B1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swap의 비가역성
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/06_%EB%B0%B1%EC%97%85%EA%B3%BC_%EB%A9%94%EB%AA%A8%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    백업과 메모리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/07_%EC%8B%A4%EC%A0%84_WAS02_%EC%9E%A5%EC%95%A0%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전 WAS02 장애분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/08_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Swap_%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC/09_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스프링 / Java
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    스프링 / Java
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Core
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Spring Core
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/01_Spring%EC%9D%B4_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring이 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/02_Bean%EC%9D%B4_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bean이 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/03_DI_%EC%9D%98%EC%A1%B4%EC%84%B1_%EC%A3%BC%EC%9E%85/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DI 의존성 주입
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/04_XML_%EC%84%A4%EC%A0%95_%EC%99%84%EC%A0%84%EC%A0%95%EB%B3%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XML 설정
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/05_Bean_%EC%83%9D%EB%AA%85%EC%A3%BC%EA%B8%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bean 생명주기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/06_Bean_Scope/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bean Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/07_%EC%96%B4%EB%85%B8%ED%85%8C%EC%9D%B4%EC%85%98_%EC%84%A4%EC%A0%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    어노테이션 설정
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/08_Spring_Context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/09_%EC%9A%B0%EB%A6%AC_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A1%9C_%EB%B3%B4%EB%8A%94_Spring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    우리 프로젝트로 보는 Spring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_Core/10_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring 요청 흐름과 세션
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Spring 요청 흐름과 세션
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/01_HTTP_%EC%9A%94%EC%B2%AD%EC%9D%B4_%EC%84%9C%EB%B2%84%EC%97%90_%EB%8F%84%EC%B0%A9%ED%95%98%EB%A9%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP 요청이 서버에 도착하면
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/02_DispatcherServlet_%EA%B5%90%ED%86%B5%EC%A0%95%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DispatcherServlet 교통정리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/03_%EC%9D%B8%ED%84%B0%EC%85%89%ED%84%B0_%EA%B2%BD%EB%B9%84%EC%9B%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    인터셉터 경비원
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/04_%EC%84%B8%EC%85%98%EC%9D%B4%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    세션이란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/05_Redis%EC%99%80_%EC%84%B8%EC%85%98_%EA%B3%B5%EC%9C%A0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redis와 세션 공유
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/06_%EC%9D%B8%EC%A6%9D_%EC%B2%B4%ED%81%AC_%ED%9D%90%EB%A6%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    인증 체크 흐름
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/07_%EC%84%B8%EC%85%98_%EB%A7%8C%EB%A3%8C_%EC%A0%84%EC%B2%B4_%ED%9D%90%EB%A6%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    세션 만료 전체 흐름
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/08_printStackTrace_vs_Logger/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    printStackTrace vs Logger
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/09_%EC%8B%A4%EC%A0%84_WAS02_%EB%A1%9C%EA%B7%B8%ED%8F%AD%EC%A6%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전 WAS02 로그폭증
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/10_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Spring_%EC%9A%94%EC%B2%AD_%EC%84%B8%EC%85%98/11_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JPA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JPA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/01_Alpha_JPA%EA%B0%80_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JPA가 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/02_Alpha_%EC%97%94%ED%8B%B0%ED%8B%B0_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    엔티티 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/03_Beta_Repository%EC%99%80_CRUD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository와 CRUD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/04_Beta_%EC%97%B0%EA%B4%80%EA%B4%80%EA%B3%84_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    연관관계 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/05_Gamma_%EC%98%81%EC%86%8D%EC%84%B1_%EC%BB%A8%ED%85%8D%EC%8A%A4%ED%8A%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    영속성 컨텍스트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/06_Gamma_JPQL%EA%B3%BC_%EC%BF%BC%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JPQL과 쿼리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/07_Delta_%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%EA%B3%BC_%EB%8F%99%EC%8B%9C%EC%84%B1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    트랜잭션과 동시성
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/08_Delta_%EC%84%B1%EB%8A%A5_%EC%B5%9C%EC%A0%81%ED%99%94/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    성능 최적화
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/09_Omega_NexClass_%EC%8B%A4%EC%A0%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NexClass 실전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/10_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JPA/11_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    스레드
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/01_%EC%8A%A4%EB%A0%88%EB%93%9C%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/02_%EC%8A%A4%EB%A0%88%EB%93%9C_%EC%83%9D%EC%84%B1%EA%B3%BC_%EC%8B%A4%ED%96%89/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드 생성과 실행
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/03_%EC%8A%A4%EB%A0%88%EB%93%9C_%EC%83%9D%EB%AA%85%EC%A3%BC%EA%B8%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드 생명주기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/04_%EB%8F%99%EA%B8%B0%ED%99%94%EC%99%80_%EB%9D%BD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    동기화와 락
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/05_Timer%EC%99%80_TimerTask/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Timer와 TimerTask
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/06_%EC%8A%A4%EB%A0%88%EB%93%9C%ED%92%80%EA%B3%BC_Executor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스레드풀과 Executor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/07_%EB%8D%B0%EB%AA%AC%EC%8A%A4%EB%A0%88%EB%93%9C%EC%99%80_GC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    데몬스레드와 GC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/08_%EC%9A%B0%EB%A6%AC_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A1%9C_%EB%B3%B4%EB%8A%94_%EC%8A%A4%EB%A0%88%EB%93%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    우리 프로젝트로 보는 스레드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8A%A4%EB%A0%88%EB%93%9C/09_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버 / 인프라
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    서버 / 인프라
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버 인프라
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    서버 인프라
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/01_%EC%84%9C%EB%B2%84%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/02_%EB%A6%AC%EB%88%85%EC%8A%A4_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    리눅스 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/03_%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    네트워크 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/04_WEB%EC%84%9C%EB%B2%84_Apache/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WEB서버 Apache
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/05_WAS%EC%97%B0%EB%8F%99_mod_jk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WAS연동 mod_jk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC/06_SSL_%EB%B3%B4%EC%95%88_%EB%B0%B1%EC%97%85/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSL 보안 백업
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DNS Nginx 인프라
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DNS Nginx 인프라
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/01_IP%EC%99%80_%ED%8F%AC%ED%8A%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IP와 포트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/02_DNS_%EB%8F%84%EB%A9%94%EC%9D%B8%EC%9D%98_%EB%B9%84%EB%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DNS 도메인의 비밀
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/03_HTTP%EC%99%80_HTTPS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP와 HTTPS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/04_SSL_%EC%9D%B8%EC%A6%9D%EC%84%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSL 인증서
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/05_Nginx_%EB%A6%AC%EB%B2%84%EC%8A%A4%ED%94%84%EB%A1%9D%EC%8B%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nginx 리버스프록시
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/06_Cloudflare/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cloudflare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/07_WEB_WAS_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WEB WAS 아키텍처
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/08_NexClass_%EC%9D%B8%ED%94%84%EB%9D%BC_%EC%8B%A4%EC%A0%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NexClass 인프라 실전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/09_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DNS_Nginx_%EC%9D%B8%ED%94%84%EB%9D%BC/10_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    네트워크 / API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    네트워크 / API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 통신
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API 통신
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/01_HTTP_%EA%B8%B0%EC%B4%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP 기초
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/02_JSON_%EC%99%84%EC%A0%84%EC%A0%95%EB%B3%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JSON 완전정복
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/03_REST_API/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/04_Java_%ED%83%80%EC%9E%85%EC%BA%90%EC%8A%A4%ED%8C%85/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java 타입캐스팅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/05_Spring_Transactional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Transactional
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/06_MyBatis_Batch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MyBatis Batch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/07_%EC%9E%AC%EC%8B%9C%EB%8F%84_%ED%8C%A8%ED%84%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    재시도 패턴
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/08_%EC%8B%A4%EC%A0%84_%EA%B2%BD%EC%83%81%EA%B5%AD%EB%A6%BD%EB%8C%80_%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전 경상국립대 분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/09_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/10_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API_%ED%86%B5%EC%8B%A0/11_%EC%84%9C%EB%B2%84_%EC%9D%B8%ED%94%84%EB%9D%BC_%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    서버 인프라 네트워크
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Webhook
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/01_API_%ED%98%B8%EC%B6%9C%EC%9D%B4_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 호출이 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/02_Webhook%EC%9D%B4_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook이 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/03_Push%EC%99%80_Pull/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Push와 Pull
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/04_Webhook_%EB%8F%99%EC%9E%91_%EC%9B%90%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook 동작 원리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/05_Webhook_vs_API_%ED%98%B8%EC%B6%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook vs API 호출
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/06_Zoom_Webhook_%EC%9D%B4%EB%B2%A4%ED%8A%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zoom Webhook 이벤트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/07_Webhook_%EB%B3%B4%EC%95%88%EA%B3%BC_%EC%84%A4%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook 보안과 설계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/08_NexClass_%EC%8B%A4%EC%A0%84_%EA%B5%AC%ED%98%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NexClass 실전 구현
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/09_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Webhook/10_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    네트워크 스토리지
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    네트워크 스토리지
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/01_%EC%A0%84%EC%B2%B4_%EA%B5%AC%EC%A1%B0%EB%8F%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    전체 구조도
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/02_%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C_%EB%B9%84%EA%B5%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    프로토콜 비교
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/03_S3_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80_%EC%9D%B4%ED%95%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    S3 스토리지 이해
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/04_HTTP_%EC%83%81%ED%83%9C%EC%BD%94%EB%93%9C_%EC%9D%B8%EC%A6%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP 상태코드 인증
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/05_CDN_CMS_%ED%9D%90%EB%A6%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CDN CMS 흐름
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/06_Python_%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC_%EC%A0%95%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python 라이브러리 정리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80/07_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    인증 / 세션
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    인증 / 세션
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_1" id="__nav_6_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT API인증
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JWT API인증
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/01_Alpha_JWT%EA%B0%80_%EB%AD%90%EC%95%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT가 뭐야
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/02_Alpha_%EC%95%94%ED%98%B8%ED%99%94_%EC%9D%B8%EC%BD%94%EB%94%A9_%ED%95%B4%EC%8B%B1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    암호화 인코딩 해싱
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/03_Beta_JWT_3%EC%A1%B0%EA%B0%81_%ED%95%B4%EB%B6%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 3조각 해부
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/04_Beta_JWT_%EC%83%9D%EC%84%B1%EA%B3%BC_%EA%B2%80%EC%A6%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 생성과 검증
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/05_Gamma_API_%EC%9D%B8%EC%A6%9D%EA%B3%BC_JWT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 인증과 JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/06_Gamma_AES256_%EC%95%94%ED%98%B8%ED%99%94/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AES256 암호화
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/07_Delta_JWT_%EB%B3%B4%EC%95%88_%EC%84%A4%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 보안 설계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/08_Omega_NexClass_LMS_%EC%8B%A4%EC%A0%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NexClass LMS 실전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/09_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_API%EC%9D%B8%EC%A6%9D/10_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_2" id="__nav_6_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 세션 디버깅
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JWT 세션 디버깅
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/01_JWT_%EA%B8%B0%EB%B3%B8%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 기본구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/02_%EC%84%B8%EC%85%98%EA%B3%BC_%ED%86%A0%ED%81%B0_%EA%B4%80%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    세션과 토큰 관계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/03_%EC%BD%94%EB%93%9C%EB%B2%A0%EC%9D%B4%EC%8A%A4_%EA%B2%80%EC%83%89_%EA%B8%B0%EC%88%A0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    코드베이스 검색 기술
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/04_%EC%99%B8%EB%B6%80%EC%97%B0%EB%8F%99_%EB%94%94%EB%B2%84%EA%B9%85_%EB%B0%A9%EB%B2%95%EB%A1%A0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    외부연동 디버깅 방법론
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JWT_%EC%84%B8%EC%85%98_%EB%94%94%EB%B2%84%EA%B9%85/05_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redis
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Redis
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/01_Redis_%EA%B8%B0%EB%B3%B8%EA%B0%9C%EB%85%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redis 기본개념
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/02_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%B3%84_Redis_%EC%A0%81%EC%9A%A9%ED%98%84%ED%99%A9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    프로젝트별 Redis 적용현황
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/03_Redis_%EC%84%A4%EC%A0%95_%EC%83%81%EC%84%B8%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redis 설정 상세분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/04_%EC%8B%A4%EC%A0%9C_%EC%BD%94%EB%93%9C_%ED%8C%A8%ED%84%B4_%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실제 코드 패턴 분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/05_%ED%86%B5%ED%95%A9_%EB%A7%88%EC%8A%A4%ED%84%B0_%EA%B0%80%EC%9D%B4%EB%93%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    통합 마스터 가이드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/06_%EB%B9%84%EC%A0%84%EA%B3%B5%EC%9E%90%EC%9A%A9_Redis_%EC%9A%94%EC%95%BD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    비전공자용 Redis 요약
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/07_LMS_%EC%A4%91%EB%B3%B5%EC%B2%B4%ED%81%AC_%EB%A9%94%EC%BB%A4%EB%8B%88%EC%A6%98_%EC%A0%95%ED%99%95%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LMS 중복체크 메커니즘
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DB
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DB
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/01_DB%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/02_SQL_%EA%B8%B0%EC%B4%88_DDL_DML_DCL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL 기초 DDL DML DCL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/03_DELETE_TRUNCATE_DROP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DELETE TRUNCATE DROP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/04_%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%EA%B3%BC_Auto-Commit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    트랜잭션과 Auto-Commit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/05_%EA%B2%A9%EB%A6%AC%EC%88%98%EC%A4%80%EA%B3%BC_MVCC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    격리수준과 MVCC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/06_%EB%9D%BD%EC%9D%98_%EC%84%B8%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    락의 세계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/07_SHOW_PROCESSLIST_%EC%8B%A4%EC%A0%84%EB%B6%84%EC%84%9D/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SHOW PROCESSLIST 실전분석
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/08_information_schema_%ED%99%9C%EC%9A%A9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    information_schema 활용
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/09_%EC%9D%B8%EB%8D%B1%EC%8A%A4_%EC%99%84%EC%A0%84%EC%A0%95%EB%B3%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    인덱스 완전정복
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/10_InnoDB_%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80_%EC%97%94%EC%A7%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    InnoDB 스토리지 엔진
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/11_mysqldump%EC%99%80_%EB%B0%B1%EC%97%85%EC%A0%84%EB%9E%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mysqldump와 백업전략
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/12_%EB%94%94%EC%8A%A4%ED%81%AC%EC%99%80_DB%EC%9D%98_%EA%B4%80%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    디스크와 DB의 관계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/13_%EC%8B%A4%EC%A0%84%EC%A2%85%ED%95%A9_%EC%9E%A5%EC%95%A0%EB%8C%80%EC%9D%91/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전종합 장애대응
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DB/14_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    HTTP
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP 완전정복
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    HTTP 완전정복
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    학습 로드맵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_%EC%9D%B8%ED%84%B0%EB%84%B7%EA%B3%BC_%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8%EC%84%9C%EB%B2%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    인터넷과 클라이언트-서버
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_TCP_IP%EC%99%80_%ED%8F%AC%ED%8A%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TCP/IP와 포트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_DNS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DNS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_HTTP%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_URL_%ED%95%B4%EB%B6%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    URL 해부
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06_HTTP_%EB%A9%94%EC%84%9C%EB%93%9C%EC%99%80_%EB%A9%B1%EB%93%B1%EC%84%B1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP 메서드와 멱등성
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_HTTP_%EC%9A%94%EC%B2%AD%EC%9D%91%EB%8B%B5_%EA%B5%AC%EC%A1%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP 요청/응답 구조
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_%EC%83%81%ED%83%9C%EC%BD%94%EB%93%9C_%EC%99%84%EC%A0%84%EC%A0%95%EB%B3%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    상태 코드 완전정복
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_HTTP_%ED%97%A4%EB%8D%94_%EC%99%84%EC%A0%84%EC%A0%95%EB%B3%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP 헤더 완전정복
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10_ContentType%EA%B3%BC_Body/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Content-Type과 Body
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11_API%EB%9E%80_%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API란 무엇인가
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12_REST_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST 아키텍처
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13_RESTful_URL_%EC%84%A4%EA%B3%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RESTful URL 설계
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14_REST_API_%EC%9A%94%EC%B2%AD%EC%9D%91%EB%8B%B5_%EC%8B%A4%EC%A0%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST API 요청/응답 실전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15_REST_API_%EB%B2%84%EC%A0%84%EA%B4%80%EB%A6%AC%EC%99%80_%EB%AC%B8%EC%84%9C%ED%99%94/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST API 버전관리와 문서화
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16_%EC%BF%A0%ED%82%A4%EC%99%80_%EC%84%B8%EC%85%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    쿠키와 세션
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17_HTTPS%EC%99%80_TLS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTPS와 TLS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18_CORS%EC%99%80_SameOrigin_Policy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CORS와 Same-Origin Policy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19_%EC%9D%B8%EC%BD%94%EB%94%A9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    인코딩
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20_%ED%95%B4%EC%8B%B1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    해싱
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21_%EC%95%94%ED%98%B8%ED%99%94/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    암호화
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../22_HMAC%EA%B3%BC_%EB%94%94%EC%A7%80%ED%84%B8%EC%84%9C%EB%AA%85/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HMAC과 디지털 서명
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../23_%EC%9D%B8%EC%A6%9D%EB%B0%A9%EC%8B%9D_%EC%B4%9D%EC%A0%95%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    인증 방식 총정리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24_JWT_%EA%B9%8A%EC%9D%B4%ED%8C%8C%EA%B8%B0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT 깊이 파기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../25_Webhook_%EB%8F%99%EC%9E%91%EC%9B%90%EB%A6%AC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook 동작 원리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../26_Webhook_%EB%B3%B4%EC%95%88%EC%8B%A4%EC%A0%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook 보안 실전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../27_%EC%8B%A4%EC%A0%84_NexClass_Zoom_Webhook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    실전 NexClass Zoom Webhook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    전체 흐름 통합
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    전체 흐름 통합
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        시나리오
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        전체 흐름 한눈에
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-1-zoom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1: 사용자가 Zoom 미팅에 참여한다
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 1: 사용자가 Zoom 미팅에 참여한다">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-dns-03" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: DNS 조회 (03장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-tcp-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: TCP 연결 (02장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-tls-17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: TLS 핸드셰이크 (17장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-http-04-06-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: HTTP 요청 (04장, 06장, 07장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2: 미팅이 끝난다
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-3-zoom-webhook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3: Zoom이 우리 서버에 Webhook을 보낸다
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3: Zoom이 우리 서버에 Webhook을 보낸다">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        이것도 HTTP야
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webhook-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhook HTTP 요청 분석
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        서명은 어떻게 만들었어? (22장, 26장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-4-nexclass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 4: NexClass 서버가 처리한다
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 4: NexClass 서버가 처리한다">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: 요청 수신 (27장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: 타임스탬프 검증 (26장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-22-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: 서명 검증 (22장, 26장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-rest-api-14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: 이벤트 처리 (REST API, 14장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-08" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: 응답 (08장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        전체 챕터 연결 맵
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        개념별 의존 관계
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        주의사항과 함정
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="주의사항과 함정">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함정 1: "이거 전부 순서대로 일어나는 거 아니야?"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-webhook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함정 2: "Webhook도 브라우저가 보내는 거지?"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함정 3: "이 중에 하나만 잘 알면 되지 않아?"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        정리
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        확인 문제
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../29_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../30_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98_%EC%A0%95%EB%8B%B5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    최종시험 정답
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        시나리오
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        전체 흐름 한눈에
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-1-zoom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1: 사용자가 Zoom 미팅에 참여한다
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 1: 사용자가 Zoom 미팅에 참여한다">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-dns-03" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: DNS 조회 (03장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-tcp-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: TCP 연결 (02장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-tls-17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: TLS 핸드셰이크 (17장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-http-04-06-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: HTTP 요청 (04장, 06장, 07장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2: 미팅이 끝난다
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-3-zoom-webhook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3: Zoom이 우리 서버에 Webhook을 보낸다
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3: Zoom이 우리 서버에 Webhook을 보낸다">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        이것도 HTTP야
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webhook-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhook HTTP 요청 분석
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        서명은 어떻게 만들었어? (22장, 26장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-4-nexclass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 4: NexClass 서버가 처리한다
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 4: NexClass 서버가 처리한다">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: 요청 수신 (27장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: 타임스탬프 검증 (26장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-22-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: 서명 검증 (22장, 26장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-rest-api-14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: 이벤트 처리 (REST API, 14장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-08" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: 응답 (08장)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        전체 챕터 연결 맵
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        개념별 의존 관계
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        주의사항과 함정
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="주의사항과 함정">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함정 1: "이거 전부 순서대로 일어나는 거 아니야?"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-webhook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함정 2: "Webhook도 브라우저가 보내는 거지?"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        함정 3: "이 중에 하나만 잘 알면 되지 않아?"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        정리
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        확인 문제
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="네비게이션" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    HTTP
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../00_%ED%95%99%EC%8A%B5_%EB%A1%9C%EB%93%9C%EB%A7%B5/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    HTTP 완전정복
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+  
+                  
+
+
+
+<h1 id="28">28. 전체 흐름 통합<a class="headerlink" href="#28" title="Permanent link">&para;</a></h1>
+<div class="admonition abstract">
+<p class="admonition-title">한 줄 요약</p>
+<p>01장부터 27장까지 배운 모든 개념이 <strong>하나의 시나리오</strong>로 연결된다.
+이 챕터를 읽고 전부 이해되면, HTTP 완전정복 끝.</p>
+</div>
+<hr />
+<h2 id="_1">시나리오<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>"Zoom 미팅이 끝나면 NexClass에 출결이 자동으로 처리된다."</strong></p>
+</blockquote>
+<p>이 한 문장 안에 01~27장 전부가 들어있어. 하나씩 풀어보자.</p>
+<hr />
+<h2 id="_2">전체 흐름 한눈에<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>sequenceDiagram
+    participant U as 사용자 (브라우저)
+    participant D as DNS 서버
+    participant Z as Zoom 서버
+    participant N as NexClass 서버
+
+    rect rgb(230, 240, 255)
+    Note over U,Z: Phase 1: 사용자가 Zoom 미팅 참여
+    U-&gt;&gt;D: "zoom.us의 IP가 뭐야?" (DNS 조회)
+    D--&gt;&gt;U: "141.193.213.10" (IP 응답)
+    U-&gt;&gt;Z: TCP 3-way handshake (SYN → SYN-ACK → ACK)
+    U-&gt;&gt;Z: TLS 핸드셰이크 (인증서 검증 + 키 교환)
+    U-&gt;&gt;Z: HTTPS GET /j/123456 (미팅 참여)
+    Z--&gt;&gt;U: 200 OK (미팅 페이지)
+    end
+
+    rect rgb(255, 245, 230)
+    Note over Z: Phase 2: 미팅 진행 및 종료
+    Note over Z: meeting.ended 이벤트 발생
+    end
+
+    rect rgb(230, 255, 230)
+    Note over Z,N: Phase 3: Webhook 발송
+    Z-&gt;&gt;Z: message = "v0:" + timestamp + ":" + body
+    Z-&gt;&gt;Z: signature = HMAC-SHA256(secret, message)
+    Z-&gt;&gt;N: POST /webhook/zoom (서명 + body)
+    end
+
+    rect rgb(255, 230, 230)
+    Note over N: Phase 4: NexClass 처리
+    N-&gt;&gt;N: 타임스탬프 검증 (5분 이내?)
+    N-&gt;&gt;N: 서명 검증 (HMAC 일치?)
+    N-&gt;&gt;N: 이벤트 처리 (출결 기록)
+    N--&gt;&gt;Z: 200 OK
+    end</code></pre>
+<hr />
+<h2 id="phase-1-zoom">Phase 1: 사용자가 Zoom 미팅에 참여한다<a class="headerlink" href="#phase-1-zoom" title="Permanent link">&para;</a></h2>
+<p>사용자가 브라우저에서 <code>https://zoom.us/j/123456</code>을 입력해. 이 순간부터 01~04장이 동작해.</p>
+<h3 id="step-1-dns-03">Step 1: DNS 조회 (03장)<a class="headerlink" href="#step-1-dns-03" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>사용자: &quot;zoom.us&quot;가 어디야?
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>DNS:    &quot;141.193.213.10이야&quot;
+</span></code></pre></div>
+<p>브라우저는 도메인 이름으로 통신 못 해. <strong>IP 주소</strong>가 필요하니까 DNS에 물어봐.</p>
+<pre class="mermaid"><code>flowchart LR
+    A[zoom.us] --&gt;|DNS 조회| B[141.193.213.10]
+    B --&gt; C[이 IP로 연결 시작]</code></pre>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>03장 연결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>도메인 → IP 변환</td>
+<td>DNS의 핵심 역할</td>
+</tr>
+<tr>
+<td>DNS 캐시</td>
+<td>매번 조회하면 느리니까 캐싱</td>
+</tr>
+<tr>
+<td>DNS 서버 계층</td>
+<td>로컬 → ISP → Root → TLD → Authoritative</td>
+</tr>
+</tbody>
+</table>
+<h3 id="step-2-tcp-02">Step 2: TCP 연결 (02장)<a class="headerlink" href="#step-2-tcp-02" title="Permanent link">&para;</a></h3>
+<p>IP를 알았으니 연결해야지. TCP 3-way handshake.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>사용자 → SYN → Zoom         &quot;연결하자&quot;
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>사용자 ← SYN-ACK ← Zoom     &quot;좋아, 연결하자&quot;
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>사용자 → ACK → Zoom         &quot;오케이, 연결!&quot;
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>02장 연결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP</td>
+<td>신뢰성 있는 통신. 순서 보장, 손실 복구</td>
+</tr>
+<tr>
+<td>포트</td>
+<td>HTTPS = 443번 포트</td>
+</tr>
+<tr>
+<td>3-way handshake</td>
+<td>SYN → SYN-ACK → ACK</td>
+</tr>
+</tbody>
+</table>
+<h3 id="step-3-tls-17">Step 3: TLS 핸드셰이크 (17장)<a class="headerlink" href="#step-3-tls-17" title="Permanent link">&para;</a></h3>
+<p>TCP 연결 위에 <strong>암호화 레이어</strong>를 까는 과정.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>1. ClientHello: &quot;나 이런 암호화 방식 지원해&quot;
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>2. ServerHello: &quot;이 방식으로 하자&quot; + 인증서 전송
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>3. 인증서 검증: &quot;이 인증서 진짜야?&quot; (CA 확인)
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>4. 키 교환: 대칭키 생성 (이후 통신에 사용)
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>5. 암호화 통신 시작
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>17장 연결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTTPS</td>
+<td>HTTP + TLS. 암호화된 HTTP</td>
+</tr>
+<tr>
+<td>인증서</td>
+<td>서버의 신원 증명</td>
+</tr>
+<tr>
+<td>대칭키 교환</td>
+<td>비대칭키로 대칭키를 안전하게 교환 (21장)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="step-4-http-04-06-07">Step 4: HTTP 요청 (04장, 06장, 07장)<a class="headerlink" href="#step-4-http-04-06-07" title="Permanent link">&para;</a></h3>
+<p>암호화된 채널이 만들어졌으니 이제 HTTP 요청을 보내.</p>
+<div class="language-http highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nf">GET</span> <span class="nn">/j/123456</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="na">Host</span><span class="o">:</span> <span class="l">zoom.us</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="na">User-Agent</span><span class="o">:</span> <span class="l">Mozilla/5.0 ...</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="na">Accept</span><span class="o">:</span> <span class="l">text/html</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="na">Cookie</span><span class="o">:</span> <span class="l">_zm_ssid=abc123</span>
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>요소</th>
+<th>관련 챕터</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td>6장</td>
+<td>HTTP 메서드. 데이터 요청</td>
+</tr>
+<tr>
+<td><code>/j/123456</code></td>
+<td>5장</td>
+<td>URL 경로. 미팅 ID</td>
+</tr>
+<tr>
+<td><code>Host: zoom.us</code></td>
+<td>9장</td>
+<td>필수 헤더</td>
+</tr>
+<tr>
+<td><code>Cookie</code></td>
+<td>16장</td>
+<td>세션 유지</td>
+</tr>
+</tbody>
+</table>
+<p>Zoom 서버가 200 OK로 미팅 페이지를 반환하고, 사용자는 미팅에 참여한다.</p>
+<hr />
+<h2 id="phase-2">Phase 2: 미팅이 끝난다<a class="headerlink" href="#phase-2" title="Permanent link">&para;</a></h2>
+<p>미팅이 진행되다가 종료돼. 이 순간 Zoom 서버 내부에서:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>이벤트 시스템: &quot;meeting.ended 이벤트 발생!&quot;
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>Webhook 엔진: &quot;이 미팅에 구독된 Webhook이 있나?&quot;
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>             → &quot;있다! https://nexclass.com/webhook/zoom&quot;
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>             → &quot;POST 보내자&quot;
+</span></code></pre></div>
+<p>이건 Zoom 내부 동작이야. 25장에서 배운 "이벤트 발생 → Webhook 발송" 흐름.</p>
+<hr />
+<h2 id="phase-3-zoom-webhook">Phase 3: Zoom이 우리 서버에 Webhook을 보낸다<a class="headerlink" href="#phase-3-zoom-webhook" title="Permanent link">&para;</a></h2>
+<h3 id="http">이것도 HTTP야<a class="headerlink" href="#http" title="Permanent link">&para;</a></h3>
+<p>Zoom이 우리 서버에 보내는 것도 결국 <strong>HTTP 요청</strong>이야. Phase 1이랑 같은 과정을 거쳐.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Zoom → DNS 조회: nexclass.com → IP
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Zoom → TCP 3-way handshake (02장)
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>Zoom → TLS 핸드셰이크 (17장)
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>Zoom → HTTP POST 요청 (아래)
+</span></code></pre></div>
+<h3 id="webhook-http">Webhook HTTP 요청 분석<a class="headerlink" href="#webhook-http" title="Permanent link">&para;</a></h3>
+<div class="language-http highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nf">POST</span> <span class="nn">/webhook/zoom</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="na">Host</span><span class="o">:</span> <span class="l">nexclass.com</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="na">x-zm-signature</span><span class="o">:</span> <span class="l">v0=a1b2c3d4e5f6789...</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="na">x-zm-request-timestamp</span><span class="o">:</span> <span class="l">1742306400</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="p">{</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span><span class="nt">&quot;event&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;meeting.ended&quot;</span><span class="p">,</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">  </span><span class="nt">&quot;event_ts&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1742306400000</span><span class="p">,</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">  </span><span class="nt">&quot;payload&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="nt">&quot;account_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ABCD1234&quot;</span><span class="p">,</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="nt">&quot;object&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;123456789&quot;</span><span class="p">,</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">      </span><span class="nt">&quot;topic&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;HTTP 완전정복 스터디&quot;</span><span class="p">,</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">      </span><span class="nt">&quot;start_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-03-18T14:00:00Z&quot;</span><span class="p">,</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">      </span><span class="nt">&quot;end_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-03-18T15:00:00Z&quot;</span><span class="p">,</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">      </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="w">      </span><span class="nt">&quot;host_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;xyz789&quot;</span>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>이 요청 하나에 얼마나 많은 개념이 들어있는지 보자:</p>
+<table>
+<thead>
+<tr>
+<th>요소</th>
+<th>값</th>
+<th>관련 챕터</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>메서드</td>
+<td><code>POST</code></td>
+<td>6장</td>
+<td>데이터를 body에 담아 전송</td>
+</tr>
+<tr>
+<td>경로</td>
+<td><code>/webhook/zoom</code></td>
+<td>5장</td>
+<td>Webhook 엔드포인트 URL</td>
+</tr>
+<tr>
+<td><code>Content-Type</code></td>
+<td><code>application/json</code></td>
+<td>10장</td>
+<td>body가 JSON임을 명시</td>
+</tr>
+<tr>
+<td><code>x-zm-signature</code></td>
+<td><code>v0=a1b2c3...</code></td>
+<td>9장, 22장, 26장</td>
+<td>커스텀 헤더. HMAC 서명</td>
+</tr>
+<tr>
+<td><code>x-zm-request-timestamp</code></td>
+<td><code>1742306400</code></td>
+<td>9장, 26장</td>
+<td>커스텀 헤더. Replay Attack 방어</td>
+</tr>
+<tr>
+<td>Body</td>
+<td>JSON 객체</td>
+<td>10장, 25장</td>
+<td>이벤트 데이터</td>
+</tr>
+<tr>
+<td>HTTPS</td>
+<td>암호화 전송</td>
+<td>17장</td>
+<td>전송 구간 보호</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-26">서명은 어떻게 만들었어? (22장, 26장)<a class="headerlink" href="#22-26" title="Permanent link">&para;</a></h3>
+<p>Zoom이 이 요청을 보내기 전에:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>1. message = &quot;v0:&quot; + &quot;1742306400&quot; + &quot;:&quot; + body(JSON 문자열)
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>2. signature = &quot;v0=&quot; + HMAC-SHA256(Secret Token, message)
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>3. x-zm-signature 헤더에 서명 넣기
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>4. x-zm-request-timestamp 헤더에 타임스탬프 넣기
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>5. POST 전송
+</span></code></pre></div>
+<hr />
+<h2 id="phase-4-nexclass">Phase 4: NexClass 서버가 처리한다<a class="headerlink" href="#phase-4-nexclass" title="Permanent link">&para;</a></h2>
+<h3 id="step-1-27">Step 1: 요청 수신 (27장)<a class="headerlink" href="#step-1-27" title="Permanent link">&para;</a></h3>
+<p>Spring Boot의 <code>@PostMapping("/webhook/zoom")</code>이 이 요청을 받아.</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nd">@PostMapping</span><span class="p">(</span><span class="s">&quot;/zoom&quot;</span><span class="p">)</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="nf">handleZoomWebhook</span><span class="p">(</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">        </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">body</span><span class="p">,</span><span class="w">              </span><span class="c1">// JSON body</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">        </span><span class="nd">@RequestHeader</span><span class="p">(</span><span class="s">&quot;x-zm-signature&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">...,</span><span class="w">  </span><span class="c1">// 서명</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">        </span><span class="nd">@RequestHeader</span><span class="p">(</span><span class="s">&quot;x-zm-request-timestamp&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">...</span><span class="w">  </span><span class="c1">// 타임스탬프</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="step-2-26">Step 2: 타임스탬프 검증 (26장)<a class="headerlink" href="#step-2-26" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>요청 시간: 1742306400 (2026-03-18 15:00:00)
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>현재 시간: 1742306520 (2026-03-18 15:02:00)
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>차이: 120초 = 2분 → 5분 이내 → 통과!
+</span></code></pre></div>
+<h3 id="step-3-22-26">Step 3: 서명 검증 (22장, 26장)<a class="headerlink" href="#step-3-22-26" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>message = &quot;v0:&quot; + &quot;1742306400&quot; + &quot;:&quot; + body
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>expectedSignature = &quot;v0=&quot; + HMAC-SHA256(Secret Token, message)
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>expectedSignature == x-zm-signature?
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>→ 일치! Zoom이 보낸 진짜 요청이야.
+</span></code></pre></div>
+<h3 id="step-4-rest-api-14">Step 4: 이벤트 처리 (REST API, 14장)<a class="headerlink" href="#step-4-rest-api-14" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>event = &quot;meeting.ended&quot;
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>→ 미팅 ID: 123456789
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>→ 출결 처리 로직 실행
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>→ DB에 출석 기록 저장
+</span></code></pre></div>
+<h3 id="step-5-08">Step 5: 응답 (08장)<a class="headerlink" href="#step-5-08" title="Permanent link">&para;</a></h3>
+<div class="language-http highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="na">Content-Length</span><span class="o">:</span> <span class="l">0</span>
+</span></code></pre></div>
+<p>200 OK를 빠르게 돌려줘. Zoom은 이걸 받으면 "전달 성공"으로 기록해.</p>
+<hr />
+<h2 id="_3">전체 챕터 연결 맵<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>이 시나리오 하나에 01~27장 전부가 연결돼:</p>
+<table>
+<thead>
+<tr>
+<th>흐름 단계</th>
+<th>관련 챕터</th>
+<th>핵심 개념</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>인터넷 통신 기반</td>
+<td>01장</td>
+<td>클라이언트-서버 모델</td>
+</tr>
+<tr>
+<td>TCP 연결</td>
+<td>02장</td>
+<td>3-way handshake, 포트</td>
+</tr>
+<tr>
+<td>DNS 조회</td>
+<td>03장</td>
+<td>도메인 → IP 변환</td>
+</tr>
+<tr>
+<td>HTTP 기본</td>
+<td>04장</td>
+<td>요청-응답, 무상태</td>
+</tr>
+<tr>
+<td>URL 구조</td>
+<td>05장</td>
+<td>경로, 쿼리, 프래그먼트</td>
+</tr>
+<tr>
+<td>HTTP 메서드</td>
+<td>06장</td>
+<td>POST (Webhook), GET (페이지)</td>
+</tr>
+<tr>
+<td>요청/응답 구조</td>
+<td>07장</td>
+<td>start line, header, body</td>
+</tr>
+<tr>
+<td>상태 코드</td>
+<td>08장</td>
+<td>200 OK, 401 Unauthorized</td>
+</tr>
+<tr>
+<td>HTTP 헤더</td>
+<td>09장</td>
+<td>Content-Type, x-zm-signature</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>10장</td>
+<td>application/json</td>
+</tr>
+<tr>
+<td>API</td>
+<td>11장</td>
+<td>시스템 간 통신 인터페이스</td>
+</tr>
+<tr>
+<td>REST</td>
+<td>12장</td>
+<td>RESTful 아키텍처</td>
+</tr>
+<tr>
+<td>URL 설계</td>
+<td>13장</td>
+<td>/webhook/zoom 엔드포인트</td>
+</tr>
+<tr>
+<td>REST API 실전</td>
+<td>14장</td>
+<td>요청/응답 패턴</td>
+</tr>
+<tr>
+<td>API 문서화</td>
+<td>15장</td>
+<td>Webhook API 명세</td>
+</tr>
+<tr>
+<td>쿠키와 세션</td>
+<td>16장</td>
+<td>사용자 미팅 참여 시 세션</td>
+</tr>
+<tr>
+<td>HTTPS/TLS</td>
+<td>17장</td>
+<td>암호화 통신, 인증서</td>
+</tr>
+<tr>
+<td>CORS</td>
+<td>18장</td>
+<td>서버 간 통신 시 정책</td>
+</tr>
+<tr>
+<td>인코딩</td>
+<td>19장</td>
+<td>UTF-8, Base64, Hex 인코딩</td>
+</tr>
+<tr>
+<td>해싱</td>
+<td>20장</td>
+<td>SHA-256 해시 함수</td>
+</tr>
+<tr>
+<td>암호화</td>
+<td>21장</td>
+<td>TLS의 대칭키/비대칭키</td>
+</tr>
+<tr>
+<td>HMAC</td>
+<td>22장</td>
+<td>서명 생성 및 검증</td>
+</tr>
+<tr>
+<td>인증 방식</td>
+<td>23장</td>
+<td>Webhook의 서명 기반 인증</td>
+</tr>
+<tr>
+<td>JWT</td>
+<td>24장</td>
+<td>API 호출 시 Bearer Token</td>
+</tr>
+<tr>
+<td>Webhook 원리</td>
+<td>25장</td>
+<td>Push vs Pull, 이벤트 구독</td>
+</tr>
+<tr>
+<td>Webhook 보안</td>
+<td>26장</td>
+<td>서명 검증, CRC, Replay Attack</td>
+</tr>
+<tr>
+<td>실전 코드</td>
+<td>27장</td>
+<td>Spring Boot 구현</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_4">개념별 의존 관계<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>"이걸 이해하려면 먼저 저걸 알아야 해" 관계를 정리하면:</p>
+<pre class="mermaid"><code>flowchart TD
+    A[01 클라이언트-서버] --&gt; B[02 TCP/IP]
+    A --&gt; C[03 DNS]
+    B --&gt; D[04 HTTP]
+    C --&gt; D
+    D --&gt; E[05 URL]
+    D --&gt; F[06 메서드]
+    D --&gt; G[07 요청/응답 구조]
+    F --&gt; H[08 상태 코드]
+    G --&gt; I[09 헤더]
+    G --&gt; J[10 Content-Type]
+
+    E --&gt; K[11 API]
+    F --&gt; K
+    K --&gt; L[12 REST]
+    L --&gt; M[13 URL 설계]
+    L --&gt; N[14 REST 실전]
+    N --&gt; O[15 문서화]
+
+    D --&gt; P[16 쿠키/세션]
+    B --&gt; Q[17 HTTPS/TLS]
+    D --&gt; R[18 CORS]
+
+    S[19 인코딩] --&gt; T[20 해싱]
+    T --&gt; U[21 암호화]
+    T --&gt; V[22 HMAC]
+    U --&gt; Q
+
+    V --&gt; W[23 인증]
+    W --&gt; X[24 JWT]
+
+    F --&gt; Y[25 Webhook]
+    I --&gt; Y
+    J --&gt; Y
+    V --&gt; Z[26 Webhook 보안]
+    Y --&gt; Z
+    Z --&gt; AA[27 실전 코드]
+    Y --&gt; AA
+
+    AA --&gt; AB[28 전체 통합]</code></pre>
+<hr />
+<h2 id="_5">주의사항과 함정<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h3 id="1">함정 1: "이거 전부 순서대로 일어나는 거 아니야?"<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Phase마다 순서가 있지만, 독립적이기도 해</p>
+<p>Phase 1(사용자 미팅 참여)과 Phase 3(Webhook 발송)은 <strong>독립적</strong>이야.
+Phase 1은 사용자 브라우저 ↔ Zoom.
+Phase 3은 Zoom ↔ NexClass 서버.
+두 개는 서로 다른 HTTP 연결이야.</p>
+</div>
+<h3 id="2-webhook">함정 2: "Webhook도 브라우저가 보내는 거지?"<a class="headerlink" href="#2-webhook" title="Permanent link">&para;</a></h3>
+<div class="admonition failure">
+<p class="admonition-title">아니야</p>
+<p>Webhook은 <strong>서버가 서버에게</strong> 보내는 거야.
+브라우저 관여 없어. Zoom 서버가 NexClass 서버에 직접 HTTP POST.
+Server-to-Server 통신이야.</p>
+</div>
+<h3 id="3">함정 3: "이 중에 하나만 잘 알면 되지 않아?"<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<div class="admonition failure">
+<p class="admonition-title">전부 연결되어 있어</p>
+<p>서명 검증(22장)을 이해하려면 해싱(20장)을 알아야 하고,
+Webhook(25장)을 이해하려면 HTTP POST(6장)를 알아야 하고,
+HTTPS(17장)를 이해하려면 TCP(2장)와 암호화(21장)를 알아야 해.
+하나 빠지면 전체 그림이 안 그려져.</p>
+</div>
+<hr />
+<h2 id="_6">정리<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>핵심</th>
+<th>관련 챕터</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. DNS 조회</td>
+<td>도메인 → IP</td>
+<td>03장</td>
+</tr>
+<tr>
+<td>2. TCP 연결</td>
+<td>3-way handshake</td>
+<td>02장</td>
+</tr>
+<tr>
+<td>3. TLS 핸드셰이크</td>
+<td>암호화 채널 수립</td>
+<td>17장, 21장</td>
+</tr>
+<tr>
+<td>4. HTTP 요청</td>
+<td>GET (페이지 요청)</td>
+<td>04~10장</td>
+</tr>
+<tr>
+<td>5. 미팅 종료</td>
+<td>이벤트 발생</td>
+<td>25장</td>
+</tr>
+<tr>
+<td>6. Webhook 발송</td>
+<td>HTTP POST + 서명</td>
+<td>06장, 22장, 25장</td>
+</tr>
+<tr>
+<td>7. 서명 검증</td>
+<td>HMAC 비교</td>
+<td>22장, 26장</td>
+</tr>
+<tr>
+<td>8. 이벤트 처리</td>
+<td>출결 기록</td>
+<td>27장</td>
+</tr>
+<tr>
+<td>9. 200 OK 응답</td>
+<td>빠른 응답</td>
+<td>08장, 25장</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition abstract">
+<p class="admonition-title">한 문장 정리</p>
+<p>"Zoom 미팅이 끝나면 출결이 처리된다"는 한 문장 안에
+<strong>DNS, TCP, TLS, HTTP 메서드, 헤더, body, 상태 코드, HMAC, 서명 검증, Webhook</strong> 전부가 들어있어.
+이 흐름이 읽히면 01~27장 다 이해한 거야.</p>
+</div>
+<hr />
+<h2 id="_7">확인 문제<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<div class="admonition question">
+<p class="admonition-title">문제 1</p>
+<p>사용자가 브라우저에서 <code>https://zoom.us</code>를 입력했을 때,
+실제 HTTP 요청이 전송되기까지 거치는 단계를 순서대로 설명해봐.
+최소 4단계.</p>
+<details class="success">
+<summary>정답 보기</summary>
+<ol>
+<li>
+<p><strong>DNS 조회</strong> (03장): <code>zoom.us</code>라는 도메인을 DNS 서버에 질의해서 IP 주소를 알아낸다.
+   캐시에 있으면 바로, 없으면 재귀적 조회.</p>
+</li>
+<li>
+<p><strong>TCP 3-way handshake</strong> (02장): 알아낸 IP의 443번 포트로 TCP 연결을 수립한다.
+   SYN → SYN-ACK → ACK.</p>
+</li>
+<li>
+<p><strong>TLS 핸드셰이크</strong> (17장): TCP 연결 위에 암호화 레이어를 만든다.
+   ClientHello → ServerHello → 인증서 검증 → 키 교환.</p>
+</li>
+<li>
+<p><strong>HTTP 요청 전송</strong> (04장, 07장): 암호화된 채널을 통해
+   <code>GET / HTTP/1.1</code> 요청을 보낸다.</p>
+</li>
+</ol>
+</details>
+</div>
+<div class="admonition question">
+<p class="admonition-title">문제 2</p>
+<p>Zoom이 NexClass에 Webhook을 보낼 때의 HTTP 요청에서,
+각 구성 요소(메서드, 경로, 헤더, body)가 각각 어느 챕터의 어떤 개념인지 연결해봐.</p>
+<details class="success">
+<summary>정답 보기</summary>
+<p><div class="language-http highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nf">POST</span> <span class="nn">/webhook/zoom</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span></code></pre></div>
+- <code>POST</code>: 6장 HTTP 메서드. body에 데이터를 담아서 전송.
+- <code>/webhook/zoom</code>: 5장 URL 경로. Webhook 수신 엔드포인트.</p>
+<p><div class="language-http highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="err">Content-Type: application/json</span>
+</span></code></pre></div>
+- 10장 Content-Type. body가 JSON 형식임을 명시.</p>
+<p><div class="language-http highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="err">x-zm-signature: v0=a1b2c3...</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="err">x-zm-request-timestamp: 1742306400</span>
+</span></code></pre></div>
+- 9장 커스텀 헤더 (<code>x-</code> 접두사).
+- 22장 HMAC-SHA256 서명.
+- 26장 서명 검증, Replay Attack 방어용 타임스탬프.</p>
+<p><div class="language-json highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p">{</span><span class="nt">&quot;event&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;meeting.ended&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">...</span><span class="p">}</span>
+</span></code></pre></div>
+- 10장 JSON body. 이벤트 데이터.
+- 25장 Webhook 이벤트 구조.</p>
+</details>
+</div>
+<div class="admonition question">
+<p class="admonition-title">문제 3</p>
+<p>HTTPS와 HMAC 서명 검증은 둘 다 보안 관련 기술이야.
+이 시나리오에서 각각 <strong>어느 단계에서, 무엇을 보호</strong>하는지 구분해서 설명해봐.</p>
+<details class="success">
+<summary>정답 보기</summary>
+<p><strong>HTTPS (TLS)</strong> - 17장:
+- <strong>단계</strong>: TCP 연결 직후, HTTP 요청 전송 전.
+- <strong>보호 대상</strong>: <strong>전송 구간</strong>. 요청과 응답이 네트워크를 통해 이동하는 동안 도청/변조 방지.
+- <strong>못 하는 것</strong>: "이 요청이 Zoom에서 왔는지" 확인 불가.</p>
+<p><strong>HMAC 서명 검증</strong> - 22장, 26장:
+- <strong>단계</strong>: NexClass 서버가 요청을 받은 후.
+- <strong>보호 대상</strong>: <strong>요청의 출처와 무결성</strong>. 이 요청이 Secret Token을 아는 Zoom이 보냈는지 확인.
+- <strong>못 하는 것</strong>: 전송 중 도청 방지 불가 (그건 HTTPS 역할).</p>
+<p>정리: HTTPS = 전송 보안 (파이프 보호), HMAC = 출처 인증 (발신자 확인). <strong>역할이 다르다</strong>.</p>
+</details>
+</div>
+<div class="admonition question">
+<p class="admonition-title">문제 4</p>
+<p>만약 서명 검증을 구현하지 않으면 (26장 내용 무시), 이 시나리오에서 어떤 공격이 가능해져?
+구체적인 공격 시나리오를 하나 말해봐.</p>
+<details class="success">
+<summary>정답 보기</summary>
+<p><strong>가짜 Webhook 공격</strong>:</p>
+<ol>
+<li>해커가 <code>/webhook/zoom</code> URL을 알아냄 (URL은 추측 가능)</li>
+<li>해커가 가짜 <code>meeting.ended</code> 이벤트를 POST로 전송</li>
+<li>서명 검증이 없으니까 NexClass 서버가 진짜로 믿어버림</li>
+<li>가짜 미팅 ID, 가짜 참가자로 출결이 처리됨</li>
+<li>수업에 안 들어온 학생이 출석 처리될 수 있음</li>
+</ol>
+<p>서명 검증이 있으면? 해커는 Secret Token을 모르니까 유효한 서명을 만들 수 없어.
+서명 불일치 → 401 Unauthorized → 공격 실패.</p>
+</details>
+</div>
+<div class="admonition question">
+<p class="admonition-title">문제 5</p>
+<p>이 전체 시나리오에서 "인코딩(19장)", "해싱(20장)", "암호화(21장)"가
+각각 어디에서 사용되는지 찾아봐. 3개 모두 역할이 다르다는 걸 설명해.</p>
+<details class="success">
+<summary>정답 보기</summary>
+<p><strong>인코딩 (19장)</strong> - 형식 변환 (누구나 복원 가능):
+- HMAC 결과 바이트를 <strong>Hex 인코딩</strong>해서 문자열로 변환 (27장 <code>Hex.encodeHexString</code>)
+- JSON body의 문자를 <strong>UTF-8 인코딩</strong>으로 바이트 변환
+- 비밀도 아무것도 없어. 그냥 형식 바꾸기.</p>
+<p><strong>해싱 (20장)</strong> - 단방향 변환 (복원 불가):
+- HMAC-SHA256의 핵심 엔진이 <strong>SHA-256 해싱</strong>
+- 입력(message + key)에서 고정 길이 해시값 생성
+- 해시에서 원본을 역산할 수 없음</p>
+<p><strong>암호화 (21장)</strong> - 양방향 변환 (키가 있으면 복원 가능):
+- <strong>TLS 핸드셰이크</strong>에서 비대칭키(RSA)로 대칭키 교환
+- 이후 통신은 <strong>대칭키(AES)</strong>로 암호화
+- 키가 있으면 복호화 가능. 없으면 불가능.</p>
+<p>정리:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>인코딩</th>
+<th>해싱</th>
+<th>암호화</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>방향</td>
+<td>양방향</td>
+<td>단방향</td>
+<td>양방향</td>
+</tr>
+<tr>
+<td>키 필요</td>
+<td>불필요</td>
+<td>불필요(HMAC은 필요)</td>
+<td>필요</td>
+</tr>
+<tr>
+<td>목적</td>
+<td>형식 변환</td>
+<td>무결성/서명</td>
+<td>기밀성</td>
+</tr>
+<tr>
+<td>이 시나리오</td>
+<td>Hex, UTF-8</td>
+<td>HMAC-SHA256</td>
+<td>TLS(AES, RSA)</td>
+</tr>
+</tbody>
+</table>
+</details>
+</div>
+<hr />
+<p>다음 챕터: <a href="../29_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/">29. 최종시험</a></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+
+  <!-- Floating Remote Control -->
+  <nav class="page-remote" id="pageRemote">
+    <button class="page-remote__btn" id="btnTop" title="맨 위로">
+      <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+    </button>
+    <div class="page-remote__row">
+      <a class="page-remote__btn page-remote__btn--nav" id="btnPrev" title="이전 글">
+        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </a>
+      <a class="page-remote__btn page-remote__btn--nav" id="btnNext" title="다음 글">
+        <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+      </a>
+    </div>
+    <button class="page-remote__btn" id="btnBottom" title="맨 아래로">
+      <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+    </button>
+  </nav>
+
+  <script>
+    function setupRemote() {
+      var btnTop = document.getElementById('btnTop');
+      var btnBottom = document.getElementById('btnBottom');
+      var btnPrev = document.getElementById('btnPrev');
+      var btnNext = document.getElementById('btnNext');
+      if (!btnTop) return;
+
+      btnTop.onclick = function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+      btnBottom.onclick = function() {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      };
+
+      // footer에서 이전/다음 링크 가져오기 (footer는 숨겨져 있지만 DOM에 존재)
+      var prevLink = document.querySelector('a.md-footer__link--prev');
+      var nextLink = document.querySelector('a.md-footer__link--next');
+
+      btnPrev.classList.remove('page-remote__btn--disabled');
+      btnNext.classList.remove('page-remote__btn--disabled');
+
+      if (prevLink && prevLink.href) {
+        btnPrev.href = prevLink.href;
+      } else {
+        btnPrev.removeAttribute('href');
+        btnPrev.classList.add('page-remote__btn--disabled');
+      }
+
+      if (nextLink && nextLink.href) {
+        btnNext.href = nextLink.href;
+      } else {
+        btnNext.removeAttribute('href');
+        btnNext.classList.add('page-remote__btn--disabled');
+      }
+    }
+
+    // instant navigation 대응: 페이지 변경 시마다 재실행
+    var _interval = setInterval(function() {
+      if (typeof document$ !== 'undefined') {
+        clearInterval(_interval);
+        document$.subscribe(function() {
+          setTimeout(setupRemote, 100);
+        });
+      }
+    }, 50);
+    // 최초 실행
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(setupRemote, 100);
+    });
+    setupRemote();
+  </script>
+
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  맨위로
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
+        
+          
+          <a href="../27_%EC%8B%A4%EC%A0%84_NexClass_Zoom_Webhook/" class="md-footer__link md-footer__link--prev" aria-label="이전: 실전 NexClass Zoom Webhook">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                이전
+              </span>
+              <div class="md-ellipsis">
+                실전 NexClass Zoom Webhook
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../29_%EC%B5%9C%EC%A2%85%EC%8B%9C%ED%97%98/" class="md-footer__link md-footer__link--next" aria-label="다음: 최종시험">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                다음
+              </span>
+              <div class="md-ellipsis">
+                최종시험
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/tideflo" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.footer", "navigation.instant", "navigation.tracking", "navigation.path", "navigation.indexes", "content.code.copy", "content.code.annotate", "content.tabs.link", "toc.follow", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
