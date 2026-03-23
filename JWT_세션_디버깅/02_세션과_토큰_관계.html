@@ -46,12 +46,12 @@
 <h1 id="세션session과-토큰token의-관계">02. 세션(Session)과
 토큰(Token)의 관계</h1>
 <blockquote>
-<p>👹 “세션이 뭔지 대충 안다고? 그러면 왜 세션이 풀리는지 설명해봐. 못
-하잖아. 그러니까 처음부터 제대로 간다.”</p>
+<p>👹 "세션이 뭔지 대충 안다고? 그러면 왜 세션이 풀리는지 설명해봐. 못
+하잖아. 그러니까 처음부터 제대로 간다."</p>
 </blockquote>
 <hr />
 <h2 id="세션이란">세션이란</h2>
-<p><strong>한 줄 정의</strong>: 서버가 “이 사용자 로그인 상태”를
+<p><strong>한 줄 정의</strong>: 서버가 "이 사용자 로그인 상태"를
 기억하는 저장소</p>
 <pre class="mermaid"><code>sequenceDiagram
     participant 사용자
@@ -61,7 +61,7 @@
 
     사용자-&gt;&gt;서버: ID/PW 전송
     서버-&gt;&gt;서버: 인증 성공
-    서버-&gt;&gt;서버: 서버 메모리에 세션 생성&lt;br/&gt;{sessionId: &quot;abc123&quot;, userId: &quot;이준성&quot;, loginTime: ...}
+    서버-&gt;&gt;서버: 서버 메모리에 세션 생성&lt;br/&gt;{sessionId: &quot;abc123&quot;, userId: &quot;홍길동&quot;, loginTime: ...}
     서버-&gt;&gt;사용자: Set-Cookie: JSESSIONID=abc123
 
     Note over 사용자, 서버: 이후 요청마다
@@ -88,9 +88,9 @@
     end
     A -- &quot;JWT&quot; --&gt; B</code></pre>
 <ul>
-<li><strong>JWT</strong>: LMS → CMS로 “이 사람 맞아”를 증명하는
+<li><strong>JWT</strong>: LMS → CMS로 "이 사람 맞아"를 증명하는
 <strong>일회성 입장권</strong></li>
-<li><strong>세션</strong>: CMS 내부에서 “이 사람 로그인 중”을 유지하는
+<li><strong>세션</strong>: CMS 내부에서 "이 사람 로그인 중"을 유지하는
 <strong>상태 저장</strong></li>
 </ul>
 <p><strong>JWT는 문을 열어주는 열쇠고, 세션은 문 안에서의 체류
@@ -98,7 +98,7 @@
 <hr />
 <h2 id="healthcheck란">healthCheck란</h2>
 <p>CMS가 세션을 유지하는 메커니즘:</p>
-<p>!!! abstract “healthCheck 흐름” <strong>시간 0초</strong>: 사용자 CMS
+<p>!!! abstract "healthCheck 흐름" <strong>시간 0초</strong>: 사용자 CMS
 접속 (JWT로 인증 → 세션 생성) 세션 상태: 활성</p>
 <pre><code>**시간 300초**: CMS가 healthCheck 실행
 → &quot;이 세션 아직 유효한가?&quot; 확인
@@ -111,7 +111,7 @@
 <hr />
 <h2 id="오늘-문제가-터진-정확한-타이밍">오늘 문제가 터진 정확한
 타이밍</h2>
-<p>!!! danger “tokenExpire = 300초일 때 (문제 발생)” <strong>시간
+<p>!!! danger "tokenExpire = 300초일 때 (문제 발생)" <strong>시간
 0초</strong>: JWT 발급 (exp = 현재 + 300초), CMS 접속 성공, 세션 생성
 세션: OK / 토큰: OK</p>
 <pre><code>**시간 100초**: 사용자 CMS 사용 중
@@ -129,7 +129,7 @@ CMS: &quot;세션 연장할까? 토큰 확인해보자&quot;
 
 **사용자**: &quot;??? 갑자기 세션 풀렸는데???&quot;</code></pre>
 <p><strong>만약 tokenExpire = 3600이었다면:</strong></p>
-<p>!!! success “tokenExpire = 3600초일 때 (정상 동작)” <strong>시간
+<p>!!! success "tokenExpire = 3600초일 때 (정상 동작)" <strong>시간
 0초</strong>: JWT 발급 (exp = 현재 + 3600초)</p>
 <pre><code>**시간 300초**: healthCheck 발동
 토큰: 아직 3300초 남음 → 세션 연장!
@@ -143,7 +143,7 @@ CMS: &quot;세션 연장할까? 토큰 확인해보자&quot;
 토큰: 만료됨 → 세션 종료 (하지만 이미 1시간 사용함)</code></pre>
 <hr />
 <h2 id="다른-학교는-왜-문제가-없나">다른 학교는 왜 문제가 없나</h2>
-<p>업체가 “다른 학교는 문제 없다”고 했다. 왜?</p>
+<p>업체가 "다른 학교는 문제 없다"고 했다. 왜?</p>
 <table style="width:100%;">
 <colgroup>
 <col style="width: 14%" />
@@ -179,7 +179,7 @@ CMS: &quot;세션 연장할까? 토큰 확인해보자&quot;
 <hr />
 <h2 id="토큰-유효시간-설계-원칙">토큰 유효시간 설계 원칙</h2>
 <blockquote>
-<p>👹 “그러면 토큰 유효시간은 길면 길수록 좋은 거야?”</p>
+<p>👹 "그러면 토큰 유효시간은 길면 길수록 좋은 거야?"</p>
 </blockquote>
 <p><strong>아니다.</strong> 트레이드오프가 있다:</p>
 <table>
@@ -297,8 +297,8 @@ Refresh Token 조합</p>
 </tbody>
 </table>
 <blockquote>
-<p>👹 “세션이 왜 풀리는지 이제 설명할 수 있어? 못 하면 처음부터 다시
-읽어. 다음 장에서 ‘어떻게 찾았어야 하는지’ 간다.”</p>
+<p>👹 "세션이 왜 풀리는지 이제 설명할 수 있어? 못 하면 처음부터 다시
+읽어. 다음 장에서 '어떻게 찾았어야 하는지' 간다."</p>
 </blockquote>
   </div>
 </body>
