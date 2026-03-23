@@ -241,6 +241,53 @@ body {
   border-radius: var(--card-radius);
   box-shadow: var(--card-shadow);
   text-align: center;
+  cursor: pointer;
+  transition: box-shadow var(--transition-speed);
+}
+
+.mermaid:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* Mermaid Zoom Modal */
+.mermaid-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.mermaid-modal-overlay.active {
+  opacity: 1;
+}
+
+.mermaid-modal-content {
+  max-width: 95vw;
+  max-height: 95vh;
+  overflow: auto;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transform: scale(0.9);
+  transition: transform 0.3s;
+}
+
+.mermaid-modal-overlay.active .mermaid-modal-content {
+  transform: scale(1);
+}
+
+[data-md-color-scheme="slate"] .mermaid-modal-content {
+  background: #2e2e2e;
 }
 
 /* --- Task Lists --- */
