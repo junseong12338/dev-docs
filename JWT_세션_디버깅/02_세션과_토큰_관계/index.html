@@ -10588,19 +10588,45 @@ CMS: "세션 연장할까? 토큰 확인해보자"
         el.dataset.zoomBound = 'true';
         el.title = '클릭하면 확대';
         el.addEventListener('click', function() {
+          var svg = el.querySelector('svg');
+          if (!svg) return;
+
           var overlay = document.createElement('div');
           overlay.className = 'mermaid-modal-overlay';
+
           var content = document.createElement('div');
           content.className = 'mermaid-modal-content';
-          content.innerHTML = el.innerHTML;
+
+          var clonedSvg = svg.cloneNode(true);
+          clonedSvg.style.width = '100%';
+          clonedSvg.style.height = 'auto';
+          clonedSvg.style.maxWidth = 'none';
+          clonedSvg.style.minWidth = '600px';
+          clonedSvg.removeAttribute('width');
+          clonedSvg.setAttribute('height', 'auto');
+
+          content.appendChild(clonedSvg);
           overlay.appendChild(content);
           document.body.appendChild(overlay);
+          document.body.style.overflow = 'hidden';
+
           requestAnimationFrame(function() { overlay.classList.add('active'); });
+
           overlay.addEventListener('click', function() {
             overlay.classList.remove('active');
+            document.body.style.overflow = '';
             setTimeout(function() { overlay.remove(); }, 300);
           });
           content.addEventListener('click', function(e) { e.stopPropagation(); });
+
+          document.addEventListener('keydown', function handler(e) {
+            if (e.key === 'Escape') {
+              overlay.classList.remove('active');
+              document.body.style.overflow = '';
+              setTimeout(function() { overlay.remove(); }, 300);
+              document.removeEventListener('keydown', handler);
+            }
+          });
         });
       });
     }
