@@ -9853,8 +9853,52 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8. 정리">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s3-cdn-cors-nexcms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        추가 보강: S3 + CDN 연계와 CORS (NexCMS 사례)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="추가 보강: S3 + CDN 연계와 CORS (NexCMS 사례)">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-s3-cdn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. S3 → CDN 서빙 흐름
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-hlsjs-cors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. HLS.js와 CORS의 관계
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-content-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Content-Type 중요성
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#_5" class="md-nav__link">
@@ -11426,8 +11470,52 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8. 정리">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s3-cdn-cors-nexcms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        추가 보강: S3 + CDN 연계와 CORS (NexCMS 사례)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="추가 보강: S3 + CDN 연계와 CORS (NexCMS 사례)">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-s3-cdn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. S3 → CDN 서빙 흐름
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-hlsjs-cors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. HLS.js와 CORS의 관계
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-content-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Content-Type 중요성
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#_5" class="md-nav__link">
@@ -12007,6 +12095,91 @@
 <div class="admonition abstract">
 <p class="admonition-title">한 줄 정리</p>
 <p>S3 호환 API 덕분에 <strong>코드는 하나, 스토리지는 아무거나</strong>. 이게 추상화의 힘이야.</p>
+</div>
+<hr>
+<h2 id="s3-cdn-cors-nexcms">추가 보강: S3 + CDN 연계와 CORS (NexCMS 사례)<a class="headerlink" href="#s3-cdn-cors-nexcms" title="Permanent link">¶</a></h2>
+<div class="admonition info">
+<p class="admonition-title">왜 보강하나?</p>
+<p>S3에 업로드하는 건 배웠어. 근데 업로드 후 <strong>CDN에서 서빙</strong>할 때
+AccessDenied, CORS 중복 헤더 같은 문제가 터져. 실전에서 겪은 삽질이야.</p>
+</div>
+<h3 id="1-s3-cdn">1. S3 → CDN 서빙 흐름<a class="headerlink" href="#1-s3-cdn" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant W as TranscodeWorker
+    participant S as S3 (iwinv)
+    participant C as CDN
+    participant B as 브라우저
+
+    W-&gt;&gt;S: 인코딩 결과 업로드 (putObject)
+    Note over S: .m3u8 + .ts + thumb.jpg 저장
+    B-&gt;&gt;C: playlist.m3u8 요청
+    C-&gt;&gt;S: 캐시 없음 (MISS) → S3에서 가져옴
+    S--&gt;&gt;C: 파일 응답
+    C--&gt;&gt;B: 파일 + 캐시 저장
+    Note over C: 다음 요청은 HIT (캐시에서 서빙)</code></pre>
+<table>
+<thead>
+<tr>
+<th>응답 헤더</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x-cache: MISS</code></td>
+<td>CDN 캐시에 없어서 S3에서 새로 가져옴</td>
+</tr>
+<tr>
+<td><code>x-cache: HIT</code></td>
+<td>CDN 캐시에서 바로 서빙</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">CORS 설정 변경 후에도 HIT이면?</p>
+<p>CDN이 이전 응답(CORS 헤더 포함)을 캐시하고 있는 거야.
+<strong>새 파일 업로드</strong>하면 MISS → 변경된 설정으로 새 응답 확인 가능.</p>
+</div>
+<h3 id="2-hlsjs-cors">2. HLS.js와 CORS의 관계<a class="headerlink" href="#2-hlsjs-cors" title="Permanent link">¶</a></h3>
+<p>hls.js는 <strong>XHR(XMLHttpRequest)</strong>로 CDN에서 파일을 가져와:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>1. playlist.m3u8 (마스터 플레이리스트) → XHR
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>2. 720p/720p.m3u8 (해상도별 플레이리스트) → XHR
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>3. segment_000.ts, segment_001.ts... → XHR
+</span></code></pre></div>
+<p>XHR = CORS 체크 필수. CDN이 <code>Access-Control-Allow-Origin</code> 헤더 안 주면 → 재생 불가.</p>
+<p>근데 <code>&lt;img src="CDN URL"&gt;</code>은 CORS 안 따져서 썸네일은 잘 나와. <strong>같은 CDN인데 결과가 다른 이유</strong>가 이거야.</p>
+<h3 id="3-content-type">3. Content-Type 중요성<a class="headerlink" href="#3-content-type" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>파일</th>
+<th>올바른 Content-Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.m3u8</code></td>
+<td><code>application/vnd.apple.mpegurl</code></td>
+</tr>
+<tr>
+<td><code>.ts</code></td>
+<td><code>video/mp2t</code></td>
+</tr>
+<tr>
+<td><code>.jpg</code></td>
+<td><code>image/jpeg</code></td>
+</tr>
+</tbody>
+</table>
+<p>S3 업로드 시 Content-Type 미설정하면 <code>application/octet-stream</code>으로 저장돼.
+CDN이 이 타입으로 서빙하면 hls.js가 <strong>m3u8 파싱 실패</strong> → <code>manifestParsingError</code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Spring Boot에서 Content-Type 매핑</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1">// WebConfig.java</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">configurer</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="p">.</span><span class="na">mediaType</span><span class="p">(</span><span class="s">"m3u8"</span><span class="p">,</span><span class="w"> </span><span class="n">MediaType</span><span class="p">.</span><span class="na">parseMediaType</span><span class="p">(</span><span class="s">"application/vnd.apple.mpegurl"</span><span class="p">))</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="p">.</span><span class="na">mediaType</span><span class="p">(</span><span class="s">"ts"</span><span class="p">,</span><span class="w"> </span><span class="n">MediaType</span><span class="p">.</span><span class="na">parseMediaType</span><span class="p">(</span><span class="s">"video/mp2t"</span><span class="p">));</span>
+</span></code></pre></div>
 </div>
 <hr>
 <h3 id="_5">확인 문제<a class="headerlink" href="#_5" title="Permanent link">¶</a></h3>

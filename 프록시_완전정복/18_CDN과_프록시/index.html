@@ -5069,8 +5069,85 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="7. 정리">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cdn-cors-nexcms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        추가 보강: CDN CORS 문제와 서버 프록시 우회 (NexCMS 사례)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="추가 보강: CDN CORS 문제와 서버 프록시 우회 (NexCMS 사례)">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-cdn-cors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. CDN CORS 헤더 주입 문제
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-x-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. x-cache 헤더로 캐시 디버깅
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cdn-referer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. CDN Referer 차단 정책
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 서버 프록시 우회 패턴
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-url-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 프록시 URL 설계 — 내부 vs 외부
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 프록시의 트레이드오프
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
@@ -11260,8 +11337,85 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="7. 정리">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cdn-cors-nexcms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        추가 보강: CDN CORS 문제와 서버 프록시 우회 (NexCMS 사례)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="추가 보강: CDN CORS 문제와 서버 프록시 우회 (NexCMS 사례)">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-cdn-cors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. CDN CORS 헤더 주입 문제
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-x-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. x-cache 헤더로 캐시 디버깅
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cdn-referer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. CDN Referer 차단 정책
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 서버 프록시 우회 패턴
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-url-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 프록시 URL 설계 — 내부 vs 외부
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 프록시의 트레이드오프
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
@@ -11721,6 +11875,204 @@
 </ol>
 </div>
 <hr>
+<h2 id="cdn-cors-nexcms">추가 보강: CDN CORS 문제와 서버 프록시 우회 (NexCMS 사례)<a class="headerlink" href="#cdn-cors-nexcms" title="Permanent link">¶</a></h2>
+<div class="admonition info">
+<p class="admonition-title">왜 보강하나?</p>
+<p>CDN은 정적 파일 서빙에 최적이야. 근데 <strong>HLS 영상을 브라우저에서 재생</strong>하려면
+CORS가 걸리고, CDN이 CORS 헤더를 이상하게 넣으면 지옥이 펼쳐져.</p>
+</div>
+<h3 id="1-cdn-cors">1. CDN CORS 헤더 주입 문제<a class="headerlink" href="#1-cdn-cors" title="Permanent link">¶</a></h3>
+<p>CDN이 모든 응답에 <code>Access-Control-Allow-Origin: *</code>를 자동으로 추가하는 경우가 있어.
+근데 S3 원본도 CORS 헤더를 추가하면?</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>응답 헤더:
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>access-control-allow-origin: *                      ← CDN이 추가
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>access-control-allow-origin: http://localhost:8083   ← S3가 추가 (Origin 에코)
+</span></code></pre></div>
+<div class="admonition danger">
+<p class="admonition-title">결과</p>
+<p>브라우저: "CORS 헤더 2개? 규격 위반!" → 에러. 값이 뭐든 2개면 안 돼.</p>
+</div>
+<p>비교해보면:</p>
+<table>
+<thead>
+<tr>
+<th>CDN</th>
+<th>CORS 헤더 수</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>기존 CDN (educdn.kr)</td>
+<td><code>*</code> 1개</td>
+<td>정상</td>
+</tr>
+<tr>
+<td>새 CDN (iwinv)</td>
+<td><code>*</code> + Origin 에코 = 2개</td>
+<td>CORS 에러</td>
+</tr>
+</tbody>
+</table>
+<p><strong>같은 hls.js, 같은 XHR인데 CDN이 달라서 결과가 다른 거야.</strong></p>
+<h3 id="2-x-cache">2. <code>x-cache</code> 헤더로 캐시 디버깅<a class="headerlink" href="#2-x-cache" title="Permanent link">¶</a></h3>
+<p>CDN 응답에 <code>x-cache</code> 헤더가 있어:</p>
+<table>
+<thead>
+<tr>
+<th>값</th>
+<th>의미</th>
+<th>언제 보이나</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HIT</code></td>
+<td>CDN 캐시에서 서빙</td>
+<td>이전에 누가 같은 URL 요청한 적 있을 때</td>
+</tr>
+<tr>
+<td><code>MISS</code></td>
+<td>S3 원본에서 새로 가져옴</td>
+<td>처음 요청하거나 캐시 만료됐을 때</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">CORS 설정 바꿨는데 여전히 에러?</p>
+<p><code>x-cache: HIT</code>이면 CDN이 <strong>이전 응답을 캐시</strong>에서 서빙하고 있는 거야.
+S3 CORS를 바꿔도 CDN 캐시가 갱신될 때까지 반영 안 돼.
+<strong>새 파일 업로드</strong> → MISS → 변경 확인 가능.</p>
+</div>
+<h3 id="3-cdn-referer">3. CDN Referer 차단 정책<a class="headerlink" href="#3-cdn-referer" title="Permanent link">¶</a></h3>
+<p>CDN이 <strong>Referer 헤더</strong> 기반으로 핫링크를 방지하는 경우:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>브라우저 → CDN 요청
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Referer: http://localhost:8083/cms/preview
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>→ CDN: "localhost? 허용 목록에 없네" → 403 Forbidden
+</span></code></pre></div>
+<p>해결:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="cm">&lt;!-- 모든 페이지 &lt;head&gt;에 추가 --&gt;</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">"referrer"</span> <span class="na">content</span><span class="o">=</span><span class="s">"no-referrer"</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>리소스 유형</th>
+<th>Referer 제거 후</th>
+<th>CORS 문제</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;img&gt;</code> (썸네일)</td>
+<td>403 해결 → 정상</td>
+<td>CORS 무관</td>
+</tr>
+<tr>
+<td>XHR (HLS.js)</td>
+<td>403 해결</td>
+<td><strong>CORS는 별도 문제</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Referer 문제와 CORS 문제는 별개야</p>
+<p><code>no-referrer</code>로 CDN 403은 해결되지만, CORS 중복 헤더는 Origin 기반이라 따로 해결해야 해.</p>
+</div>
+<h3 id="4">4. 서버 프록시 우회 패턴<a class="headerlink" href="#4" title="Permanent link">¶</a></h3>
+<p>CORS는 브라우저 보안 정책이야. 서버-서버 통신에는 CORS가 없어. 이걸 이용하는 거지.</p>
+<pre class="mermaid"><code>graph LR
+    subgraph "같은 출처 (CORS 없음)"
+        B[브라우저 HLS.js] --&gt;|/cdn-proxy/...| P[NexCMS 서버]
+    end
+    P --&gt;|서버-서버 통신| C[CDN]
+    C --&gt; S[S3]</code></pre>
+<p>Spring Boot에서 프록시 컨트롤러:</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/cdn-proxy/**"</span><span class="p">)</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">[]&gt;</span><span class="w"> </span><span class="nf">proxy</span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="na">getRequestURI</span><span class="p">().</span><span class="na">substring</span><span class="p">(</span><span class="s">"/cdn-proxy/"</span><span class="p">.</span><span class="na">length</span><span class="p">());</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">cdnUrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://{CDN_HOST}/"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">path</span><span class="p">;</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="c1">// 서버가 CDN에 요청 (CORS 없음)</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="n">HttpResponse</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">[]&gt;</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">httpClient</span><span class="p">.</span><span class="na">send</span><span class="p">(</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">        </span><span class="n">HttpRequest</span><span class="p">.</span><span class="na">newBuilder</span><span class="p">().</span><span class="na">uri</span><span class="p">(</span><span class="n">URI</span><span class="p">.</span><span class="na">create</span><span class="p">(</span><span class="n">cdnUrl</span><span class="p">)).</span><span class="na">GET</span><span class="p">().</span><span class="na">build</span><span class="p">(),</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">        </span><span class="n">HttpResponse</span><span class="p">.</span><span class="na">BodyHandlers</span><span class="p">.</span><span class="na">ofByteArray</span><span class="p">());</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="c1">// 브라우저에 전달 (같은 출처, CORS 없음)</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">status</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="na">statusCode</span><span class="p">())</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">        </span><span class="p">.</span><span class="na">body</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="na">body</span><span class="p">());</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="5-url-vs">5. 프록시 URL 설계 — 내부 vs 외부<a class="headerlink" href="#5-url-vs" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>용도</th>
+<th>URL 형태</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NexCMS 내부 (미리보기)</td>
+<td><code>/cdn-proxy/nexcms/...</code></td>
+<td>상대 경로, 같은 서버</td>
+</tr>
+<tr>
+<td>LMS postMessage</td>
+<td><code>http://localhost:8083/cdn-proxy/nexcms/...</code></td>
+<td>다른 도메인에서 접근하니까 풀 URL</td>
+</tr>
+<tr>
+<td>DB 저장</td>
+<td><code>https://cdn.../nexcms/...</code></td>
+<td>원본 CDN URL 그대로</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">DB에는 CDN 원본 URL 저장</p>
+<p>프록시 URL은 <strong>조회 시 변환</strong>해서 반환해. DB에 프록시 URL 저장하면
+나중에 CDN 직접 접근으로 전환할 때 DB 데이터 다 바꿔야 해.</p>
+</div>
+<h3 id="6_1">6. 프록시의 트레이드오프<a class="headerlink" href="#6_1" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>CDN 직접 접근</th>
+<th>서버 프록시 경유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CORS</td>
+<td>중복 헤더 에러 가능</td>
+<td>없음 (같은 출처)</td>
+</tr>
+<tr>
+<td>서버 부하</td>
+<td>없음</td>
+<td>영상 트래픽 전부 서버 경유</td>
+</tr>
+<tr>
+<td>지연시간</td>
+<td>CDN 엣지 → 브라우저</td>
+<td>CDN → 서버 → 브라우저</td>
+</tr>
+<tr>
+<td>CDN 가치</td>
+<td>100% 활용</td>
+<td>부하 분산 효과 감소</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition abstract">
+<p class="admonition-title">결론</p>
+<p>프록시는 <strong>CDN CORS 문제의 우회법</strong>이지 이상적인 해결은 아니야.
+CDN 인프라에서 CORS 중복이 수정되면 프록시 빼고 CDN 직접 접근으로 전환하는 게 맞아.</p>
+</div>
+<hr>
 <h3 id="_3">확인 문제<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
 <div class="admonition question">
 <p class="admonition-title">다음 문제를 풀어봐. 답 못 하면 위에서 다시 읽어.</p>
@@ -11737,6 +12089,13 @@
 <p><strong>A3.</strong> Flexible 모드는 사용자↔Cloudflare는 HTTPS지만, Cloudflare↔원본 서버는 <strong>평문 HTTP</strong>야. 사용자 브라우저에는 자물쇠 아이콘이 보이니까 안전한 줄 알지만, 실제로는 Cloudflare에서 원본 서버 구간이 암호화 안 돼 있어서 중간자 공격에 취약해.</p>
 <p><strong>A4.</strong> Cloudflare Proxied 모드는 지원하는 포트가 정해져 있어. HTTP 80, 8080 등, HTTPS 443, 2053 등. <strong>8082는 지원 포트 목록에 없어.</strong> 그래서 nginx가 앞에서 80/443으로 받아서 8082로 프록시해야 해.</p>
 <p><strong>A5.</strong> 엣지 서버가 전 세계에 수백 개 분산돼 있어. 원본에서 콘텐츠를 바꿨을 때 수백 개 엣지의 캐시를 <strong>동시에</strong> 지우는 게 네트워크 지연 때문에 불가능해. 어떤 엣지는 빠르게 갱신되고 어떤 엣지는 느리게 갱신돼서, 그 사이에 사용자마다 다른 버전을 보게 돼.</p>
+<hr>
+<p><strong>Q6.</strong> CDN 응답에 <code>Access-Control-Allow-Origin</code> 헤더가 2개 있으면 브라우저는 어떻게 반응해? 왜?</p>
+<p><strong>A6.</strong> CORS 에러로 거부해. CORS 규격상 이 헤더는 <strong>정확히 1개</strong>만 허용돼. 2개 이상이면 값이 뭐든(둘 다 <code>*</code>라도) 규격 위반이야. CDN과 S3 양쪽에서 각각 추가하면 이런 일이 생겨.</p>
+<p><strong>Q7.</strong> CDN 응답의 <code>x-cache: HIT</code>이 뭘 의미하고, CORS 설정을 변경한 직후에 이게 왜 문제가 돼?</p>
+<p><strong>A7.</strong> HIT은 CDN이 캐시에서 서빙한다는 뜻이야. S3 CORS를 변경해도 CDN 캐시가 갱신될 때까지 <strong>이전 응답(이전 CORS 헤더)</strong>이 그대로 나와. 변경 확인하려면 캐시에 없는 <strong>새 파일</strong>을 업로드해서 MISS 응답을 받아야 해.</p>
+<p><strong>Q8.</strong> 서버 프록시로 CORS를 우회할 수 있는 이유는?</p>
+<p><strong>A8.</strong> CORS는 <strong>브라우저 전용 보안 정책</strong>이야. 서버-서버 통신에는 CORS가 없어. 프록시 서버가 CDN에 요청하면 CORS 체크 자체가 안 일어나. 그리고 브라우저 입장에서는 프록시가 같은 출처(localhost:8083)니까 CORS가 발생할 이유가 없어.</p>
 </details>
 
 
